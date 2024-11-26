@@ -1,0 +1,158 @@
+{% extends "base.html" %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block title %}Profile{% endblock %}
+
+{% block content %}
+<div class="min-h-[80vh] py-12 bg-gray-50 dark:bg-gray-900">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="mb-4 rounded-md {% if message.tags == 'success' %}bg-green-50 dark:bg-green-900/50{% else %}bg-red-50 dark:bg-red-900/50{% endif %} p-4">
+                    <div class="flex">
+                        <div class="ml-3">
+                            <p class="text-sm font-medium {% if message.tags == 'success' %}text-green-800 dark:text-green-200{% else %}text-red-800 dark:text-red-200{% endif %}">
+                                {{ message }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <div class="bg-white dark:bg-gray-800 shadow-xl ring-1 ring-gray-900/10 dark:ring-gray-100/10 sm:rounded-lg">
+            <div class="px-4 py-5 sm:p-6">
+                <div class="md:grid md:grid-cols-3 md:gap-6">
+                    <div class="md:col-span-1">
+                        <h3 class="text-lg font-medium leading-6 text-gray-900 dark:text-white">Profile</h3>
+                        <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                            This information will be displayed publicly so be careful what you share.
+                        </p>
+                        {% if user.profile_picture %}
+                            <div class="mt-4">
+                                <img class="h-32 w-32 rounded-full object-cover" src="{{ user.profile_picture.url }}" alt="{{ user.username }}'s profile picture">
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="mt-5 md:col-span-2 md:mt-0">
+                        <form method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            
+                            <div class="grid grid-cols-6 gap-6">
+                                <div class="col-span-6 sm:col-span-3">
+                                    <label for="{{ form.first_name.id_for_label }}" class="block text-sm font-medium text-gray-700 dark:text-gray-300">First name</label>
+                                    {% render_field form.first_name class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white" %}
+                                    {% if form.first_name.errors %}
+                                        <p class="mt-2 text-sm text-red-600 dark:text-red-400">{{ form.first_name.errors.0 }}</p>
+                                    {% endif %}
+                                </div>
+
+                                <div class="col-span-6 sm:col-span-3">
+                                    <label for="{{ form.last_name.id_for_label }}" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Last name</label>
+                                    {% render_field form.last_name class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white" %}
+                                    {% if form.last_name.errors %}
+                                        <p class="mt-2 text-sm text-red-600 dark:text-red-400">{{ form.last_name.errors.0 }}</p>
+                                    {% endif %}
+                                </div>
+
+                                <div class="col-span-6">
+                                    <label for="{{ form.email.id_for_label }}" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Email</label>
+                                    {% render_field form.email class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white" %}
+                                    {% if form.email.errors %}
+                                        <p class="mt-2 text-sm text-red-600 dark:text-red-400">{{ form.email.errors.0 }}</p>
+                                    {% endif %}
+                                </div>
+
+                                <div class="col-span-6">
+                                    <label for="{{ form.profile_picture.id_for_label }}" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Profile Picture</label>
+                                    <div class="mt-2 flex items-center space-x-4">
+                                        <div class="w-20 h-20 rounded-full overflow-hidden ring-2 ring-blue-500/50 dark:ring-blue-400/50 shadow-lg">
+                                            {% if user.profile_picture %}
+                                                <img src="{{ user.profile_picture.url }}" alt="{{ user.username }}" class="w-full h-full object-cover">
+                                            {% else %}
+                                                <div class="w-full h-full bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center">
+                                                    <span class="text-white font-medium text-xl">{{ user.username.0|upper }}</span>
+                                                </div>
+                                            {% endif %}
+                                        </div>
+                                        <div class="flex-1">
+                                            {% render_field form.profile_picture class="block w-full text-sm text-gray-500 dark:text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 dark:file:bg-gray-700 dark:file:text-gray-300" %}
+                                            {% if form.profile_picture.errors %}
+                                                <p class="mt-2 text-sm text-red-600 dark:text-red-400">{{ form.profile_picture.errors.0 }}</p>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-span-6">
+                                    <label for="{{ form.bio.id_for_label }}" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Bio</label>
+                                    {% render_field form.bio class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white" rows="4" %}
+                                    {% if form.bio.errors %}
+                                        <p class="mt-2 text-sm text-red-600 dark:text-red-400">{{ form.bio.errors.0 }}</p>
+                                    {% endif %}
+                                </div>
+
+                                <div class="col-span-6">
+                                    <label for="{{ form.location.id_for_label }}" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Location</label>
+                                    {% render_field form.location class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white" %}
+                                    {% if form.location.errors %}
+                                        <p class="mt-2 text-sm text-red-600 dark:text-red-400">{{ form.location.errors.0 }}</p>
+                                    {% endif %}
+                                </div>
+
+                                <div class="col-span-6">
+                                    <label for="{{ form.birth_date.id_for_label }}" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Birth Date</label>
+                                    {% render_field form.birth_date class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white" %}
+                                    {% if form.birth_date.errors %}
+                                        <p class="mt-2 text-sm text-red-600 dark:text-red-400">{{ form.birth_date.errors.0 }}</p>
+                                    {% endif %}
+                                </div>
+
+                                <div class="col-span-6">
+                                    <label for="{{ form.website.id_for_label }}" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Website</label>
+                                    {% render_field form.website class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white" %}
+                                    {% if form.website.errors %}
+                                        <p class="mt-2 text-sm text-red-600 dark:text-red-400">{{ form.website.errors.0 }}</p>
+                                    {% endif %}
+                                </div>
+
+                                <div class="col-span-6">
+                                    <label for="{{ form.github.id_for_label }}" class="block text-sm font-medium text-gray-700 dark:text-gray-300">GitHub</label>
+                                    {% render_field form.github class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white" %}
+                                    {% if form.github.errors %}
+                                        <p class="mt-2 text-sm text-red-600 dark:text-red-400">{{ form.github.errors.0 }}</p>
+                                    {% endif %}
+                                </div>
+
+                                <div class="col-span-6">
+                                    <label for="{{ form.linkedin.id_for_label }}" class="block text-sm font-medium text-gray-700 dark:text-gray-300">LinkedIn</label>
+                                    {% render_field form.linkedin class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white" %}
+                                    {% if form.linkedin.errors %}
+                                        <p class="mt-2 text-sm text-red-600 dark:text-red-400">{{ form.linkedin.errors.0 }}</p>
+                                    {% endif %}
+                                </div>
+
+                                <div class="col-span-6">
+                                    <label for="{{ form.twitter.id_for_label }}" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Twitter</label>
+                                    {% render_field form.twitter class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white" %}
+                                    {% if form.twitter.errors %}
+                                        <p class="mt-2 text-sm text-red-600 dark:text-red-400">{{ form.twitter.errors.0 }}</p>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <div class="mt-6">
+                                <button type="submit" class="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800">
+                                    Save Changes
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
