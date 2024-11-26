@@ -1,0 +1,279 @@
+{% extends 'dashboard/base.html' %}
+{% load static %}
+
+{% block title %}Comments - Dashboard{% endblock %}
+
+{% block dashboard_content %}
+<div class="bg-white dark:bg-gray-800 shadow rounded-lg">
+    <div class="p-6 border-b border-gray-200 dark:border-gray-700">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-4 sm:space-y-0">
+            <div>
+                <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Project Comments</h2>
+                <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Manage comments from your portfolio project visitors.</p>
+            </div>
+            <div class="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-4 w-full sm:w-auto">
+                <div class="relative">
+                    <select id="sort-select" 
+                            class="block w-full pl-3 pr-10 py-2 text-base border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                            onchange="window.location.href='?sort=' + this.value">
+                        <option value="-created_at" {% if sort == '-created_at' %}selected{% endif %}>Newest First</option>
+                        <option value="created_at" {% if sort == 'created_at' %}selected{% endif %}>Oldest First</option>
+                        <option value="project__title" {% if sort == 'project__title' %}selected{% endif %}>Project Name (A-Z)</option>
+                        <option value="-project__title" {% if sort == '-project__title' %}selected{% endif %}>Project Name (Z-A)</option>
+                        <option value="name" {% if sort == 'name' %}selected{% endif %}>Commenter Name (A-Z)</option>
+                        <option value="-name" {% if sort == '-name' %}selected{% endif %}>Commenter Name (Z-A)</option>
+                    </select>
+                </div>
+                <button id="delete-selected" 
+                        class="hidden px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 dark:bg-red-700 dark:hover:bg-red-800 disabled:opacity-50 transition duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800"
+                        disabled>
+                    Delete Selected
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="overflow-x-auto">
+        <form id="comments-form" method="post" action="{% url 'dashboard:dashboard_comment_delete_multiple' %}">
+            {% csrf_token %}
+            <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                <thead class="bg-gray-50 dark:bg-gray-700">
+                    <tr>
+                        <th scope="col" class="px-6 py-3 text-left">
+                            <div class="flex items-center">
+                                <input type="checkbox" id="select-all" 
+                                       class="rounded border-gray-300 dark:border-gray-600 text-indigo-600 focus:ring-indigo-500 dark:bg-gray-800 transition duration-150 ease-in-out">
+                                <label for="select-all" class="ml-2 text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Select</label>
+                            </div>
+                        </th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Project</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Name</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Status</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Date</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                    {% for comment in comment_items %}
+                    <tr class="hover:bg-gray-50 dark:hover:bg-gray-700 transition duration-150 ease-in-out">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <input type="checkbox" name="comment_ids" value="{{ comment.id }}" 
+                                   class="comment-checkbox rounded border-gray-300 dark:border-gray-600 text-indigo-600 focus:ring-indigo-500 dark:bg-gray-800 transition duration-150 ease-in-out">
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm font-medium text-gray-900 dark:text-gray-200">{{ comment.project.title }}</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm text-gray-900 dark:text-gray-200">{{ comment.user.username }}</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
+                                {% if comment.status == 'approved' %}bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200
+                                {% elif comment.status == 'rejected' %}bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200
+                                {% else %}bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200{% endif %}">
+                                {{ comment.get_status_display }}
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm text-gray-500 dark:text-gray-400">{{ comment.created_at|date:"M d, Y H:i" }}</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
+                            <a href="{% url 'dashboard:dashboard_comment_detail' comment.id %}" 
+                               class="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300 transition duration-150 ease-in-out">
+                                View
+                            </a>
+                            {% if comment.status != 'approved' %}
+                            <button type="button" onclick="updateCommentStatus('{{ comment.id }}', 'approve')"
+                                    class="text-green-600 hover:text-green-900 dark:text-green-400 dark:hover:text-green-300 transition duration-150 ease-in-out">
+                                Approve
+                            </button>
+                            {% endif %}
+                            {% if comment.status != 'rejected' %}
+                            <button type="button" onclick="updateCommentStatus('{{ comment.id }}', 'reject')"
+                                    class="text-yellow-600 hover:text-yellow-900 dark:text-yellow-400 dark:hover:text-yellow-300 transition duration-150 ease-in-out">
+                                Reject
+                            </button>
+                            {% endif %}
+                            <button type="button" onclick="confirmDelete('{{ comment.id }}')"
+                                    class="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300 transition duration-150 ease-in-out">
+                                Delete
+                            </button>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="6" class="px-6 py-4 text-center text-gray-500 dark:text-gray-400">
+                            <div class="flex flex-col items-center justify-center space-y-2">
+                                <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path>
+                                </svg>
+                                <p>No comments found.</p>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </form>
+    </div>
+
+    {% if comment_items.has_other_pages %}
+    <div class="px-6 py-4 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700">
+        <nav class="flex justify-between items-center">
+            <div class="text-sm text-gray-700 dark:text-gray-300">
+                Showing <span class="font-medium">{{ comment_items.start_index }}</span> to <span class="font-medium">{{ comment_items.end_index }}</span> of <span class="font-medium">{{ comment_items.paginator.count }}</span> results
+            </div>
+            <ul class="flex space-x-2">
+                {% if comment_items.has_previous %}
+                <li>
+                    <a href="?page={{ comment_items.previous_page_number }}&sort={{ sort }}" 
+                       class="px-3 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-gray-200 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition duration-150 ease-in-out">
+                        Previous
+                    </a>
+                </li>
+                {% endif %}
+
+                {% for num in comment_items.paginator.page_range %}
+                    {% if comment_items.number == num %}
+                    <li>
+                        <span class="px-3 py-2 rounded-md text-sm font-medium text-white bg-indigo-600">{{ num }}</span>
+                    </li>
+                    {% elif num > comment_items.number|add:'-3' and num < comment_items.number|add:'3' %}
+                    <li>
+                        <a href="?page={{ num }}&sort={{ sort }}" 
+                           class="px-3 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-gray-200 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition duration-150 ease-in-out">
+                            {{ num }}
+                        </a>
+                    </li>
+                    {% endif %}
+                {% endfor %}
+
+                {% if comment_items.has_next %}
+                <li>
+                    <a href="?page={{ comment_items.next_page_number }}&sort={{ sort }}" 
+                       class="px-3 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-gray-200 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition duration-150 ease-in-out">
+                        Next
+                    </a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+    {% endif %}
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div id="deleteModal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
+    <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white dark:bg-gray-800">
+        <div class="mt-3 text-center">
+            <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100 dark:bg-red-900">
+                <svg class="h-6 w-6 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                </svg>
+            </div>
+            <h3 class="text-lg leading-6 font-medium text-gray-900 dark:text-white mt-4">Delete Comment</h3>
+            <div class="mt-2 px-7 py-3">
+                <p class="text-sm text-gray-500 dark:text-gray-400">
+                    Are you sure you want to delete this comment? This action cannot be undone.
+                </p>
+            </div>
+            <div class="flex justify-center mt-4 space-x-4">
+                <button id="cancelDelete" 
+                        class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600">
+                    Cancel
+                </button>
+                <form id="deleteForm" method="post" class="inline">
+                    {% csrf_token %}
+                    <button type="submit" 
+                            class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 dark:bg-red-700 dark:hover:bg-red-800">
+                        Delete
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const selectAll = document.getElementById('select-all');
+        const checkboxes = document.getElementsByClassName('comment-checkbox');
+        const deleteSelected = document.getElementById('delete-selected');
+        const form = document.getElementById('comments-form');
+        const deleteModal = document.getElementById('deleteModal');
+        const cancelDelete = document.getElementById('cancelDelete');
+        const deleteForm = document.getElementById('deleteForm');
+    
+        function updateDeleteButton() {
+            const checkedBoxes = document.querySelectorAll('.comment-checkbox:checked');
+            deleteSelected.disabled = checkedBoxes.length === 0;
+            deleteSelected.classList.toggle('hidden', checkedBoxes.length === 0);
+        }
+    
+        selectAll.addEventListener('change', function() {
+            Array.from(checkboxes).forEach(checkbox => {
+                checkbox.checked = selectAll.checked;
+            });
+            updateDeleteButton();
+        });
+    
+        Array.from(checkboxes).forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                selectAll.checked = Array.from(checkboxes).every(cb => cb.checked);
+                updateDeleteButton();
+            });
+        });
+    
+        deleteSelected.addEventListener('click', function(e) {
+            e.preventDefault();
+            const checkedBoxes = document.querySelectorAll('.comment-checkbox:checked');
+            if (checkedBoxes.length > 0) {
+                form.submit();
+            }
+        });
+    
+        window.confirmDelete = function(commentId) {
+            deleteModal.classList.remove('hidden');
+            deleteForm.action = "{% url 'dashboard:dashboard_comment_delete' 0 %}".replace('0', commentId);
+        }
+    
+        cancelDelete.addEventListener('click', function() {
+            deleteModal.classList.add('hidden');
+        });
+    
+        // Close modal when clicking outside
+        deleteModal.addEventListener('click', function(e) {
+            if (e.target === deleteModal) {
+                deleteModal.classList.add('hidden');
+            }
+        });
+    
+        window.updateCommentStatus = function(commentId, action) {
+            const url = action === 'approve' 
+                ? "{% url 'dashboard:dashboard_comment_approve' 0 %}".replace('0', commentId)
+                : "{% url 'dashboard:dashboard_comment_reject' 0 %}".replace('0', commentId);
+    
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    location.reload();
+                } else {
+                    alert('Error updating comment status');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error updating comment status');
+            });
+        }
+    });
+</script>
+{% endblock %}
+{% endblock %}

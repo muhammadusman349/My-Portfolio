@@ -1,0 +1,187 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | Portfolio</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        dark: {
+                            bg: '#1a1a1a',
+                            card: '#2d2d2d',
+                            text: '#ffffff',
+                            border: '#404040'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script>
+        // Check if dark mode is enabled
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark')
+        } else {
+            document.documentElement.classList.remove('dark')
+        }
+    </script>
+</head>
+<body class="h-full bg-gray-100 dark:bg-gray-900">
+    {% load static %}
+
+    {% block content %}
+    {% if not user.is_superuser %}
+    <div class="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-gray-900">
+        <div class="text-center">
+            <h1 class="text-4xl font-bold text-gray-900 dark:text-white mb-4">Access Denied</h1>
+            <p class="text-gray-600 dark:text-gray-400 mb-6">You don't have permission to access this page.</p>
+            <a href="{% url 'portfolio:home' %}" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700">
+                Return to Home
+            </a>
+        </div>
+    </div>
+    {% else %}
+    <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
+        <!-- Sidebar -->
+        <aside class="fixed inset-y-0 left-0 bg-white dark:bg-gray-800 w-64 border-r border-gray-200 dark:border-gray-700 z-30">
+            <div class="flex flex-col h-full">
+                <div class="h-16 flex items-center justify-center border-b border-gray-200 dark:border-gray-700">
+                    <h1 class="text-xl font-semibold text-gray-800 dark:text-white">Dashboard</h1>
+                </div>
+                
+                <nav class="flex-1 overflow-y-auto py-4">
+                    <ul class="space-y-2 px-3">
+                        <li>
+                            <a href="{% url 'dashboard:dashboard_home' %}" class="flex items-center px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg {% if request.resolver_match.url_name == 'dashboard_home' %}bg-gray-100 dark:bg-gray-700{% endif %}">
+                                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+                                </svg>
+                                Dashboard
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{% url 'dashboard:dashboard_project_list' %}" class="flex items-center px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg {% if 'dashboard_project' in request.resolver_match.url_name %}bg-gray-100 dark:bg-gray-700{% endif %}">
+                                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+                                </svg>
+                                Projects
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{% url 'dashboard:dashboard_skill_list' %}" class="flex items-center px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg {% if 'dashboard_skill' in request.resolver_match.url_name %}bg-gray-100 dark:bg-gray-700{% endif %}">
+                                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+                                </svg>
+                                Skills
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{% url 'dashboard:dashboard_education_list' %}" class="flex items-center px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg {% if 'dashboard_education' in request.resolver_match.url_name %}bg-gray-100 dark:bg-gray-700{% endif %}">
+                                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path d="M12 14l9-5-9-5-9 5 9 5z"/>
+                                    <path d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"/>
+                                </svg>
+                                Education
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{% url 'dashboard:dashboard_experience_list' %}" class="flex items-center px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg {% if 'dashboard_experience' in request.resolver_match.url_name %}bg-gray-100 dark:bg-gray-700{% endif %}">
+                                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                                </svg>
+                                Experience
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{% url 'dashboard:dashboard_contact_list' %}" class="flex items-center px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg {% if 'dashboard_contact' in request.resolver_match.url_name %}bg-gray-100 dark:bg-gray-700{% endif %}">
+                                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                                </svg>
+                                Contact Messages
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{% url 'dashboard:dashboard_comment_list' %}" class="flex items-center px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg {% if 'dashboard_comment' in request.resolver_match.url_name %}bg-gray-100 dark:bg-gray-700{% endif %}">
+                                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"/>
+                                </svg>
+                                Comments
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{% url 'dashboard:user_list' %}" class="flex items-center px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg {% if 'user' in request.resolver_match.url_name %}bg-gray-100 dark:bg-gray-700{% endif %}">
+                                <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
+                                </svg>
+                                Users
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+                
+                <div class="p-4 border-t border-gray-200 dark:border-gray-700">
+                    <a href="{% url 'portfolio:home' %}" class="flex items-center text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">
+                        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                        </svg>
+                        Back to Site
+                    </a>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="ml-64 min-h-screen">
+            <div class="p-8">
+                {% if messages %}
+                <div class="mb-6">
+                    {% for message in messages %}
+                    <div class="p-4 {% if message.tags == 'success' %}bg-green-100 text-green-700 dark:bg-green-800 dark:text-green-200{% elif message.tags == 'error' %}bg-red-100 text-red-700 dark:bg-red-800 dark:text-red-200{% endif %} rounded-lg">
+                        {{ message }}
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                {% block dashboard_content %}{% endblock %}
+            </div>
+        </main>
+    </div>
+    {% endif %}
+    {% endblock %}
+
+    <!-- Dark Mode Toggle Script -->
+    <script>
+        function toggleDarkMode() {
+            if (localStorage.theme === 'dark') {
+                localStorage.theme = 'light'
+                document.documentElement.classList.remove('dark')
+            } else {
+                localStorage.theme = 'dark'
+                document.documentElement.classList.add('dark')
+            }
+        }
+    </script>
+
+    <!-- Custom JS -->
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

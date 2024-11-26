@@ -1,0 +1,255 @@
+{% extends 'dashboard/base.html' %}
+{% load static %}
+
+{% block title %}Contacts - Dashboard{% endblock %}
+
+{% block dashboard_content %}
+<div class="bg-white dark:bg-gray-800 shadow rounded-lg">
+    <div class="p-6 border-b border-gray-200 dark:border-gray-700">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-4 sm:space-y-0">
+            <div>
+                <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Contact Messages</h2>
+                <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Manage incoming contact messages from your portfolio visitors.</p>
+            </div>
+            <div class="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-4 w-full sm:w-auto">
+                <div class="relative">
+                    <select id="sort-select" 
+                            class="block w-full pl-3 pr-10 py-2 text-base border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                            onchange="window.location.href='?sort=' + this.value">
+                        <option value="-created_at" {% if sort == '-created_at' %}selected{% endif %}>Newest First</option>
+                        <option value="created_at" {% if sort == 'created_at' %}selected{% endif %}>Oldest First</option>
+                        <option value="name" {% if sort == 'name' %}selected{% endif %}>Name (A-Z)</option>
+                        <option value="-name" {% if sort == '-name' %}selected{% endif %}>Name (Z-A)</option>
+                        <option value="email" {% if sort == 'email' %}selected{% endif %}>Email (A-Z)</option>
+                        <option value="-email" {% if sort == '-email' %}selected{% endif %}>Email (Z-A)</option>
+                    </select>
+                </div>
+                <button id="delete-selected" 
+                        onclick="submitDeleteForm()"
+                        class="hidden px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 dark:bg-red-700 dark:hover:bg-red-800 disabled:opacity-50 transition duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800"
+                        disabled>
+                    Delete Selected
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="overflow-x-auto">
+        <form id="contacts-form" method="post" action="{% url 'dashboard:dashboard_contact_delete_multiple' %}">
+            {% csrf_token %}
+            <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                <thead class="bg-gray-50 dark:bg-gray-700">
+                    <tr>
+                        <th scope="col" class="px-6 py-3 text-left">
+                            <div class="flex items-center">
+                                <input type="checkbox" id="select-all" 
+                                       class="rounded border-gray-300 dark:border-gray-600 text-indigo-600 focus:ring-indigo-500 dark:bg-gray-800 transition duration-150 ease-in-out">
+                                <label for="select-all" class="ml-2 text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Select</label>
+                            </div>
+                        </th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Name</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Email</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Status</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Date</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                    {% for contact in contact_items %}
+                    <tr class="hover:bg-gray-50 dark:hover:bg-gray-700 {% if not contact.is_read %}bg-blue-50 dark:bg-blue-900/20{% endif %} transition duration-150 ease-in-out">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <input type="checkbox" name="contact_ids" value="{{ contact.id }}" 
+                                   class="contact-checkbox rounded border-gray-300 dark:border-gray-600 text-indigo-600 focus:ring-indigo-500 dark:bg-gray-800 transition duration-150 ease-in-out">
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm font-medium text-gray-900 dark:text-gray-200">{{ contact.name }}</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm text-gray-900 dark:text-gray-200">{{ contact.email }}</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center space-x-2">
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {% if contact.is_read %}bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200{% else %}bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200{% endif %}">
+                                    {{ contact.is_read|yesno:"Read,Unread" }}
+                                </span>
+                                {% if contact.responded_at %}
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200" title="Responded on {{ contact.responded_at|date:'M d, Y H:i' }}">
+                                    Responded
+                                </span>
+                                {% endif %}
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm text-gray-500 dark:text-gray-400">
+                                {{ contact.created_at|date:"M d, Y H:i" }}
+                                {% if contact.responded_at %}
+                                <div class="text-xs text-gray-400 dark:text-gray-500">
+                                    Responded: {{ contact.responded_at|date:"M d, Y H:i" }}
+                                </div>
+                                {% endif %}
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                            <div class="flex space-x-2">
+                                <a href="{% url 'dashboard:dashboard_contact_detail' contact.id %}" 
+                                   class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-indigo-700 bg-indigo-100 hover:bg-indigo-200 dark:bg-indigo-900 dark:text-indigo-200 dark:hover:bg-indigo-800 transition duration-150 ease-in-out">
+                                    View
+                                </a>
+                                {% if contact.is_read %}
+                                <button type="button" 
+                                        onclick="toggleReadStatus('{{ contact.id }}', false)"
+                                        class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-yellow-700 bg-yellow-100 hover:bg-yellow-200 dark:bg-yellow-900 dark:text-yellow-200 dark:hover:bg-yellow-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500 transition duration-150 ease-in-out">
+                                    Mark Unread
+                                </button>
+                                {% else %}
+                                <button type="button" 
+                                        onclick="toggleReadStatus('{{ contact.id }}', true)"
+                                        class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-green-700 bg-green-100 hover:bg-green-200 dark:bg-green-900 dark:text-green-200 dark:hover:bg-green-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition duration-150 ease-in-out">
+                                    Mark Read
+                                </button>
+                                {% endif %}
+                                <button type="button" 
+                                        onclick="window.location.href='{% url 'dashboard:dashboard_contact_delete' contact.id %}'"
+                                        class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-red-700 bg-red-100 hover:bg-red-200 dark:bg-red-900 dark:text-red-200 dark:hover:bg-red-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition duration-150 ease-in-out">
+                                    Delete
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="6" class="px-6 py-4 text-center text-gray-500 dark:text-gray-400">
+                            <div class="flex flex-col items-center justify-center space-y-2">
+                                <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path>
+                                </svg>
+                                <p>No contact messages found.</p>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </form>
+    </div>
+
+    {% if contact_items.has_other_pages %}
+    <div class="px-6 py-4 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700">
+        <nav class="flex justify-between items-center">
+            <div class="text-sm text-gray-700 dark:text-gray-300">
+                Showing <span class="font-medium">{{ contact_items.start_index }}</span> to <span class="font-medium">{{ contact_items.end_index }}</span> of <span class="font-medium">{{ contact_items.paginator.count }}</span> results
+            </div>
+            <ul class="flex space-x-2">
+                {% if contact_items.has_previous %}
+                <li>
+                    <a href="?page={{ contact_items.previous_page_number }}&sort={{ sort }}" 
+                       class="px-3 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-gray-200 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition duration-150 ease-in-out">
+                        Previous
+                    </a>
+                </li>
+                {% endif %}
+
+                {% for num in contact_items.paginator.page_range %}
+                    {% if contact_items.number == num %}
+                    <li>
+                        <span class="px-3 py-2 rounded-md text-sm font-medium text-white bg-indigo-600">{{ num }}</span>
+                    </li>
+                    {% elif num > contact_items.number|add:'-3' and num < contact_items.number|add:'3' %}
+                    <li>
+                        <a href="?page={{ num }}&sort={{ sort }}" 
+                           class="px-3 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-gray-200 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition duration-150 ease-in-out">
+                            {{ num }}
+                        </a>
+                    </li>
+                    {% endif %}
+                {% endfor %}
+
+                {% if contact_items.has_next %}
+                <li>
+                    <a href="?page={{ contact_items.next_page_number }}&sort={{ sort }}" 
+                       class="px-3 py-2 rounded-md text-sm font-medium text-gray-700 dark:text-gray-200 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition duration-150 ease-in-out">
+                        Next
+                    </a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+    {% endif %}
+</div>
+
+{% block extra_js %}
+<script>
+const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+const checkboxes = document.querySelectorAll('.contact-checkbox');
+const selectAll = document.getElementById('select-all');
+const deleteSelectedBtn = document.getElementById('delete-selected');
+
+function updateDeleteButton() {
+    const checkedBoxes = document.querySelectorAll('.contact-checkbox:checked');
+    deleteSelectedBtn.disabled = checkedBoxes.length === 0;
+    deleteSelectedBtn.classList.toggle('hidden', checkedBoxes.length === 0);
+}
+
+function submitDeleteForm() {
+    const checkedBoxes = document.querySelectorAll('.contact-checkbox:checked');
+    if (checkedBoxes.length > 0) {
+        document.getElementById('contacts-form').action = "{% url 'dashboard:dashboard_contact_delete_multiple' %}";
+        document.getElementById('contacts-form').submit();
+    }
+}
+
+// Event Listeners
+selectAll.addEventListener('change', function() {
+    Array.from(checkboxes).forEach(checkbox => {
+        checkbox.checked = selectAll.checked;
+    });
+    updateDeleteButton();
+});
+
+checkboxes.forEach(checkbox => {
+    checkbox.addEventListener('change', function() {
+        if (!this.checked) {
+            selectAll.checked = false;
+        } else {
+            selectAll.checked = Array.from(checkboxes).every(cb => cb.checked);
+        }
+        updateDeleteButton();
+    });
+});
+
+function toggleReadStatus(contactId, isRead) {
+    const url = isRead 
+        ? `/dashboard/contacts/${contactId}/mark-read/`
+        : `/dashboard/contacts/${contactId}/mark-unread/`;
+    
+    fetch(url, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': csrfToken,
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        },
+        credentials: 'same-origin'
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data.status === 'success') {
+            window.location.reload();
+        } else {
+            alert('Error: ' + (data.message || 'Failed to update status'));
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Failed to update contact status. Please try again.');
+    });
+}
+</script>
+{% endblock %}
+{% endblock %}

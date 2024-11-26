@@ -1,0 +1,111 @@
+{% extends 'dashboard/base.html' %}
+
+{% block title %}Contact Details - Dashboard{% endblock %}
+
+{% block dashboard_content %}
+<div class="bg-white dark:bg-gray-800 shadow rounded-lg">
+    <!-- Header -->
+    <div class="p-6 border-b border-gray-200 dark:border-gray-700">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-4 sm:space-y-0">
+            <div>
+                <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Contact Message</h2>
+                <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">View and respond to contact messages from your portfolio visitors.</p>
+            </div>
+            <div class="flex space-x-3">
+                <a href="{% url 'dashboard:dashboard_contact_list' %}" 
+                   class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600 transition duration-150 ease-in-out">
+                    Back to List
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Message Details -->
+    <div class="p-6 border-b border-gray-200 dark:border-gray-700">
+        <div class="space-y-6">
+            <!-- Sender Info -->
+            <div>
+                <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-4">Sender Information</h3>
+                <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Name</p>
+                            <p class="mt-1 text-sm text-gray-900 dark:text-white">{{ contact.name }}</p>
+                        </div>
+                        <div>
+                            <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Email</p>
+                            <p class="mt-1 text-sm text-gray-900 dark:text-white">{{ contact.email }}</p>
+                        </div>
+                        <div>
+                            <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Date Received</p>
+                            <p class="mt-1 text-sm text-gray-900 dark:text-white">{{ contact.created_at|date:"M d, Y H:i" }}</p>
+                        </div>
+                        <div>
+                            <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Status</p>
+                            <span class="mt-1 inline-flex px-2.5 py-0.5 rounded-full text-xs font-medium {% if contact.is_read %}bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200{% else %}bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200{% endif %}">
+                                {{ contact.is_read|yesno:"Read,Unread" }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Message Content -->
+            <div>
+                <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-4">Message</h3>
+                <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
+                    <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Subject</p>
+                    <p class="mt-1 mb-4 text-sm text-gray-900 dark:text-white">{{ contact.subject }}</p>
+                    <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Content</p>
+                    <p class="mt-1 text-sm text-gray-900 dark:text-white whitespace-pre-wrap">{{ contact.message }}</p>
+                </div>
+            </div>
+
+            <!-- Previous Response -->
+            {% if contact.response %}
+            <div>
+                <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-4">Previous Response</h3>
+                <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
+                    <div class="space-y-2">
+                        <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Sent on: {{ contact.responded_at|date:"M d, Y H:i" }}</p>
+                        <p class="text-sm text-gray-900 dark:text-white whitespace-pre-wrap">{{ contact.response }}</p>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Response Form -->
+            <div>
+                <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-4">
+                    {% if contact.response %}Update Response{% else %}Send Response{% endif %}
+                </h3>
+                <form method="post" class="space-y-4">
+                    {% csrf_token %}
+                    <div>
+                        <label for="{{ form.response.id_for_label }}" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                            Your Response
+                        </label>
+                        {% if form.response.help_text %}
+                        <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">{{ form.response.help_text }}</p>
+                        {% endif %}
+                        <div class="mt-2">
+                            {{ form.response }}
+                            {% if form.response.errors %}
+                            <div class="mt-2 text-sm text-red-600 dark:text-red-400">
+                                {{ form.response.errors }}
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="flex justify-end">
+                        <button type="submit" 
+                                class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 transition duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800">
+                            {% if contact.response %}Update Response{% else %}Send Response{% endif %}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
