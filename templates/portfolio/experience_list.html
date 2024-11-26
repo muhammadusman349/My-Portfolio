@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+{% block title %}Experience - Portfolio{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+    <div class="px-4 py-6 sm:px-0">
+        <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-8">Professional Experience</h1>
+        
+        <div class="space-y-8">
+            {% for experience in experiences %}
+            <div class="bg-white dark:bg-gray-800 shadow overflow-hidden sm:rounded-lg">
+                <div class="px-4 py-5 sm:px-6">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h3 class="text-xl font-bold text-gray-900 dark:text-white">{{ experience.position }}</h3>
+                            <div class="mt-1">
+                                {% if experience.company_url %}
+                                <a href="{{ experience.company_url }}" target="_blank" class="text-blue-600 dark:text-blue-400 hover:underline">{{ experience.company }}</a>
+                                {% else %}
+                                <span class="text-gray-600 dark:text-gray-300">{{ experience.company }}</span>
+                                {% endif %}
+                                <span class="text-gray-500 dark:text-gray-400"> • {{ experience.location }}</span>
+                            </div>
+                            <div class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                                {{ experience.start_date|date:"F Y" }} - 
+                                {% if experience.current %}
+                                Present
+                                {% else %}
+                                {{ experience.end_date|date:"F Y" }}
+                                {% endif %}
+                                • {{ experience.get_employment_type_display }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="border-t border-gray-200 dark:border-gray-700 px-4 py-5 sm:px-6">
+                    <dl class="grid grid-cols-1 gap-x-4 gap-y-6">
+                        <div class="sm:col-span-1">
+                            <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Description</dt>
+                            <dd class="mt-1 text-sm text-gray-900 dark:text-gray-300 whitespace-pre-line">{{ experience.description }}</dd>
+                        </div>
+                        
+                        {% if experience.technologies_used %}
+                        <div class="sm:col-span-1">
+                            <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Technologies Used</dt>
+                            <dd class="mt-2">
+                                {% for tech in experience.technologies_used.split %}
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200 mr-2 mb-2">
+                                    {{ tech }}
+                                </span>
+                                {% endfor %}
+                            </dd>
+                        </div>
+                        {% endif %}
+                    </dl>
+                </div>
+            </div>
+            {% empty %}
+            <div class="text-center py-12">
+                <p class="text-gray-500 dark:text-gray-400">No experience entries found.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

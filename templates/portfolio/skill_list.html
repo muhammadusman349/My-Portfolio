@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block title %}My Skills{% endblock %}
+
+{% block content %}
+<div class="bg-white dark:bg-gray-900 py-24 sm:py-32">
+    <div class="mx-auto max-w-7xl px-6 lg:px-8">
+        <div class="mx-auto max-w-2xl lg:max-w-none">
+            <div class="text-center">
+                <h2 class="text-3xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-4xl">Skills & Expertise</h2>
+                <p class="mt-4 text-lg leading-8 text-gray-600 dark:text-gray-400">
+                    A comprehensive overview of my technical abilities and proficiency levels
+                </p>
+            </div>
+
+            {% regroup skills by category as category_list %}
+            
+            <div class="mt-16 space-y-20">
+                {% for category in category_list %}
+                <div>
+                    <h3 class="text-2xl font-semibold text-gray-900 dark:text-white mb-8">{{ category.grouper }}</h3>
+                    <div class="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
+                        {% for skill in category.list %}
+                        <div class="bg-gray-50 dark:bg-gray-800 p-6 rounded-lg shadow-sm">
+                            <h4 class="text-lg font-semibold text-gray-900 dark:text-white">{{ skill.name }}</h4>
+                            <div class="mt-2">
+                                <div class="flex items-center">
+                                    <div class="flex-1">
+                                        <div class="h-2 bg-gray-200 dark:bg-gray-700 rounded-full">
+                                            <div class="h-2 bg-blue-600 dark:bg-blue-500 rounded-full" 
+                                                 style="width: {{ skill.proficiency }}%">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <span class="ml-4 text-sm text-gray-600 dark:text-gray-400">{{ skill.proficiency }}%</span>
+                                </div>
+                            </div>
+                            {% if skill.description %}
+                            <p class="mt-4 text-sm text-gray-600 dark:text-gray-400">{{ skill.description }}</p>
+                            {% endif %}
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% empty %}
+                <div class="text-center py-12">
+                    <p class="text-gray-500 dark:text-gray-400">No skills added yet.</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

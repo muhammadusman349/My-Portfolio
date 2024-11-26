@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+
+{% block title %}Contact Messages{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+    <div class="px-4 py-5 sm:px-6">
+        <h1 class="text-3xl font-bold text-gray-900 dark:text-white">Contact Messages</h1>
+        <p class="mt-2 text-sm text-gray-600 dark:text-gray-300">
+            Manage and respond to contact form submissions
+        </p>
+    </div>
+
+    <div class="mt-6">
+        {% if messages %}
+        <div class="mb-4">
+            {% for message in messages %}
+            <div class="rounded-md p-4 {% if message.tags == 'success' %}bg-green-50 dark:bg-green-900{% else %}bg-red-50 dark:bg-red-900{% endif %}">
+                <p class="text-sm {% if message.tags == 'success' %}text-green-700 dark:text-green-100{% else %}text-red-700 dark:text-red-100{% endif %}">
+                    {{ message }}
+                </p>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <div class="bg-white dark:bg-gray-800 shadow overflow-hidden sm:rounded-lg">
+            <div class="divide-y divide-gray-200 dark:divide-gray-700">
+                {% for contact in contacts %}
+                <div class="p-4 {% if not contact.is_read %}bg-blue-50 dark:bg-blue-900/20{% endif %}" id="contact-{{ contact.id }}">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h3 class="text-lg font-medium text-gray-900 dark:text-white">
+                                {{ contact.subject }}
+                            </h3>
+                            <div class="mt-1 text-sm text-gray-500 dark:text-gray-300">
+                                From: {{ contact.name }} ({{ contact.email }})
+                            </div>
+                            <div class="mt-2 text-sm text-gray-700 dark:text-gray-200">
+                                {{ contact.message }}
+                            </div>
+                            <div class="mt-2 text-xs text-gray-500 dark:text-gray-400">
+                                Received: {{ contact.created_at|date:"F j, Y, g:i a" }}
+                            </div>
+                        </div>
+                        <div class="ml-4">
+                            {% if not contact.is_read %}
+                            <form method="post" action="{% url 'portfolio:mark_contact_read' contact.id %}" class="mark-read-form">
+                                {% csrf_token %}
+                                <button type="submit"
+                                    class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-full shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 dark:focus:ring-offset-gray-800">
+                                    Mark as Read
+                                </button>
+                            </form>
+                            {% endif %}
+                            <a href="mailto:{{ contact.email }}" target="_blank"
+                                class="inline-flex items-center px-3 py-1.5 border border-gray-300 dark:border-gray-600 text-xs font-medium rounded-full text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 dark:focus:ring-offset-gray-800">
+                                Reply
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="p-4 text-center text-gray-500 dark:text-gray-400">
+                    No contact messages yet.
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    $(document).ready(function() {
+        $('.mark-read-form').on('submit', function(e) {
+            e.preventDefault();
+            const form = $(this);
+            const contactDiv = form.closest('[id^="contact-"]');
+            
+            $.ajax({
+                url: form.attr('action'),
+                type: 'POST',
+                data: form.serialize(),
+                success: function(response) {
+                    if (response.status === 'success') {
+                        // Remove background color and hide the button
+                        contactDiv.removeClass('bg-blue-50 dark:bg-blue-900/20');
+                        form.fadeOut();
+                    }
+                }
+            });
+        });
+    });
+</script>
+{% endblock %}
