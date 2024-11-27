@@ -1,16 +1,35 @@
 from django.contrib import admin
-from .models import Project, ProjectComment, Skill, Education, Contact, Experience
+from .models import (
+    Project, ProjectComment,
+    Skill, Education,
+    Contact, Experience,
+    ProjectImage
+    )
 
 # Register your models here.
 
 
+class ProjectImageInline(admin.TabularInline):
+    model = ProjectImage
+    extra = 1
+
+
 @admin.register(Project)
 class ProjectAdmin(admin.ModelAdmin):
+    inlines = [ProjectImageInline]
     list_display = ('id', 'title', 'user', 'created_at', 'updated_at')
     list_filter = ('created_at', 'updated_at')
-    search_fields = ('title', 'description', 'technologies')
+    search_fields = ('title', 'description', 'skills__name')
     date_hierarchy = 'created_at'
+    filter_horizontal = ('skills',)
 
+
+@admin.register(ProjectImage)
+class ProjectImageAdmin(admin.ModelAdmin):
+    list_display = ('id', 'project', 'image', 'caption', 'order', 'created_at')
+    list_filter = ('created_at',)
+    search_fields = ('caption', 'project__title')
+    date_hierarchy = 'created_at'
 
 @admin.register(ProjectComment)
 class ProjectCommentAdmin(admin.ModelAdmin):

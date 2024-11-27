@@ -6,12 +6,32 @@ from django.utils import timezone
 # Create your models here.
 
 
+class Skill(models.Model):
+    PROFICIENCY_CHOICES = [
+        (1, 'Beginner'),
+        (2, 'Elementary'),
+        (3, 'Intermediate'),
+        (4, 'Advanced'),
+        (5, 'Expert')
+    ]
+
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    name = models.CharField(max_length=100)
+    proficiency = models.IntegerField(choices=PROFICIENCY_CHOICES)
+
+    def __str__(self):
+        return f"{self.name} - {self.get_proficiency_display()}"
+
+    class Meta:
+        ordering = ['name']
+        verbose_name_plural = 'Skills'
+
+
 class Project(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     title = models.CharField(max_length=200)
     description = models.TextField()
-    image = models.ImageField(upload_to='project_images/', blank=True)
-    technologies = models.CharField(max_length=200)
+    skills = models.ManyToManyField(Skill, related_name='projects', blank=True)
     github_link = models.URLField(blank=True)
     live_link = models.URLField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -22,6 +42,20 @@ class Project(models.Model):
 
     class Meta:
         ordering = ['-created_at']
+
+
+class ProjectImage(models.Model):
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='images')
+    image = models.ImageField(upload_to='project_images/')
+    caption = models.CharField(max_length=200, blank=True)
+    order = models.PositiveIntegerField(default=0)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['order', 'created_at']
+
+    def __str__(self):
+        return f"Image for {self.project.title}"
 
 
 class ProjectComment(models.Model):
@@ -91,27 +125,6 @@ class ProjectComment(models.Model):
             level += 1
             current = current.parent_comment
         return level
-
-
-class Skill(models.Model):
-    PROFICIENCY_CHOICES = [
-        (1, 'Beginner'),
-        (2, 'Elementary'),
-        (3, 'Intermediate'),
-        (4, 'Advanced'),
-        (5, 'Expert')
-    ]
-
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    name = models.CharField(max_length=100)
-    proficiency = models.IntegerField(choices=PROFICIENCY_CHOICES)
-
-    def __str__(self):
-        return f"{self.name} - {self.get_proficiency_display()}"
-
-    class Meta:
-        ordering = ['name']
-        verbose_name_plural = 'Skills'
 
 
 class Education(models.Model):

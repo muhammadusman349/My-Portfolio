@@ -4,13 +4,24 @@ from django.views.decorators.http import require_POST
 from django.http import JsonResponse
 from django.template.loader import render_to_string
 from django.utils import timezone
-from .models import Project, ProjectComment, Skill, Education, Experience, Contact
-from .forms import CommentForm
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from .models import Project, ProjectComment, Skill, Education, Experience, Contact, ProjectImage
+from .forms import CommentForm, ProjectForm
 from django.contrib import messages
 
 
 def project_list(request):
-    projects = Project.objects.all().order_by('-created_at')
+    project_list = Project.objects.all().order_by('-created_at')
+    paginator = Paginator(project_list, 6)  # Show 6 projects per page
+    
+    page = request.GET.get('page')
+    try:
+        projects = paginator.page(page)
+    except PageNotAnInteger:
+        projects = paginator.page(1)
+    except EmptyPage:
+        projects = paginator.page(paginator.num_pages)
+    
     return render(request, 'portfolio/project_list.html', {'projects': projects})
 
 
@@ -188,6 +199,30 @@ def project_detail(request, pk):
         'comment_form': form,
     }
     return render(request, 'portfolio/project_detail.html', context)
+
+
+def projects_by_skill(request, skill_slug):
+    skill_name = skill_slug.replace('-', ' ')
+    try:
+        skill = Skill.objects.get(name__iexact=skill_name)
+        project_list = skill.projects.all().order_by('-created_at')
+        paginator = Paginator(project_list, 6)  # Show 6 projects per page
+
+        page = request.GET.get('page')
+        try:
+            projects = paginator.page(page)
+        except PageNotAnInteger:
+            projects = paginator.page(1)
+        except EmptyPage:
+            projects = paginator.page(paginator.num_pages)
+    except Skill.DoesNotExist:
+        projects = Project.objects.none()
+
+    context = {
+        'projects': projects,
+        'skill_name': skill_name,
+    }
+    return render(request, 'portfolio/project_list.html', context)
 
 
 def skill_list(request):

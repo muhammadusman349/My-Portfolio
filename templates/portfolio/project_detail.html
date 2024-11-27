@@ -1,44 +1,119 @@
 {% extends 'base.html' %}
 {% load static %}
+{% block title %}{{ project.title }} - Project Details{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css">
+<script src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js"></script>
+<style>
+    .project-swiper {
+        --swiper-theme-color: #3b82f6;
+        --swiper-navigation-size: 24px;
+    }
+    .project-swiper .swiper-button-next,
+    .project-swiper .swiper-button-prev {
+        background-color: rgba(0, 0, 0, 0.5);
+        padding: 20px;
+        border-radius: 50%;
+        color: white;
+    }
+    .project-swiper .swiper-pagination-bullet {
+        width: 8px;
+        height: 8px;
+    }
+    .project-swiper .swiper-pagination-bullet-active {
+        background: #3b82f6;
+    }
+    .project-thumbs {
+        height: 80px;
+    }
+    .project-thumbs .swiper-slide {
+        width: 100px;
+        opacity: 0.6;
+        transition: opacity 0.3s;
+    }
+    .project-thumbs .swiper-slide-thumb-active {
+        opacity: 1;
+    }
+</style>
+{% endblock %}
 
 {% block content %}
-<div class="container mx-auto px-4 py-8">
-    <!-- Project Details -->
-    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden">
-        <!-- Project Header -->
-        <div class="px-4 py-5">
-            <div>
-                <h1 class="text-3xl font-bold text-gray-900 dark:text-white">{{ project.title }}</h1>
-                <p class="mt-1 max-w-2xl text-sm text-gray-500 dark:text-gray-400">
-                    Posted on {{ project.created_at|date:"F j, Y" }}
-                </p>
+<div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+    <div class="px-4 sm:px-0">
+        <a href="{% url 'portfolio:project_list' %}" class="inline-flex items-center text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300 mb-4">
+            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+            </svg>
+            Back to Projects
+        </a>
+    </div>
+
+    <div class="bg-white dark:bg-gray-800 overflow-hidden shadow rounded-lg">
+        <!-- Image Gallery -->
+        {% if project.images.exists %}
+        <div class="swiper project-swiper">
+            <div class="swiper-wrapper">
+                {% for image in project.images.all %}
+                <div class="swiper-slide">
+                    <div class="relative h-96">
+                        <img src="{{ image.image.url }}" 
+                             alt="{{ image.caption|default:project.title }}"
+                             class="w-full h-full object-cover">
+                        {% if image.caption %}
+                        <div class="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 text-white p-2 text-sm">
+                            {{ image.caption }}
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            
+            <!-- Navigation Buttons -->
+            <div class="swiper-button-prev"></div>
+            <div class="swiper-button-next"></div>
+            
+            <!-- Pagination -->
+            <div class="swiper-pagination"></div>
+            
+            <!-- Thumbnails -->
+            <div class="mt-4 px-4">
+                <div class="swiper project-thumbs">
+                    <div class="swiper-wrapper">
+                        {% for image in project.images.all %}
+                        <div class="swiper-slide">
+                            <img src="{{ image.image.url }}" 
+                                 alt="Thumbnail"
+                                 class="w-full h-20 object-cover cursor-pointer rounded-lg">
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
             </div>
         </div>
-
-        <!-- Project Image -->
-        {% if project.image %}
-        <div class="border-t border-gray-200 dark:border-gray-700">
-            <div class="aspect-w-16 aspect-h-9">
-                <img class="object-cover w-full h-96" src="{{ project.image.url }}" alt="{{ project.title }}">
-            </div>
+        {% elif project.image %}
+        <div class="h-96">
+            <img src="{{ project.image.url }}" alt="{{ project.title }}" class="w-full h-full object-cover">
         </div>
         {% endif %}
 
         <!-- Project Details -->
-        <div class="border-t border-gray-200 dark:border-gray-700 px-4 py-5 sm:px-6">
-            <dl class="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2">
-                <div class="sm:col-span-2">
-                    <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Description</dt>
-                    <dd class="mt-1 text-sm text-gray-900 dark:text-gray-300">{{ project.description }}</dd>
+        <div class="px-4 py-5 sm:p-6">
+            <div class="space-y-6">
+                <div>
+                    <h1 class="text-2xl font-bold text-gray-900 dark:text-white">{{ project.title }}</h1>
+                    <p class="mt-4 text-gray-600 dark:text-gray-300">{{ project.description }}</p>
                 </div>
 
                 <div>
-                    <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Technologies</dt>
+                    <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Skills</dt>
                     <dd class="mt-1">
-                        {% for tech in project.technologies.split %}
-                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
-                            {{ tech }}
-                        </span>
+                        {% for skill in project.skills.all %}
+                        <a href="{% url 'portfolio:projects_by_skill' skill.name|slugify %}"
+                           class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200 hover:bg-blue-200 dark:hover:bg-blue-800 transition-colors">
+                            {{ skill.name }}
+                        </a>
                         {% endfor %}
                     </dd>
                 </div>
@@ -48,76 +123,82 @@
                     <dd class="mt-1 text-sm text-gray-900 dark:text-gray-300">
                         <div class="flex space-x-4">
                             {% if project.github_link %}
-                            <a href="{{ project.github_link }}" target="_blank" class="text-gray-400 hover:text-gray-500 dark:text-gray-500 dark:hover:text-gray-400">
-                                <i class="fab fa-github fa-2x"></i>
+                            <a href="{{ project.github_link }}" target="_blank" rel="noopener noreferrer" 
+                               class="inline-flex items-center text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200">
+                                <i class="fab fa-github fa-lg mr-2"></i>
+                                <span>GitHub Repository</span>
                             </a>
                             {% endif %}
                             {% if project.live_link %}
-                            <a href="{{ project.live_link }}" target="_blank" class="text-gray-400 hover:text-gray-500 dark:text-gray-500 dark:hover:text-gray-400">
-                                <i class="fas fa-external-link-alt fa-2x"></i>
+                            <a href="{{ project.live_link }}" target="_blank" rel="noopener noreferrer"
+                               class="inline-flex items-center text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200">
+                                <i class="fas fa-external-link-alt fa-lg mr-2"></i>
+                                <span>Live Demo</span>
                             </a>
                             {% endif %}
                         </div>
                     </dd>
                 </div>
-            </dl>
+            </div>
+        </div>
+    </div>
+
+    <!-- Comments Section -->
+    <div class="mt-8 bg-white dark:bg-gray-800 shadow rounded-lg overflow-hidden">
+        <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-8">Comments</h2>
+
+        <!-- Comment Form -->
+        {% if user.is_authenticated %}
+        <div class="mb-8">
+            <form id="comment-form" 
+                  method="post" 
+                  action="{% url 'portfolio:add_comment' project.id %}" 
+                  data-project-id="{{ project.id }}"
+                  class="space-y-4">
+                {% csrf_token %}
+                <div>
+                    <label for="comment-text" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Add a comment</label>
+                    <textarea id="comment-text" 
+                            name="text" 
+                            rows="3" 
+                            class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" 
+                            placeholder="Share your thoughts..." 
+                            required></textarea>
+                </div>
+                <div class="flex justify-end">
+                    <button type="submit" 
+                            class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                        Post Comment
+                    </button>
+                </div>
+            </form>
+        </div>
+        {% else %}
+        <div class="bg-gray-50 dark:bg-gray-800 rounded-lg p-4 mb-8">
+            <p class="text-gray-600 dark:text-gray-400">
+                Please <a href="{% url 'account_login' %}?next={{ request.path }}" class="text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300">log in</a> 
+                or <a href="{% url 'account_signup' %}?next={{ request.path }}" class="text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300">sign up</a> to post comments.
+            </p>
+        </div>
+        {% endif %}
+
+        <!-- Comments List -->
+        {% if user.is_authenticated %}
+        <div id="comments-container" class="space-y-6">
+            {% for comment in project.comments.all %}
+                {% if not comment.parent_comment %}  {# Only show top-level comments #}
+                    {% include 'portfolio/includes/comment.html' with comment=comment project=project %}
+                {% endif %}
+            {% endfor %}
         </div>
 
-        <!-- Comments Section -->
-        <section class="mt-16 max-w-4xl mx-auto">
-            <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-8">Comments</h2>
-
-            <!-- Comment Form -->
-            {% if user.is_authenticated %}
-            <div class="mb-8">
-                <form id="comment-form" 
-                      method="post" 
-                      action="{% url 'portfolio:add_comment' project.id %}" 
-                      data-project-id="{{ project.id }}"
-                      class="space-y-4">
-                    {% csrf_token %}
-                    <div>
-                        <label for="comment-text" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Add a comment</label>
-                        <textarea id="comment-text" 
-                                name="text" 
-                                rows="3" 
-                                class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" 
-                                placeholder="Share your thoughts..." 
-                                required></textarea>
-                    </div>
-                    <div class="flex justify-end">
-                        <button type="submit" 
-                                class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                            Post Comment
-                        </button>
-                    </div>
-                </form>
-            </div>
-            {% else %}
-            <div class="bg-gray-50 dark:bg-gray-800 rounded-lg p-4 mb-8">
-                <p class="text-gray-600 dark:text-gray-400">
-                    Please <a href="{% url 'login' %}?next={{ request.path }}" class="text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300">log in</a> 
-                    to leave a comment.
-                </p>
-            </div>
-            {% endif %}
-
-            <!-- Comments List -->
-            <div id="comments-container" class="space-y-6">
-                {% for comment in project.comments.all %}
-                    {% if not comment.parent_comment %}  {# Only show top-level comments #}
-                        {% include 'portfolio/includes/comment.html' with comment=comment project=project %}
-                    {% endif %}
-                {% endfor %}
-            </div>
-
-            <!-- No Comments Message -->
-            {% if not project.comments.exists %}
-            <div class="text-center py-8 no-comments-message">
-                <p class="text-gray-500 dark:text-gray-400">No comments yet. Be the first to share your thoughts!</p>
-            </div>
-            {% endif %}
-        </section>
+        <!-- No Comments Message -->
+        {% if not project.comments.exists %}
+        <div class="text-center py-8 no-comments-message">
+            <p class="text-gray-500 dark:text-gray-400">No comments yet. Be the first to share your thoughts!</p>
+        </div>
+        {% endif %}
+        {% endif %}
     </div>
 </div>
 
@@ -151,5 +232,35 @@
 {% endblock %}
 
 {% block extra_js %}
-<script src="{% static 'js/comments.js' %}"></script>
-{% endblock extra_js %}
+{% if project.images.exists %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const thumbsSwiper = new Swiper('.project-thumbs', {
+        spaceBetween: 10,
+        slidesPerView: 'auto',
+        freeMode: true,
+        watchSlidesProgress: true,
+    });
+
+    const swiper = new Swiper('.project-swiper', {
+        spaceBetween: 10,
+        navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+        },
+        pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+        },
+        thumbs: {
+            swiper: thumbsSwiper,
+        },
+        keyboard: {
+            enabled: true,
+        },
+        loop: true,
+    });
+});
+</script>
+{% endif %}
+{% endblock %}

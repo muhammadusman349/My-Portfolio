@@ -8,6 +8,7 @@ urlpatterns = [
 
     # Project URLs
     path('projects/', views.project_list, name='project_list'),
+    path('projects/skill/<str:skill_slug>/', views.projects_by_skill, name='projects_by_skill'),
     path('projects/<int:pk>/', views.project_detail, name='project_detail'),
     path('projects/<int:pk>/comments/add/', views.add_comment, name='add_comment'),
     path('projects/comments/<int:pk>/edit/', views.edit_comment, name='edit_comment'),

@@ -1,14 +1,16 @@
 from django import forms
-from .models import Project, Skill, Education, Experience, Contact, ProjectComment
+from .models import Project, Skill, Education, Experience, Contact, ProjectComment, ProjectImage
 
 
 class ProjectForm(forms.ModelForm):
     class Meta:
         model = Project
-        fields = ['title', 'description', 'image', 'technologies', 'github_link', 'live_link']
+        fields = ['title', 'description', 'skills', 'github_link', 'live_link']
         widgets = {
             'description': forms.Textarea(attrs={'rows': 4}),
-            'technologies': forms.TextInput(attrs={'placeholder': 'e.g., Python, Django, React'}),
+            'skills': forms.SelectMultiple(attrs={
+                'class': 'form-multiselect block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300'
+            }),
         }
 
 
@@ -102,3 +104,19 @@ class CommentResponseForm(forms.Form):
         ),
         required=True
     )
+
+
+class ProjectImageForm(forms.ModelForm):
+    class Meta:
+        model = ProjectImage
+        fields = ['image', 'caption', 'order']
+        widgets = {
+            'caption': forms.TextInput(attrs={
+                'class': 'form-input block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300',
+                'placeholder': 'Image caption (optional)'
+            }),
+            'order': forms.NumberInput(attrs={
+                'class': 'form-input block w-20 rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300',
+                'min': '0'
+            })
+        }
