@@ -12,6 +12,7 @@ urlpatterns = [
     path('projects/<int:pk>/edit/', views.project_edit, name='dashboard_project_edit'),
     path('projects/<int:pk>/delete/', views.project_delete, name='dashboard_project_delete'),
     path('projects/delete-multiple/', views.project_delete_multiple, name='dashboard_project_delete_multiple'),
+    path('projects/image/<int:image_id>/delete/', views.project_image_delete, name='project_image_delete'),
 
     # Skills
     path('skills/', views.skill_list, name='dashboard_skill_list'),

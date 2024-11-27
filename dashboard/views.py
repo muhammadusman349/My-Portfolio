@@ -3,14 +3,22 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
-from portfolio.models import Project, Skill, Education, Experience, Contact, ProjectComment
-from portfolio.forms import ProjectForm, SkillForm, EducationForm, ExperienceForm, ContactResponseForm, CommentResponseForm
 from django.utils import timezone
 from django.core.mail import send_mail
 from django.conf import settings
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db.models import Q
 from django.contrib.auth import get_user_model
+from portfolio.models import (
+    Project, Skill,
+    Education, Experience,
+    Contact, ProjectComment, ProjectImage
+    )
+from portfolio.forms import (
+    ProjectForm, SkillForm,
+    EducationForm, ExperienceForm,
+    ContactResponseForm, CommentResponseForm
+    )
 import json
 
 
@@ -76,28 +84,71 @@ def project_list(request):
 @login_required
 def project_create(request):
     if request.method == 'POST':
-        form = ProjectForm(request.POST, request.FILES)
+        form = ProjectForm(request.POST)
         if form.is_valid():
-            project = form.save()
+            project = form.save(commit=False)
+            project.user = request.user
+            project.save()
+            form.save_m2m()  # Save many-to-many relationships
+
+            # Handle multiple image uploads
+            images = request.FILES.getlist('images[]')
+            captions = request.POST.getlist('captions[]')
+            orders = request.POST.getlist('orders[]')
+
+            for i, image in enumerate(images):
+                caption = captions[i] if i < len(captions) else ''
+                order = int(orders[i]) if i < len(orders) else 0
+                ProjectImage.objects.create(
+                    project=project,
+                    image=image,
+                    caption=caption,
+                    order=order
+                )
+
             messages.success(request, 'Project created successfully!')
             return redirect('dashboard:dashboard_project_list')
     else:
         form = ProjectForm()
-    return render(request, 'dashboard/projects/form.html', {'form': form, 'action': 'Create'})
+
+    return render(request, 'dashboard/projects/form.html', {
+        'form': form,
+        'action': 'Create'
+    })
 
 
 @login_required
 def project_edit(request, pk):
-    project = get_object_or_404(Project, pk=pk)
+    project = get_object_or_404(Project, pk=pk, user=request.user)
+
     if request.method == 'POST':
-        form = ProjectForm(request.POST, request.FILES, instance=project)
+        form = ProjectForm(request.POST, instance=project)
         if form.is_valid():
-            form.save()
+            project = form.save()
+            # Handle multiple image uploads
+            images = request.FILES.getlist('images[]')
+            captions = request.POST.getlist('captions[]')
+            orders = request.POST.getlist('orders[]')
+
+            for i, image in enumerate(images):
+                caption = captions[i] if i < len(captions) else ''
+                order = int(orders[i]) if i < len(orders) else 0
+                ProjectImage.objects.create(
+                    project=project,
+                    image=image,
+                    caption=caption,
+                    order=order
+                )
+
             messages.success(request, 'Project updated successfully!')
             return redirect('dashboard:dashboard_project_list')
     else:
         form = ProjectForm(instance=project)
-    return render(request, 'dashboard/projects/form.html', {'form': form, 'action': 'Edit'})
+    return render(request, 'dashboard/projects/form.html', {
+        'form': form,
+        'project': project,
+        'action': 'Update'
+    })
 
 
 @login_required
@@ -108,6 +159,15 @@ def project_delete(request, pk):
         messages.success(request, 'Project deleted successfully!')
         return redirect('dashboard:dashboard_project_list')
     return render(request, 'dashboard/projects/delete.html', {'project': project})
+
+
+@login_required
+def project_image_delete(request, image_id):
+    if request.method == 'POST':
+        image = get_object_or_404(ProjectImage, id=image_id, project__user=request.user)
+        image.delete()
+        return JsonResponse({'status': 'success'})
+    return JsonResponse({'status': 'error'}, status=405)
 
 
 @login_required
