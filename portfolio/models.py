@@ -162,7 +162,7 @@ class Experience(models.Model):
     end_date = models.DateField(null=True, blank=True)
     current = models.BooleanField(default=False)
     description = models.TextField(help_text="Describe your responsibilities and achievements")
-    technologies_used = models.ManyToManyField(Skill, null=True, blank=True, help_text="Select relevant skills")
+    technologies_used = models.ManyToManyField(Skill, blank=True, help_text="Select relevant skills")
     company_url = models.URLField(blank=True)
 
     def __str__(self):
