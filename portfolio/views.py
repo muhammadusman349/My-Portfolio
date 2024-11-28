@@ -231,13 +231,27 @@ def skill_list(request):
 
 
 def education_list(request):
-    education = Education.objects.all().order_by('-start_date')
-    return render(request, 'portfolio/education_list.html', {'education': education})
+    educations = Education.objects.all().order_by('-start_date')
+    return render(request, 'portfolio/education_list.html', {'educations': educations})
 
 
 def experience_list(request):
     experiences = Experience.objects.all().order_by('-start_date')
     return render(request, 'portfolio/experience_list.html', {'experiences': experiences})
+
+
+def experience_detail(request, pk):
+    experience = get_object_or_404(Experience, pk=pk)
+    
+    # Get related projects by matching the skills used in the experience
+    related_projects = Project.objects.filter(
+        skills__in=experience.technologies_used.all()
+    ).distinct().order_by('-created_at')
+    
+    return render(request, 'portfolio/experience_detail.html', {
+        'experience': experience,
+        'related_projects': related_projects,
+    })
 
 
 def contact_view(request):
@@ -305,13 +319,14 @@ def reply_to_response(request, comment_id):
 def home(request):
     projects = Project.objects.all().order_by('-created_at')[:3]
     experiences = Experience.objects.all().order_by('-start_date')[:3]
-    skills = Skill.objects.all().order_by('-proficiency')
-    education = Education.objects.all().order_by('-start_date')[:3]
+    educations = Education.objects.all().order_by('-start_date')
+    skills = Skill.objects.all().order_by('-proficiency')[:10]
+    
     return render(request, 'portfolio/home.html', {
         'projects': projects,
         'experiences': experiences,
+        'educations': educations,
         'skills': skills,
-        'education': education,
     })
 
 

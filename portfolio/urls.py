@@ -24,6 +24,7 @@ urlpatterns = [
 
     # Experience URLs
     path('experience/', views.experience_list, name='experience_list'),
+    path('experience/<int:pk>/', views.experience_detail, name='experience_detail'),
 
     # Contact URLs
     path('contact/', views.contact_view, name='contact'),

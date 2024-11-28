@@ -102,21 +102,57 @@
             <!-- Timeline items -->
             <div class="space-y-12">
                 {% for experience in experiences %}
-                <div class="relative pl-16">
-                    <!-- Timeline icon -->
-                    <div class="absolute left-4 -translate-x-1/2">
-                        <svg class="w-6 h-6 text-blue-500 dark:text-blue-300" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M10 2H14C15.1 2 16 2.9 16 4H20C21.1 4 22 4.9 22 6V20C22 21.1 21.1 22 20 22H4C2.9 22 2 21.1 2 20V6C2 4.9 2.9 4 4 4H8C8 2.9 8.9 2 10 2ZM10 4H14V6H10V4ZM4 8V20H20V8H4Z"/>
-                        </svg>
+                <a href="{% url 'portfolio:experience_detail' experience.pk %}" 
+                   class="block group">
+                    <div class="relative pl-16">
+                        <!-- Timeline icon -->
+                        <div class="absolute left-4 -translate-x-1/2 transition-transform duration-200 group-hover:scale-110">
+                            <div class="w-8 h-8 rounded-full bg-white dark:bg-gray-800 border-2 border-blue-500 dark:border-blue-300 flex items-center justify-center group-hover:bg-blue-50 dark:group-hover:bg-gray-700">
+                                <svg class="w-4 h-4 text-blue-500 dark:text-blue-300" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M10 2H14C15.1 2 16 2.9 16 4H20C21.1 4 22 4.9 22 6V20C22 21.1 21.1 22 20 22H4C2.9 22 2 21.1 2 20V6C2 4.9 2.9 4 4 4H8C8 2.9 8.9 2 10 2ZM10 4H14V6H10V4ZM4 8V20H20V8H4Z"/>
+                                </svg>
+                            </div>
+                        </div>
+                        
+                        <!-- Content -->
+                        <div class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-md transition-all duration-200 group-hover:shadow-lg group-hover:scale-[1.02]">
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-4">
+                                <h3 class="text-xl font-semibold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400">
+                                    {{ experience.company }}
+                                </h3>
+                                <div class="text-sm text-gray-600 dark:text-gray-400 mt-2 sm:mt-0">
+                                    {{ experience.start_date|date:"F Y" }} - 
+                                    {% if experience.current %}
+                                        Present
+                                    {% else %}
+                                        {{ experience.end_date|date:"F Y" }}
+                                    {% endif %}
+                                </div>
+                            </div>
+                            
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-4">
+                                <p class="text-lg text-gray-700 dark:text-gray-300">{{ experience.position }}</p>
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
+                                           bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200 mt-2 sm:mt-0">
+                                    {{ experience.get_employment_type_display }}
+                                </span>
+                            </div>
+                            
+                            <p class="text-gray-500 dark:text-gray-400">{{ experience.location }}</p>
+                            
+                            {% if experience.technologies_used.exists %}
+                            <div class="mt-4 flex flex-wrap gap-2">
+                                {% for tech in experience.technologies_used.all %}
+                                <span class="px-2 py-1 text-xs bg-gray-100 dark:bg-gray-700 
+                                           text-gray-700 dark:text-gray-300 rounded-full">
+                                    {{ tech.name }}
+                                </span>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+                        </div>
                     </div>
-                    
-                    <!-- Content -->
-                    <div>
-                        <h3 class="text-xl font-semibold text-gray-900 dark:text-white">{{ experience.company }}</h3>
-                        <p class="text-gray-600 dark:text-gray-300 mt-1">{{ experience.position }}</p>
-                        <p class="text-gray-500 dark:text-gray-400 mt-1">{{ experience.location }}</p>
-                    </div>
-                </div>
+                </a>
                 {% endfor %}
             </div>
         </div>
@@ -125,31 +161,54 @@
 
 
 <!-- Education Section -->
-<section class="py-12 bg-white dark:bg-gray-800">
+<section class="py-12 bg-gray-50 dark:bg-gray-900">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-12">Education</h2>
         <!-- Timeline container -->
         <div class="relative">
             <!-- Vertical line -->
-            <div class="absolute left-6 top-0 bottom-0 w-0.5 bg-green-200 dark:bg-green-900"></div>
+            <div class="absolute left-6 top-0 bottom-0 w-0.5 bg-blue-200 dark:bg-blue-900"></div>
             
             <!-- Timeline items -->
             <div class="space-y-12">
-                {% for edu in education %}
-                <div class="relative pl-16">
+                {% for education in educations %}
+                <div class="relative pl-16 group">
                     <!-- Timeline icon -->
-                    <div class="absolute left-4 -translate-x-1/2">
-                        <svg class="w-6 h-6 text-green-500 dark:text-green-300" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M12 3L1 9l11 6 9-4.91V17h2V9L12 3z"/>
-                            <path d="M5 11.34V15.4l7 3.6 7-3.6v-4.06l-7 3.82-7-3.82z"/>
-                        </svg>
+                    <div class="absolute left-4 -translate-x-1/2 transition-transform duration-200 group-hover:scale-110">
+                        <div class="w-8 h-8 rounded-full bg-white dark:bg-gray-800 border-2 border-blue-500 dark:border-blue-300 flex items-center justify-center group-hover:border-blue-600 dark:group-hover:border-blue-400 transition-colors duration-200">
+                            <svg class="w-4 h-4 text-blue-500 dark:text-blue-300 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-200" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path d="M12 14l9-5-9-5-9 5 9 5z"/>
+                                <path d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5l4-2.222"/>
+                            </svg>
+                        </div>
                     </div>
                     
                     <!-- Content -->
-                    <div>
-                        <h3 class="text-xl font-semibold text-gray-900 dark:text-white">{{ edu.institution }}</h3>
-                        <p class="text-gray-600 dark:text-gray-300 mt-1">{{ edu.degree }}</p>
-                        <p class="text-gray-500 dark:text-gray-400 mt-1">{{ edu.field_of_study }}</p>
+                    <div class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-md transition-all duration-200 group-hover:shadow-lg group-hover:scale-[1.02]">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-4">
+                            <h3 class="text-xl font-semibold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-200">
+                                {{ education.institution }}
+                            </h3>
+                            <div class="text-sm text-gray-600 dark:text-gray-400 mt-2 sm:mt-0 group-hover:text-gray-900 dark:group-hover:text-gray-300 transition-colors duration-200">
+                                {{ education.start_date|date:"F Y" }} - 
+                                {% if education.end_date %}
+                                    {{ education.end_date|date:"F Y" }}
+                                {% else %}
+                                    Present
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <div class="space-y-2">
+                            <p class="text-lg text-gray-700 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-white transition-colors duration-200">{{ education.degree }}</p>
+                            <p class="text-gray-600 dark:text-gray-400 group-hover:text-gray-800 dark:group-hover:text-gray-200 transition-colors duration-200">{{ education.field_of_study }}</p>
+                            {% if education.description %}
+                            <p class="mt-4 text-gray-600 dark:text-gray-400 group-hover:text-gray-800 dark:group-hover:text-gray-200 transition-colors duration-200">
+                                {{ education.description }}
+                            </p>
+                            {% endif %}
+                        </div>
                     </div>
                 </div>
                 {% endfor %}
@@ -158,9 +217,8 @@
     </div>
 </section>
 
-
 <!-- Skills Section -->
-<section class="py-12 bg-gray-50 dark:bg-gray-900">
+<section class="py-12 bg-white dark:bg-gray-800">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-8">Skills</h2>
         <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
