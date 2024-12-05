@@ -204,8 +204,9 @@ def project_detail(request, pk):
 def projects_by_skill(request, skill_slug):
     skill_name = skill_slug.replace('-', ' ')
     try:
-        skill = Skill.objects.get(name__iexact=skill_name)
-        project_list = skill.projects.all().order_by('-created_at')
+        # Get all skills with the given name and combine their projects
+        skills = Skill.objects.filter(name__iexact=skill_name)
+        project_list = Project.objects.filter(skills__in=skills).distinct().order_by('-created_at')
         paginator = Paginator(project_list, 6)  # Show 6 projects per page
 
         page = request.GET.get('page')

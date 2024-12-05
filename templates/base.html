@@ -34,10 +34,7 @@
         }
     </script>
 
-    <!-- Additional Scripts -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://kit.fontawesome.com/your-font-awesome-kit.js"></script>
-    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         /* Dark mode transitions */
         .dark-transition {
@@ -74,7 +71,33 @@
             opacity: 1;
             transform: scale(1);
         }
+
+        @keyframes float-1 {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        @keyframes float-2 {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+        @keyframes float-3 {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+        .animate-float-1 {
+            animation: float-1 3s ease-in-out infinite;
+        }
+        .animate-float-2 {
+            animation: float-2 4s ease-in-out infinite;
+        }
+        .animate-float-3 {
+            animation: float-3 5s ease-in-out infinite;
+        }
     </style>
+    
+    <!-- Additional Scripts -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://kit.fontawesome.com/your-font-awesome-kit.js"></script>
     
     {% block extra_head %}{% endblock %}
 </head>
@@ -82,25 +105,25 @@
     <!-- Navigation -->
     <nav class="bg-white dark:bg-gray-800 shadow-lg fixed w-full top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-16">
+            <div class="flex justify-between h-20">
                 <div class="flex">
                     <div class="flex-shrink-0 flex items-center">
                         <a href="{% url 'portfolio:home' %}" class="flex items-center space-x-2 group">
-                            <span class="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent group-hover:from-purple-600 group-hover:to-blue-600 transition-all duration-300">Portfolio</span>
+                            <span class="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent group-hover:from-purple-600 group-hover:to-blue-600 transition-all duration-300">Portfolio</span>
                         </a>
                     </div>
                 </div>
                 <!-- Middle - Navigation Links -->
-                <div class="hidden sm:ml-6 sm:flex sm:items-center sm:space-x-4">
-                    <a href="{% url 'portfolio:home' %}" class="relative px-3 py-2 rounded-lg overflow-hidden group">
+                <div class="hidden sm:ml-6 sm:flex sm:items-center sm:space-x-6">
+                    <a href="{% url 'portfolio:home' %}" class="relative px-4 py-3 rounded-lg overflow-hidden group text-lg">
                         <div class="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-purple-500/20 dark:from-blue-400/10 dark:to-purple-400/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                         <span class="text-gray-700 dark:text-gray-200 relative z-10">Home</span>
                     </a>
-                    <a href="{% url 'portfolio:project_list' %}" class="relative px-3 py-2 rounded-lg overflow-hidden group">
+                    <a href="{% url 'portfolio:project_list' %}" class="relative px-4 py-3 rounded-lg overflow-hidden group text-lg">
                         <div class="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-purple-500/20 dark:from-blue-400/10 dark:to-purple-400/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                         <span class="text-gray-700 dark:text-gray-200 relative z-10">Projects</span>
                     </a>
-                    <a href="{% url 'portfolio:contact' %}" class="relative px-3 py-2 rounded-lg overflow-hidden group">
+                    <a href="{% url 'portfolio:contact' %}" class="relative px-4 py-3 rounded-lg overflow-hidden group text-lg">
                         <div class="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-purple-500/20 dark:from-blue-400/10 dark:to-purple-400/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                         <span class="text-gray-700 dark:text-gray-200 relative z-10">Contact</span>
                     </a>
@@ -182,49 +205,118 @@
     </nav>
 
     <!-- Add padding to account for fixed header -->
-    <div class="pt-16">
+    <div class="pt-20">
         <!-- Main Content -->
-        <main class="container mx-auto px-4 py-8 min-h-[calc(100vh-16rem)]">
+        <main class="container mx-auto px-4 py-8 min-h-[calc(100vh-20rem)]">
             {% block content %}{% endblock %}
         </main>
     </div>
 
     <!-- Footer -->
-    <footer class="bg-white dark:bg-gray-800 shadow-lg mt-12">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <!-- About Section -->
-                <div>
-                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">About</h3>
-                    <p class="text-gray-600 dark:text-gray-300">A showcase of my professional work and projects. Explore my portfolio to see what I can bring to your next project.</p>
-                </div>
-                <!-- Quick Links -->
-                <div>
-                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Quick Links</h3>
-                    <ul class="space-y-2">
-                        <li><a href="{% url 'portfolio:home' %}" class="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition duration-150 ease-in-out">Home</a></li>
-                        <li><a href="{% url 'portfolio:project_list' %}" class="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition duration-150 ease-in-out">Projects</a></li>
-                        <li><a href="{% url 'portfolio:contact' %}" class="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition duration-150 ease-in-out">Contact</a></li>
-                    </ul>
-                </div>
-                <!-- Social Links -->
-                <div>
-                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Connect</h3>
-                    <div class="flex space-x-4">
-                        <a href="#" class="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition duration-150 ease-in-out">
-                            <i class="fab fa-github text-xl"></i>
+    <footer class="relative bg-gradient-to-br from-gray-900 via-gray-800 to-black text-gray-300 overflow-hidden">
+        <!-- Decorative Elements -->
+        <div class="absolute inset-0 opacity-10">
+            <div class="absolute -right-10 -top-10 w-40 h-40 bg-blue-500 rounded-full filter blur-3xl"></div>
+            <div class="absolute -left-10 -bottom-10 w-40 h-40 bg-purple-500 rounded-full filter blur-3xl"></div>
+        </div>
+
+        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+            <!-- Grid Container -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-16">
+                <!-- Brand Section -->
+                <div class="space-y-8">
+                    <div>
+                        <h3 class="text-3xl font-bold bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500 bg-clip-text text-transparent">
+                            Usman Portfolio
+                        </h3>
+                        <p class="mt-4 text-gray-400 leading-relaxed">
+                            Transforming ideas into elegant digital solutions with passion and precision.
+                        </p>
+                    </div>
+                    <div class="flex space-x-6">
+                        <a href="#" class="group">
+                            <div class="w-10 h-10 rounded-lg bg-gray-800/50 flex items-center justify-center transform transition-all duration-300 group-hover:scale-110 group-hover:bg-blue-500/20">
+                                <i class="fab fa-linkedin-in text-xl text-gray-400 group-hover:text-blue-500 transition-colors duration-300"></i>
+                            </div>
                         </a>
-                        <a href="#" class="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition duration-150 ease-in-out">
-                            <i class="fab fa-linkedin text-xl"></i>
+                        <a href="#" class="group">
+                            <div class="w-10 h-10 rounded-lg bg-gray-800/50 flex items-center justify-center transform transition-all duration-300 group-hover:scale-110 group-hover:bg-gray-700/20">
+                                <i class="fab fa-github text-xl text-gray-400 group-hover:text-white transition-colors duration-300"></i>
+                            </div>
                         </a>
-                        <a href="#" class="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition duration-150 ease-in-out">
-                            <i class="fab fa-twitter text-xl"></i>
+                        <a href="#" class="group">
+                            <div class="w-10 h-10 rounded-lg bg-gray-800/50 flex items-center justify-center transform transition-all duration-300 group-hover:scale-110 group-hover:bg-blue-400/20">
+                                <i class="fab fa-twitter text-xl text-gray-400 group-hover:text-blue-400 transition-colors duration-300"></i>
+                            </div>
+                        </a>
+                        <a href="#" class="group">
+                            <div class="w-10 h-10 rounded-lg bg-gray-800/50 flex items-center justify-center transform transition-all duration-300 group-hover:scale-110 group-hover:bg-pink-500/20">
+                                <i class="fab fa-instagram text-xl text-gray-400 group-hover:text-pink-500 transition-colors duration-300"></i>
+                            </div>
                         </a>
                     </div>
                 </div>
+
+                <!-- Navigation -->
+                <div class="space-y-8">
+                    <h3 class="text-xl font-semibold text-white relative">
+                        Quick Links
+                        <span class="absolute -bottom-2 left-0 w-12 h-1 bg-gradient-to-r from-blue-500 to-purple-500"></span>
+                    </h3>
+                    <nav class="grid grid-cols-1 gap-4">
+                        <a href="{% url 'portfolio:home' %}" class="text-gray-400 hover:text-white transition-colors duration-300 flex items-center space-x-2 group w-fit">
+                            <span class="w-1.5 h-1.5 rounded-full bg-blue-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
+                            <span>Home</span>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors duration-300 flex items-center space-x-2 group w-fit">
+                            <span class="w-1.5 h-1.5 rounded-full bg-blue-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
+                            <span>Projects</span>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors duration-300 flex items-center space-x-2 group w-fit">
+                            <span class="w-1.5 h-1.5 rounded-full bg-blue-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
+                            <span>Skills</span>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors duration-300 flex items-center space-x-2 group w-fit">
+                            <span class="w-1.5 h-1.5 rounded-full bg-blue-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
+                            <span>Contact</span>
+                        </a>
+                    </nav>
+                </div>
+
+                <!-- Contact -->
+                <div class="space-y-8">
+                    <h3 class="text-xl font-semibold text-white relative">
+                        Get in Touch
+                        <span class="absolute -bottom-2 left-0 w-12 h-1 bg-gradient-to-r from-blue-500 to-purple-500"></span>
+                    </h3>
+                    <div class="space-y-6">
+                        <a href="mailto:contact@example.com" class="group flex items-center space-x-4 text-gray-400 hover:text-white transition-colors duration-300">
+                            <div class="w-10 h-10 rounded-lg bg-gray-800/50 flex items-center justify-center group-hover:bg-blue-500/20 transition-colors duration-300">
+                                <i class="fas fa-envelope text-blue-500"></i>
+                            </div>
+                            <span>contact@example.com</span>
+                        </a>
+                        <div class="group flex items-center space-x-4 text-gray-400">
+                            <div class="w-10 h-10 rounded-lg bg-gray-800/50 flex items-center justify-center">
+                                <i class="fas fa-map-marker-alt text-blue-500"></i>
+                            </div>
+                            <span>Your Location</span>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="border-t border-gray-200 dark:border-gray-700 mt-8 pt-8 text-center">
-                <p class="text-gray-500 dark:text-gray-400">&copy; {% now "Y" %} Portfolio. All rights reserved.</p>
+
+            <!-- Bottom Bar -->
+            <div class="mt-16 pt-8 border-t border-gray-800/50">
+                <div class="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+                    <p class="text-sm text-gray-400">
+                        &copy; {% now "Y" %} <span class="text-white">Usman Portfolio</span>. All rights reserved.
+                    </p>
+                    <div class="flex space-x-8">
+                        <a href="#" class="text-sm text-gray-400 hover:text-white transition-colors duration-300">Privacy Policy</a>
+                        <a href="#" class="text-sm text-gray-400 hover:text-white transition-colors duration-300">Terms of Service</a>
+                    </div>
+                </div>
             </div>
         </div>
     </footer>
