@@ -29,107 +29,83 @@
     </div>
 
     <!-- Hero content -->
-    <div class="relative pt-32 pb-16 sm:pb-24">
+    <div class="relative pt-24 pb-20 sm:pt-32 sm:pb-24">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center">
-                <h1 class="text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white sm:text-5xl md:text-6xl">
-                    <span class="block">Welcome to My Portfolio</span>
-                    <span class="block mt-3 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                        Full Stack Developer
+            <div class="text-center relative">
+                <!-- Decorative blur effects -->
+                <div class="absolute inset-0 -z-10">
+                    <div class="absolute top-1/4 left-1/4 w-64 h-64 bg-purple-300 dark:bg-purple-900 rounded-full mix-blend-multiply dark:mix-blend-soft-light filter blur-3xl opacity-30 animate-blob"></div>
+                    <div class="absolute top-1/3 right-1/4 w-64 h-64 bg-blue-300 dark:bg-blue-900 rounded-full mix-blend-multiply dark:mix-blend-soft-light filter blur-3xl opacity-30 animate-blob animation-delay-2000"></div>
+                    <div class="absolute bottom-1/4 left-1/3 w-64 h-64 bg-pink-300 dark:bg-pink-900 rounded-full mix-blend-multiply dark:mix-blend-soft-light filter blur-3xl opacity-30 animate-blob animation-delay-4000"></div>
+                </div>
+
+                <!-- Main heading -->
+                <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight mb-8">
+                    <span class="block text-gray-900 dark:text-white mb-4">Welcome to My Portfolio</span>
+                    <span class="block bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 bg-clip-text text-transparent">
+                        Backend Developer
                     </span>
                 </h1>
-                <p class="mt-6 max-w-2xl mx-auto text-xl text-gray-500 dark:text-gray-400 sm:text-2xl">
-                    Passionate about creating innovative solutions and delivering exceptional results.
-                    Transforming ideas into elegant, functional applications.
-                </p>
-                
+
                 <!-- Animated Tech Stack Icons -->
-                <div class="mt-12 flex flex-wrap justify-center items-center gap-8">
+                <div class="mt-16 flex flex-wrap justify-center items-center gap-8">
                     <!-- Python -->
-                    <div class="animate-float-1 p-4 bg-gradient-to-br from-blue-500/10 to-purple-500/10 rounded-full">
-                        <i class="fab fa-python text-4xl text-blue-500"></i>
+                    <div class="animate-float-1 p-4 bg-gradient-to-br from-blue-500/10 to-purple-500/10 rounded-full transform hover:scale-110 transition-transform duration-200">
+                        <i class="fab fa-python text-3xl text-blue-500"></i>
                     </div>
                     
                     <!-- Django -->
-                    <div class="animate-float-2 p-4 bg-gradient-to-br from-green-500/10 to-emerald-500/10 rounded-full">
-                        <span class="text-4xl font-bold text-green-600">dj</span>
+                    <div class="animate-float-2 p-4 bg-gradient-to-br from-green-500/10 to-emerald-500/10 rounded-full transform hover:scale-110 transition-transform duration-200">
+                        <span class="text-3xl font-bold text-green-600">dj</span>
                     </div>
                     
                     <!-- DRF -->
-                    <div class="animate-float-3 p-4 bg-gradient-to-br from-orange-500/10 to-red-500/10 rounded-full">
-                        <i class="fas fa-cogs text-4xl text-orange-600"></i>
+                    <div class="animate-float-3 p-4 bg-gradient-to-br from-orange-500/10 to-red-500/10 rounded-full transform hover:scale-110 transition-transform duration-200">
+                        <i class="fas fa-cogs text-3xl text-orange-600"></i>
                     </div>
                     
                     <!-- Docker -->
-                    <div class="animate-float-2 p-4 bg-gradient-to-br from-blue-500/10 to-cyan-500/10 rounded-full">
-                        <i class="fab fa-docker text-4xl text-blue-500"></i>
+                    <div class="animate-float-2 p-4 bg-gradient-to-br from-blue-500/10 to-cyan-500/10 rounded-full transform hover:scale-110 transition-transform duration-200">
+                        <i class="fab fa-docker text-3xl text-blue-500"></i>
                     </div>
 
                     <!-- MySQL -->
-                    <div class="animate-float-3 p-4 bg-gradient-to-br from-blue-600/10 to-purple-600/10 rounded-full">
-                        <i class="fas fa-database text-4xl text-blue-600"></i>
+                    <div class="animate-float-3 p-4 bg-gradient-to-br from-blue-600/10 to-purple-600/10 rounded-full transform hover:scale-110 transition-transform duration-200">
+                        <i class="fas fa-database text-3xl text-blue-600"></i>
                     </div>
-
-                    <!-- Git -->
-                    <!-- <div class="animate-float-2 p-4 bg-gradient-to-br from-orange-500/10 to-red-500/10 rounded-full">
-                        <i class="fab fa-git-alt text-4xl text-orange-600"></i>
-                    </div> -->
 
                     <!-- GitHub -->
-                    <div class="animate-float-1 p-4 bg-gradient-to-br from-gray-500/10 to-gray-700/10 rounded-full dark:from-gray-400/10 dark:to-gray-600/10">
-                        <i class="fab fa-github text-4xl text-gray-700 dark:text-gray-300"></i>
-                    </div>
-
-                    <!-- HTML5 -->
-                    <div class="animate-float-3 p-4 bg-gradient-to-br from-orange-500/10 to-red-500/10 rounded-full">
-                        <i class="fab fa-html5 text-4xl text-orange-500"></i>
-                    </div>
-
-                    <!-- CSS3 -->
-                    <div class="animate-float-2 p-4 bg-gradient-to-br from-blue-500/10 to-blue-700/10 rounded-full">
-                        <i class="fab fa-css3-alt text-4xl text-blue-500"></i>
-                    </div>
-
-                    <!-- Tailwind -->
-                    <div class="animate-float-1 p-4 bg-gradient-to-br from-cyan-500/10 to-blue-500/10 rounded-full">
-                        <i class="fas fa-wind text-4xl text-cyan-500"></i>
+                    <div class="animate-float-1 p-4 bg-gradient-to-br from-gray-500/10 to-gray-700/10 rounded-full dark:from-gray-400/10 dark:to-gray-600/10 transform hover:scale-110 transition-transform duration-200">
+                        <i class="fab fa-github text-3xl text-gray-700 dark:text-gray-300"></i>
                     </div>
                 </div>
 
-                <!-- Animated Stats -->
+                <!-- Stats -->
                 <div class="mt-16 grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto">
-                    <div class="text-center">
-                        <div class="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent animate-pulse">
+                    <div class="text-center transform hover:scale-105 transition-transform duration-200">
+                        <div class="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent animate-pulse">
                             {{ projects.count }}+
                         </div>
-                        <div class="mt-2 text-gray-600 dark:text-gray-400">Projects Completed</div>
+                        <div class="mt-2 text-sm text-gray-500 dark:text-gray-400">Projects Completed</div>
                     </div>
-                    <div class="text-center">
-                        <div class="text-4xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent animate-pulse">
+                    <div class="text-center transform hover:scale-105 transition-transform duration-200">
+                        <div class="text-3xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent animate-pulse">
+                            1+
+                        </div>
+                        <div class="mt-2 text-sm text-gray-500 dark:text-gray-400">Years Experience</div>
+                    </div>
+                    <div class="text-center transform hover:scale-105 transition-transform duration-200">
+                        <div class="text-3xl font-bold bg-gradient-to-r from-pink-600 to-red-600 bg-clip-text text-transparent animate-pulse">
                             {{ skills.count }}+
                         </div>
-                        <div class="mt-2 text-gray-600 dark:text-gray-400">Technologies</div>
+                        <div class="mt-2 text-sm text-gray-500 dark:text-gray-400">Technologies</div>
                     </div>
-                    <div class="text-center">
-                        <div class="text-4xl font-bold bg-gradient-to-r from-pink-600 to-red-600 bg-clip-text text-transparent animate-pulse">
-                            3+
-                        </div>
-                        <div class="mt-2 text-gray-600 dark:text-gray-400">Years Experience</div>
-                    </div>
-                    <div class="text-center">
-                        <div class="text-4xl font-bold bg-gradient-to-r from-red-600 to-orange-600 bg-clip-text text-transparent animate-pulse">
+                    <div class="text-center transform hover:scale-105 transition-transform duration-200">
+                        <div class="text-3xl font-bold bg-gradient-to-r from-red-600 to-orange-600 bg-clip-text text-transparent animate-pulse">
                             100%
                         </div>
-                        <div class="mt-2 text-gray-600 dark:text-gray-400">Client Satisfaction</div>
+                        <div class="mt-2 text-sm text-gray-500 dark:text-gray-400">Client Satisfaction</div>
                     </div>
-                </div>
-
-                <!-- Scroll Indicator -->
-                <!-- <div class="absolute -bottom-4 left-1/2 transform -translate-x-1/2 cursor-pointer scroll-indicator" onclick="scrollToNextSection()">
-                    <div class="flex flex-col items-center text-gray-500 dark:text-gray-400 animate-bounce">
-                        <span class="text-sm mb-2">Scroll Down</span>
-                        <i class="fas fa-chevron-down text-2xl"></i>
-                    </div> -->
                 </div>
             </div>
         </div>
@@ -137,73 +113,113 @@
 </div>
 
 <!-- Latest Projects Section -->
-<section id="latest-projects" class="py-12 bg-white dark:bg-gray-800">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center">
-            <h2 class="text-3xl font-extrabold text-gray-900 dark:text-white sm:text-4xl">
-                Latest Projects
+<section id="latest-projects" class="py-20 bg-gradient-to-b from-white to-gray-50 dark:from-gray-800 dark:to-gray-900">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Section Header -->
+        <div class="text-center max-w-3xl mx-auto mb-16">
+            <h2 class="text-3xl font-extrabold">
+                <span class="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                    Latest Projects
+                </span>
             </h2>
-            <p class="mt-3 max-w-2xl mx-auto text-xl text-gray-500 dark:text-gray-300 sm:mt-4">
-                Check out some of my recent work
+            <p class="mt-4 text-base text-gray-600 dark:text-gray-300">
+                Explore my recent work and creative solutions
             </p>
         </div>
 
-        <div class="mt-12 grid gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+        <!-- Projects Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-12">
             {% for project in projects %}
-            <div class="bg-white dark:bg-gray-700 rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
-                <div class="aspect-w-16 aspect-h-9">
-                    {% if project.images.exists %}
+            <article class="group relative bg-white dark:bg-gray-900 rounded-2xl shadow-md hover:shadow-xl transition-all duration-300">
+                <!-- Project Image Container -->
+                <div class="aspect-w-16 aspect-h-9 rounded-t-2xl overflow-hidden">
                     {% with first_image=project.images.first %}
-                    <img src="{{ first_image.image.url }}" 
-                         alt="{{ first_image.caption|default:project.title }}"
-                         class="w-full h-48 object-cover">
+                        {% if first_image %}
+                            <img src="{{ first_image.image.url }}" 
+                                 alt="{{ project.title }}" 
+                                 class="w-full h-full object-cover transform transition-transform duration-500 group-hover:scale-110">
+                        {% else %}
+                            <div class="w-full h-full bg-gradient-to-br from-blue-500/10 to-purple-500/10 dark:from-blue-600/20 dark:to-purple-600/20 flex items-center justify-center">
+                                <i class="fas fa-code text-4xl text-blue-500/70 dark:text-blue-400/70"></i>
+                            </div>
+                        {% endif %}
                     {% endwith %}
-                    {% elif project.image %}
-                    <img src="{{ project.image.url }}" 
-                         alt="{{ project.title }}"
-                         class="w-full h-48 object-cover">
-                    {% else %}
-                    <div class="w-full h-48 bg-gradient-to-br from-blue-100 to-blue-50 dark:from-blue-900 dark:to-blue-800 flex items-center justify-center">
-                        <div class="text-center px-4">
-                            <svg class="mx-auto h-12 w-12 text-blue-400 dark:text-blue-300 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                            </svg>
-                            <span class="text-sm font-medium text-blue-600 dark:text-blue-300">Project Preview</span>
-                        </div>
-                    </div>
-                    {% endif %}
+                    <!-- Gradient Overlay -->
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 </div>
-                
+
+                <!-- Project Content -->
                 <div class="p-6">
-                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+                    <!-- Title -->
+                    <h3 class="text-2xl font-bold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-300">
                         {{ project.title }}
                     </h3>
-                    <p class="mt-2 text-gray-600 dark:text-gray-300 text-sm line-clamp-2">
-                        {{ project.description }}
+
+                    <!-- Description -->
+                    <p class="mt-3 text-base text-gray-600 dark:text-gray-400 line-clamp-2 min-h-[48px]">
+                        {{ project.description|truncatechars:120 }}
                     </p>
-                    <div class="mt-4 flex justify-between items-center">
-                        <a href="{% url 'portfolio:project_detail' project.pk %}" 
-                           class="inline-flex items-center text-sm font-medium text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300">
-                            View Details
-                            <svg class="ml-1 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7m0 0l-7-7m7 7V3"></path>
-                            </svg>
-                        </a>
-                        <span class="text-sm text-gray-500 dark:text-gray-400">
-                            {{ project.created_at|date:"M j, Y" }}
+
+                    <!-- Technologies Used -->
+                    <div class="mt-4 flex flex-wrap gap-2">
+                        {% for skill in project.skills.all|slice:":3" %}
+                        <span class="inline-flex items-center px-3 py-1 rounded-full text-base font-medium bg-blue-50 text-blue-600 dark:bg-blue-900/30 dark:text-blue-300 ring-1 ring-inset ring-blue-500/20">
+                            {{ skill.name }}
+                        </span>
+                        {% endfor %}
+                        {% if project.skills.count > 3 %}
+                        <span class="inline-flex items-center px-3 py-1 rounded-full text-base font-medium bg-gray-50 text-gray-600 dark:bg-gray-800 dark:text-gray-400 ring-1 ring-inset ring-gray-500/20">
+                            +{{ project.skills.count|add:"-3" }}
+                        </span>
+                        {% endif %}
+                    </div>
+
+                    <!-- Footer: Links & Date -->
+                    <div class="mt-6 pt-4 border-t border-gray-100 dark:border-gray-800 flex items-center justify-between">
+                        <!-- Project Links -->
+                        <div class="flex items-center space-x-4">
+                            {% if project.github_link %}
+                            <a href="{{ project.github_link }}" 
+                               target="_blank" 
+                               rel="noopener noreferrer" 
+                               class="text-gray-500 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400 transition-colors duration-300"
+                               onclick="event.stopPropagation();">
+                                <i class="fab fa-github text-2xl"></i>
+                            </a>
+                            {% endif %}
+                            {% if project.live_link %}
+                            <a href="{{ project.live_link }}" 
+                               target="_blank" 
+                               rel="noopener noreferrer" 
+                               class="text-gray-500 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400 transition-colors duration-300"
+                               onclick="event.stopPropagation();">
+                                <i class="fas fa-external-link-alt text-lg"></i>
+                            </a>
+                            {% endif %}
+                        </div>
+                        <!-- Date -->
+                        <span class="text-sm text-gray-500 dark:text-gray-400 font-medium">
+                            {{ project.created_at|date:"M Y" }}
                         </span>
                     </div>
+
+                    <!-- Project Link Overlay -->
+                    <a href="{% url 'portfolio:project_detail' project.id %}" 
+                       class="absolute inset-0 z-10 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded-2xl">
+                        <span class="sr-only">View project {{ project.title }}</span>
+                    </a>
                 </div>
-            </div>
+            </article>
             {% endfor %}
         </div>
 
-        <div class="mt-12 text-center">
+        <!-- View All Projects Button -->
+        <div class="mt-16 text-center">
             <a href="{% url 'portfolio:project_list' %}" 
-               class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600">
+               class="inline-flex items-center px-6 py-3 text-base font-medium text-white bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl shadow-lg hover:from-blue-700 hover:to-purple-700 transform hover:scale-105 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                 View All Projects
-                <svg class="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+                <svg class="ml-2 -mr-1 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
                 </svg>
             </a>
         </div>
@@ -211,194 +227,212 @@
 </section>
 
 <!-- Experience Section -->
-<section class="py-12 bg-gray-50 dark:bg-gray-900">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-12">Professional Experience</h2>
+<section class="py-20 bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-800">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Section Header -->
+        <div class="text-center max-w-3xl mx-auto mb-16">
+            <h2 class="text-3xl font-extrabold">
+                <span class="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                    Professional Experience
+                </span>
+            </h2>
+            <p class="mt-4 text-base text-gray-600 dark:text-gray-300">
+                My journey and professional growth
+            </p>
+        </div>
+
         <!-- Timeline container -->
         <div class="relative">
             <!-- Vertical line -->
-            <div class="absolute left-6 top-0 bottom-0 w-0.5 bg-blue-200 dark:bg-blue-900"></div>
-            
-            <!-- Timeline items -->
-            <div class="space-y-12">
-                {% for experience in experiences %}
-                <a href="{% url 'portfolio:experience_detail' experience.pk %}" 
-                   class="block group">
-                    <div class="relative pl-16">
-                        <!-- Timeline icon -->
-                        <div class="absolute left-4 -translate-x-1/2 transition-transform duration-200 group-hover:scale-110">
-                            <div class="w-8 h-8 rounded-full bg-white dark:bg-gray-800 border-2 border-blue-500 dark:border-blue-300 flex items-center justify-center group-hover:bg-blue-50 dark:group-hover:bg-gray-700">
-                                <svg class="w-4 h-4 text-blue-500 dark:text-blue-300" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M10 2H14C15.1 2 16 2.9 16 4H20C21.1 4 22 4.9 22 6V20C22 21.1 21.1 22 20 22H4C2.9 22 2 21.1 2 20V6C2 4.9 2.9 4 4 4H8C8 2.9 8.9 2 10 2ZM10 4H14V6H10V4ZM4 8V20H20V8H4Z"/>
-                                </svg>
-                            </div>
-                        </div>
-                        
-                        <!-- Content -->
-                        <div class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-md transition-all duration-200 group-hover:shadow-lg group-hover:scale-[1.02]">
-                            <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-4">
-                                <h3 class="text-xl font-semibold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400">
-                                    {{ experience.company }}
-                                </h3>
-                                <div class="text-sm text-gray-600 dark:text-gray-400 mt-2 sm:mt-0">
-                                    {{ experience.start_date|date:"F Y" }} - 
-                                    {% if experience.current %}
-                                        Present
-                                    {% else %}
-                                        {{ experience.end_date|date:"F Y" }}
-                                    {% endif %}
+            <div class="absolute left-1/2 transform -translate-x-1/2 h-full w-0.5 bg-gradient-to-b from-blue-600 to-purple-600 opacity-30"></div>
+
+            <!-- Experience Items -->
+            {% for experience in experiences %}
+            <div class="relative mb-12">
+                <!-- Timeline dot -->
+                <div class="absolute left-1/2 transform -translate-x-1/2 -translate-y-4 w-4 h-4 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 shadow-lg"></div>
+
+                <!-- Content container -->
+                <div class="relative {% if forloop.counter|divisibleby:2 %}ml-auto pl-12 pr-0{% else %}mr-auto pr-12 pl-0{% endif %} w-full md:w-[calc(50%-2rem)]">
+                    <a href="{% url 'portfolio:experience_detail' experience.pk %}" class="block group">
+                        <div class="bg-white dark:bg-gray-900 rounded-2xl shadow-lg p-6 transform transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+                            <!-- Company and Duration -->
+                            <div class="flex justify-between items-start mb-4">
+                                <div>
+                                    <h3 class="text-2xl font-bold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-300">
+                                        {{ experience.position }}
+                                    </h3>
+                                    <p class="text-base text-blue-600 dark:text-blue-400 font-medium">{{ experience.company }}</p>
                                 </div>
+                                <span class="text-sm text-gray-500 dark:text-gray-400 whitespace-nowrap">
+                                    {{ experience.start_date|date:"M Y" }} - 
+                                    {% if experience.current %}Present{% else %}{{ experience.end_date|date:"M Y" }}{% endif %}
+                                </span>
                             </div>
-                            
-                            <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-4">
-                                <p class="text-lg text-gray-700 dark:text-gray-300">{{ experience.position }}</p>
-                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
-                                           bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200 mt-2 sm:mt-0">
+
+                            <!-- Location and Type -->
+                            <div class="flex items-center gap-4 mb-4 text-sm text-gray-600 dark:text-gray-300">
+                                <span class="flex items-center">
+                                    <i class="fas fa-map-marker-alt mr-2 text-gray-400"></i>
+                                    {{ experience.location }}
+                                </span>
+                                <span class="flex items-center">
+                                    <i class="fas fa-briefcase mr-2 text-gray-400"></i>
                                     {{ experience.get_employment_type_display }}
                                 </span>
                             </div>
-                            
-                            <p class="text-gray-500 dark:text-gray-400">{{ experience.location }}</p>
-                            
-                            {% if experience.technologies_used.exists %}
-                            <div class="mt-4 flex flex-wrap gap-2">
+
+                            <!-- Description - Limited to 2 lines -->
+                            <p class="text-sm text-gray-600 dark:text-gray-400 mb-4 line-clamp-2">
+                                {{ experience.description|linebreaksbr }}
+                            </p>
+
+                            <!-- Technologies -->
+                            {% if experience.technologies_used.all %}
+                            <div class="flex flex-wrap gap-2">
                                 {% for tech in experience.technologies_used.all %}
-                                <span class="px-2 py-1 text-xs bg-gray-100 dark:bg-gray-700 
-                                           text-gray-700 dark:text-gray-300 rounded-full">
+                                <span class="inline-flex items-center px-3 py-1 rounded-full text-base font-medium bg-blue-50 text-blue-600 dark:bg-blue-900/30 dark:text-blue-300 ring-1 ring-inset ring-blue-500/20">
                                     {{ tech.name }}
                                 </span>
                                 {% endfor %}
                             </div>
                             {% endif %}
+
+                            <!-- View Details Link -->
+                            <div class="mt-4 flex justify-end">
+                                <span class="inline-flex items-center text-sm font-medium text-blue-600 dark:text-blue-400 group-hover:text-blue-700 dark:group-hover:text-blue-300">
+                                    View Details
+                                    <svg class="ml-1 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                                    </svg>
+                                </span>
+                            </div>
                         </div>
-                    </div>
-                </a>
-                {% endfor %}
+                    </a>
+                </div>
             </div>
+            {% endfor %}
         </div>
     </div>
 </section>
 
-
 <!-- Education Section -->
-<section class="py-12 bg-gray-50 dark:bg-gray-900">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-12">Education</h2>
+<section class="py-20 bg-white dark:bg-gray-800">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Section Header -->
+        <div class="text-center max-w-3xl mx-auto mb-16">
+            <h2 class="text-3xl font-extrabold">
+                <span class="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                    Education
+                </span>
+            </h2>
+            <p class="mt-4 text-base text-gray-600 dark:text-gray-300">
+                Academic background and qualifications
+            </p>
+        </div>
+
         <!-- Timeline container -->
         <div class="relative">
             <!-- Vertical line -->
-            <div class="absolute left-6 top-0 bottom-0 w-0.5 bg-blue-200 dark:bg-blue-900"></div>
-            
-            <!-- Timeline items -->
-            <div class="space-y-12">
-                {% for education in educations %}
-                <div class="relative pl-16 group">
-                    <!-- Timeline icon -->
-                    <div class="absolute left-4 -translate-x-1/2 transition-transform duration-200 group-hover:scale-110">
-                        <div class="w-8 h-8 rounded-full bg-white dark:bg-gray-800 border-2 border-blue-500 dark:border-blue-300 flex items-center justify-center group-hover:border-blue-600 dark:group-hover:border-blue-400 transition-colors duration-200">
-                            <svg class="w-4 h-4 text-blue-500 dark:text-blue-300 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-200" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path d="M12 14l9-5-9-5-9 5 9 5z"/>
-                                <path d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"/>
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
-                            </svg>
-                        </div>
-                    </div>
-                    
-                    <!-- Content -->
-                    <div class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-md transition-all duration-200 group-hover:shadow-lg group-hover:scale-[1.02]">
-                        <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-4">
-                            <h3 class="text-xl font-semibold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-200">
-                                {{ education.institution }}
-                            </h3>
-                            <div class="text-sm text-gray-600 dark:text-gray-400 mt-2 sm:mt-0 group-hover:text-gray-900 dark:group-hover:text-gray-300 transition-colors duration-200">
-                                {{ education.start_date|date:"F Y" }} - 
-                                {% if education.end_date %}
-                                    {{ education.end_date|date:"F Y" }}
-                                {% else %}
-                                    Present
-                                {% endif %}
+            <div class="absolute left-1/2 transform -translate-x-1/2 h-full w-0.5 bg-gradient-to-b from-blue-600 to-purple-600 opacity-30"></div>
+
+            <!-- Education Items -->
+            {% for education in educations %}
+            <div class="relative mb-12">
+                <!-- Timeline dot -->
+                <div class="absolute left-1/2 transform -translate-x-1/2 -translate-y-4 w-4 h-4 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 shadow-lg"></div>
+
+                <!-- Content container -->
+                <div class="relative {% if forloop.counter|divisibleby:2 %}ml-auto pl-12 pr-0{% else %}mr-auto pr-12 pl-0{% endif %} w-full md:w-[calc(50%-2rem)]">
+                    <div class="bg-white dark:bg-gray-900 rounded-2xl shadow-lg p-6 transform transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+                        <!-- Institution and Duration -->
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <h3 class="text-2xl font-bold text-gray-900 dark:text-white">{{ education.degree }}</h3>
+                                <p class="text-base text-blue-600 dark:text-blue-400 font-medium">{{ education.institution }}</p>
                             </div>
+                            <span class="text-sm text-gray-500 dark:text-gray-400 whitespace-nowrap">
+                                {{ education.start_date|date:"M Y" }} - 
+                                {% if education.end_date %}{{ education.end_date|date:"M Y" }}{% else %}Present{% endif %}
+                            </span>
                         </div>
-                        
-                        <div class="space-y-2">
-                            <p class="text-lg text-gray-700 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-white transition-colors duration-200">{{ education.degree }}</p>
-                            <p class="text-gray-600 dark:text-gray-400 group-hover:text-gray-800 dark:group-hover:text-gray-200 transition-colors duration-200">{{ education.field_of_study }}</p>
-                            {% if education.description %}
-                            <p class="mt-4 text-gray-600 dark:text-gray-400 group-hover:text-gray-800 dark:group-hover:text-gray-200 transition-colors duration-200">
-                                {{ education.description }}
-                            </p>
-                            {% endif %}
+
+                        <!-- Field of Study -->
+                        <div class="flex items-center gap-4 mb-4 text-sm text-gray-600 dark:text-gray-300">
+                            <span class="flex items-center">
+                                <i class="fas fa-graduation-cap mr-2 text-gray-400"></i>
+                                {{ education.field_of_study }}
+                            </span>
                         </div>
+
+                        <!-- Description -->
+                        {% if education.description %}
+                        <p class="text-sm text-gray-600 dark:text-gray-400">{{ education.description|linebreaks }}</p>
+                        {% endif %}
                     </div>
                 </div>
-                {% endfor %}
             </div>
+            {% endfor %}
         </div>
     </div>
 </section>
 
 <!-- Skills Section -->
 <section class="py-12 bg-white dark:bg-gray-800">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center space-y-4 mb-16">
-            <h2 class="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Skills & Technologies</h2>
-            <p class="text-gray-600 dark:text-gray-400">Technologies I work with</p>
+            <h2 class="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                Skills & Technologies
+            </h2>
+            <p class="text-base text-gray-600 dark:text-gray-400">Core technologies I work with</p>
         </div>
         
-        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
             {% for skill in skills %}
             <div class="group relative">
                 <div class="absolute inset-0.5 bg-gradient-to-r from-blue-500 to-purple-500 rounded-xl blur opacity-30 group-hover:opacity-100 transition duration-500"></div>
                 <a href="{% url 'portfolio:projects_by_skill' skill.name|slugify %}" 
-                   class="relative block bg-white dark:bg-gray-700 rounded-xl p-6 transform transition duration-500 hover:scale-[1.02] hover:rotate-1">
-                    <div class="flex flex-col items-center text-center space-y-4">
+                   class="relative block bg-white dark:bg-gray-700 rounded-xl p-4 transform transition duration-500 hover:scale-[1.02] hover:rotate-1">
+                    <div class="flex flex-col items-center text-center space-y-3">
                         <div class="relative">
                             <div class="absolute inset-0 bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-full blur-sm transform scale-125 transition-all duration-300 opacity-0 group-hover:opacity-100"></div>
-                            <div class="relative p-4 bg-gradient-to-br from-blue-500/10 to-purple-500/10 dark:from-blue-400/20 dark:to-purple-400/20 rounded-full group-hover:from-blue-500/30 group-hover:to-purple-500/30 transition-all duration-300">
+                            <div class="relative p-3 bg-gradient-to-br from-blue-500/10 to-purple-500/10 dark:from-blue-400/20 dark:to-purple-400/20 rounded-full group-hover:from-blue-500/30 group-hover:to-purple-500/30 transition-all duration-300">
                                 {% if 'python' in skill.name|lower %}
-                                    <i class="fab fa-python text-4xl text-blue-500 group-hover:animate-bounce"></i>
+                                    <i class="fab fa-python text-2xl text-blue-500 group-hover:animate-bounce"></i>
                                 {% elif 'javascript' in skill.name|lower or 'js' in skill.name|lower %}
-                                    <i class="fab fa-js text-4xl text-yellow-400 group-hover:animate-spin"></i>
+                                    <i class="fab fa-js text-2xl text-yellow-400 group-hover:animate-spin"></i>
                                 {% elif 'react' in skill.name|lower %}
-                                    <i class="fab fa-react text-4xl text-blue-400 group-hover:animate-spin"></i>
+                                    <i class="fab fa-react text-2xl text-blue-400 group-hover:animate-spin"></i>
                                 {% elif 'node' in skill.name|lower %}
-                                    <i class="fab fa-node-js text-4xl text-green-500 group-hover:animate-bounce"></i>
+                                    <i class="fab fa-node-js text-2xl text-green-500 group-hover:animate-bounce"></i>
                                 {% elif 'html' in skill.name|lower %}
-                                    <i class="fab fa-html5 text-4xl text-orange-500 group-hover:animate-pulse"></i>
+                                    <i class="fab fa-html5 text-2xl text-orange-500 group-hover:animate-pulse"></i>
                                 {% elif 'css' in skill.name|lower %}
-                                    <i class="fab fa-css3-alt text-4xl text-blue-500 group-hover:animate-pulse"></i>
+                                    <i class="fab fa-css3-alt text-2xl text-blue-500 group-hover:animate-pulse"></i>
                                 {% elif 'django' in skill.name|lower and 'rest' in skill.name|lower %}
-                                    <i class="fa-solid fa-gears text-4xl text-green-600 group-hover:animate-spin"></i>
+                                    <i class="fa-solid fa-gears text-2xl text-green-600 group-hover:animate-spin"></i>
                                 {% elif 'django' in skill.name|lower %}
-                                    <i class="fa-solid fa-cube text-4xl text-green-500 group-hover:animate-bounce"></i>
+                                    <i class="fa-solid fa-cube text-2xl text-green-500 group-hover:animate-bounce"></i>
                                 {% elif 'docker' in skill.name|lower %}
-                                    <i class="fab fa-docker text-4xl text-blue-500 group-hover:animate-pulse"></i>
+                                    <i class="fab fa-docker text-2xl text-blue-500 group-hover:animate-pulse"></i>
                                 {% elif 'redis' in skill.name|lower %}
-                                    <i class="fas fa-database text-4xl text-red-500 group-hover:animate-pulse"></i>
+                                    <i class="fas fa-database text-2xl text-red-500 group-hover:animate-pulse"></i>
                                 {% elif 'mysql' in skill.name|lower or 'sql' in skill.name|lower %}
-                                    <i class="fas fa-database text-4xl text-blue-600 group-hover:animate-pulse"></i>
-                                {% elif 'git' in skill.name|lower %}
-                                    <i class="fab fa-git-alt text-4xl text-orange-600 group-hover:animate-spin"></i>
-                                {% elif 'github' in skill.name|lower %}
-                                    <i class="fab fa-github text-4xl text-gray-800 dark:text-gray-200 group-hover:animate-bounce"></i>
-                                {% elif 'bootstrap' in skill.name|lower %}
-                                    <i class="fab fa-bootstrap text-4xl text-purple-500 group-hover:animate-bounce"></i>
-                                {% elif 'tailwind' in skill.name|lower %}
-                                    <i class="fas fa-wind text-4xl text-cyan-500 group-hover:animate-pulse"></i>
+                                    <i class="fas fa-database text-2xl text-blue-600 group-hover:animate-pulse"></i>
                                 {% else %}
-                                    <i class="fas fa-code text-4xl text-gray-600 dark:text-gray-400 group-hover:animate-pulse"></i>
+                                    <i class="fas fa-code text-2xl text-gray-600 dark:text-gray-400 group-hover:animate-pulse"></i>
                                 {% endif %}
                             </div>
                         </div>
                         <div>
-                            <h3 class="text-lg font-semibold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-300">
+                            <h3 class="text-base font-semibold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-300">
                                 {{ skill.name }}
                             </h3>
-                            <div class="mt-2 relative h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                            <div class="mt-2 relative h-1.5 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
                                 <div class="absolute top-0 left-0 h-full bg-gradient-to-r from-blue-500 to-purple-500 rounded-full transform origin-left transition-transform duration-1000 skill-bar" 
                                      style="width: {{ skill.proficiency }}%"></div>
                             </div>
-                            <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">{{ skill.proficiency }}%</p>
+                            <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">{{ skill.get_proficiency_display }}</p>
                         </div>
                     </div>
                 </a>

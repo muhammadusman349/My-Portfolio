@@ -321,7 +321,7 @@ def home(request):
     projects = Project.objects.all().order_by('-created_at')[:3]
     experiences = Experience.objects.all().order_by('-start_date')[:3]
     educations = Education.objects.all().order_by('-start_date')
-    skills = Skill.objects.all().order_by('-proficiency')[:10]
+    skills = Skill.objects.all().order_by('-proficiency')[:8]  # Reduced from 10 to 8 skills
     
     return render(request, 'portfolio/home.html', {
         'projects': projects,
