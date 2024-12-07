@@ -222,7 +222,9 @@ def skill_create(request):
     if request.method == 'POST':
         form = SkillForm(request.POST)
         if form.is_valid():
-            skill = form.save()
+            skill = form.save(commit=False)
+            skill.user = request.user
+            skill.save()
             messages.success(request, 'Skill created successfully!')
             return redirect('dashboard:dashboard_skill_list')
     else:
