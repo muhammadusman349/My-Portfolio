@@ -29,4 +29,8 @@ urlpatterns = [
     # Contact URLs
     path('contact/', views.contact_view, name='contact'),
     path('contact/list/', views.contact_list, name='contact_list'),
+
+    # Privacy Policy URL
+    path('privacy-policy/', views.privacy_policy, name='privacy_policy'),
+    path('terms-of-service/', views.terms_of_service, name='terms_of_service'),
 ]

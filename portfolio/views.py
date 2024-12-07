@@ -344,3 +344,11 @@ def get_comment_html(request, pk):
         'status': 'success',
         'html': html
     })
+
+
+def privacy_policy(request):
+    return render(request, 'portfolio/privacy_policy.html')
+
+
+def terms_of_service(request):
+    return render(request, 'portfolio/terms_of_service.html')

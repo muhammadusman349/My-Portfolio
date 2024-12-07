@@ -313,8 +313,8 @@
                         &copy; {% now "Y" %} <span class="text-white">Usman Portfolio</span>. All rights reserved.
                     </p>
                     <div class="flex space-x-8">
-                        <a href="#" class="text-sm text-gray-400 hover:text-white transition-colors duration-300">Privacy Policy</a>
-                        <a href="#" class="text-sm text-gray-400 hover:text-white transition-colors duration-300">Terms of Service</a>
+                        <a href="{% url 'portfolio:privacy_policy' %}" class="text-sm text-gray-400 hover:text-white transition-colors duration-300">Privacy Policy</a>
+                        <a href="{% url 'portfolio:terms_of_service' %}" class="text-sm text-gray-400 hover:text-white transition-colors duration-300">Terms of Service</a>
                     </div>
                 </div>
             </div>
