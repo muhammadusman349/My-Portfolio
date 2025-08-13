@@ -1,1 +1,1 @@
-web: python -m gunicorn conf.asgi:application -k uvicorn.workers.UvicornWorker
+web: gunicorn conf.asgi:application -k uvicorn.workers.UvicornWorker --bind 0.0.0.0:$PORT
