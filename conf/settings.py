@@ -39,7 +39,7 @@ ALLOWED_HOSTS = ["*"]
 RAILWAY_ENVIRONMENT = os.getenv("RAILWAY_ENVIRONMENT", "local")
 
 DEBUG = RAILWAY_ENVIRONMENT != "production"
-
+DEBUG = True
 if RAILWAY_ENVIRONMENT == "production":
     CSRF_TRUSTED_ORIGINS = ["https://*.railway.app"]
 else:
