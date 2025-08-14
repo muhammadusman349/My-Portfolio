@@ -39,7 +39,7 @@ ALLOWED_HOSTS = ["*"]
 RAILWAY_ENVIRONMENT = os.getenv("RAILWAY_ENVIRONMENT", "local")
 
 DEBUG = RAILWAY_ENVIRONMENT != "production"
-DEBUG = True
+
 if RAILWAY_ENVIRONMENT == "production":
     CSRF_TRUSTED_ORIGINS = ["https://*.railway.app"]
 else:
@@ -195,8 +195,20 @@ SITE_ID = 1
 
 # Provider specific settings
 SOCIALACCOUNT_PROVIDERS = {
-    "github": {
-        "VERIFIED_EMAIL": True
+    'google': {
+        'APP': {
+            'client_id': config("GOOGLE_CLIENT_ID"),
+            'secret': config("GOOGLE_SECRET_KEY"),
+            'key': ''
+        }
+    },
+    'github': {
+        'APP': {
+            'client_id': config("GITHUB_CLIENT_ID"),
+            'secret': config("GITHUB_SECRET_KEY"),
+            'key': ''
+        },
+        'VERIFIED_EMAIL': True
     }
 }
 
@@ -221,9 +233,7 @@ ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_USERNAME_REQUIRED = True
 ACCOUNT_SESSION_REMEMBER = True
-# ACCOUNT_RATE_LIMITS = {
-#     "login_failed": ("5/10m",),
-# }
+
 
 # Auth Settings
 AUTH_USER_MODEL = 'accounts.UserProfile'
