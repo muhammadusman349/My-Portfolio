@@ -31,7 +31,7 @@ if env_path.exists():
 # Security settings
 SECRET_KEY = config("SECRET_KEY")
 DEBUG = config("DEBUG", default=False, cast=bool)  # Set DEBUG=False in production
-
+DEBUG = True
 # ALLOWED_HOSTS = config("ALLOWED_HOSTS", default="localhost").split(",")  # Use env variable
 
 ALLOWED_HOSTS = ["*"]
