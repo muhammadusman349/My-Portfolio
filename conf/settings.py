@@ -31,7 +31,9 @@ if env_path.exists():
 # Security settings
 SECRET_KEY = config("SECRET_KEY")
 DEBUG = config("DEBUG", default=False, cast=bool)  # Set DEBUG=False in production
-ALLOWED_HOSTS = config("ALLOWED_HOSTS", default="localhost").split(",")  # Use env variable
+#ALLOWED_HOSTS = config("ALLOWED_HOSTS", default="localhost").split(",")  # Use env variable
+ALLOWED_HOSTS = ["*"]
+
 CSRF_TRUSTED_ORIGINS = config("CSRF_TRUSTED_ORIGINS", default="").split(",")
 
 # Application definition
@@ -102,11 +104,16 @@ WSGI_APPLICATION = 'conf.wsgi.application'
 #         ssl_require=False
 #     )
 # }
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.sqlite3",
+#         "NAME": BASE_DIR / "db.sqlite3",
+#     }
+# }
+
+# Database (PostgreSQL from Railway)
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
-    }
+    'default': dj_database_url.config(default=os.getenv("DATABASE_URL"))
 }
 
 # Password validation
