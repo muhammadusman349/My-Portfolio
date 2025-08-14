@@ -221,9 +221,9 @@ ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_USERNAME_REQUIRED = True
 ACCOUNT_SESSION_REMEMBER = True
-ACCOUNT_RATE_LIMITS = {
-    "login_failed": ("5/10m",),
-}
+# ACCOUNT_RATE_LIMITS = {
+#     "login_failed": ("5/10m",),
+# }
 
 # Auth Settings
 AUTH_USER_MODEL = 'accounts.UserProfile'
