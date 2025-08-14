@@ -31,10 +31,15 @@ if env_path.exists():
 # Security settings
 SECRET_KEY = config("SECRET_KEY")
 DEBUG = config("DEBUG", default=False, cast=bool)  # Set DEBUG=False in production
-#ALLOWED_HOSTS = config("ALLOWED_HOSTS", default="localhost").split(",")  # Use env variable
+
+# ALLOWED_HOSTS = config("ALLOWED_HOSTS", default="localhost").split(",")  # Use env variable
+
 ALLOWED_HOSTS = ["*"]
 
-CSRF_TRUSTED_ORIGINS = config("CSRF_TRUSTED_ORIGINS", default="").split(",")
+if os.getenv("RAILWAY_ENVIRONMENT") == "production":
+    CSRF_TRUSTED_ORIGINS = config("CSRF_TRUSTED_ORIGINS", default="").split(",")
+else:
+    CSRF_TRUSTED_ORIGINS = ["http://localhost:8000"]
 
 # Application definition
 
