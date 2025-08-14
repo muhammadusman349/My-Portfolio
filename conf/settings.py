@@ -32,9 +32,9 @@ if env_path.exists():
 SECRET_KEY = config("SECRET_KEY")
 DEBUG = config("DEBUG", default=False, cast=bool)  # Set DEBUG=False in production
 
-ALLOWED_HOSTS = config("ALLOWED_HOSTS", default="localhost").split(",")  # Use env variable
+# ALLOWED_HOSTS = config("ALLOWED_HOSTS", default="localhost").split(",")  # Use env variable
 
-# ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = ["*"]
 
 RAILWAY_ENVIRONMENT = os.getenv("RAILWAY_ENVIRONMENT", "local")
 
