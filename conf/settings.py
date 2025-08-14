@@ -222,7 +222,7 @@ ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_USERNAME_REQUIRED = True
 ACCOUNT_SESSION_REMEMBER = True
 ACCOUNT_RATE_LIMITS = {
-    "login_failed": "5/600s"
+    "login_failed": ("5/10m",),
 }
 
 # Auth Settings
