@@ -32,9 +32,9 @@ if env_path.exists():
 SECRET_KEY = config("SECRET_KEY")
 DEBUG = config("DEBUG", default=False, cast=bool)  # Set DEBUG=False in production
 
-# ALLOWED_HOSTS = config("ALLOWED_HOSTS", default="localhost").split(",")  # Use env variable
+ALLOWED_HOSTS = config("ALLOWED_HOSTS", default="localhost").split(",")  # Use env variable
 
-ALLOWED_HOSTS = ["*"]
+# ALLOWED_HOSTS = ["*"]
 
 RAILWAY_ENVIRONMENT = os.getenv("RAILWAY_ENVIRONMENT", "local")
 
@@ -195,20 +195,8 @@ SITE_ID = 1
 
 # Provider specific settings
 SOCIALACCOUNT_PROVIDERS = {
-    'google': {
-        'APP': {
-            'client_id': config("GOOGLE_CLIENT_ID"),
-            'secret': config("GOOGLE_SECRET_KEY"),
-            'key': ''
-        }
-    },
-    'github': {
-        'APP': {
-            'client_id': config("GITHUB_CLIENT_ID"),
-            'secret': config("GITHUB_SECRET_KEY"),
-            'key': ''
-        },
-        'VERIFIED_EMAIL': True
+    "github": {
+        "VERIFIED_EMAIL": True
     }
 }
 
