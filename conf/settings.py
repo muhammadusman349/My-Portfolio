@@ -39,10 +39,7 @@ ALLOWED_HOSTS = ["*"]
 RAILWAY_ENVIRONMENT = os.getenv("RAILWAY_ENVIRONMENT", "local")
 
 if RAILWAY_ENVIRONMENT == "production":
-    CSRF_TRUSTED_ORIGINS = config(
-        "CSRF_TRUSTED_ORIGINS", 
-        default="https://my-portfolio-production-a1f4.up.railway.app"
-    ).split(",")
+    CSRF_TRUSTED_ORIGINS = ["https://*.railway.app"]
 else:
     CSRF_TRUSTED_ORIGINS = ["http://localhost:8000"]
 
