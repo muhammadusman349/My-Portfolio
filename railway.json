@@ -15,7 +15,7 @@
           "cmds": ["python manage.py collectstatic --noinput"]
         },
         "start": {
-          "cmds": ["gunicorn conf.wsgi:application --bind 0.0.0.0:$PORT"]
+          "cmds": ["gunicorn conf.asgi :application --bind 0.0.0.0:$PORT"]
         }
       }
     }
