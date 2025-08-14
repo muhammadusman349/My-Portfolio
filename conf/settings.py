@@ -30,12 +30,13 @@ if env_path.exists():
 # SECRET_KEY = config("SECRET_KEY", default="unsafe-secret-key")
 # DEBUG = config("DEBUG", default=False, cast=bool)
 # ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "localhost").split(",")
-SECRET_KEY = os.getenv("SECRET_KEY", "change-this-in-production")
+SECRET_KEY = config("SECRET_KEY")
 
-DEBUG = os.getenv("DEBUG", "False").lower() == "true"
+DEBUG = True
 
-ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "localhost,127.0.0.1,my-portfolio-production-69dd.up.railway.app").split(",")
+ALLOWED_HOSTS = ['*']
 
+CSRF_TRUSTED_ORIGINS= [""]
 
 # Application definition
 
