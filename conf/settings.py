@@ -36,7 +36,9 @@ DEBUG = config("DEBUG", default=False, cast=bool)  # Set DEBUG=False in producti
 
 ALLOWED_HOSTS = ["*"]
 
-if os.getenv("RAILWAY_ENVIRONMENT") == "production":
+RAILWAY_ENVIRONMENT = os.getenv("RAILWAY_ENVIRONMENT", "local")
+
+if RAILWAY_ENVIRONMENT == "production":
     CSRF_TRUSTED_ORIGINS = config("CSRF_TRUSTED_ORIGINS", default="").split(",")
 else:
     CSRF_TRUSTED_ORIGINS = ["http://localhost:8000"]
