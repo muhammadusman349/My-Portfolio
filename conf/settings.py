@@ -23,7 +23,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Security settings
 SECRET_KEY = config("SECRET_KEY")
-DEBUG = config("DEBUG", default=False, cast=bool)  # Set DEBUG=False in production
+# DEBUG = config("DEBUG", default=False, cast=bool)
+DEBUG = True
 ALLOWED_HOSTS = ["*"]
 
 # Application definition
