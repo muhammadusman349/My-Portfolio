@@ -7,7 +7,7 @@
 <!-- Hero Section -->
 <div class="relative bg-white dark:bg-gray-900 overflow-hidden">
     <!-- Background decoration -->
-    <div class="hidden sm:block sm:absolute sm:inset-y-0 sm:h-full sm:w-full" aria-hidden="true">
+    <div class="hidden md:block md:absolute md:inset-y-0 md:h-full md:w-full" aria-hidden="true">
         <div class="relative h-full max-w-7xl mx-auto">
             <svg class="absolute right-full transform translate-y-1/4 translate-x-1/4 lg:translate-x-1/2" width="404" height="784" fill="none" viewBox="0 0 404 784">
                 <defs>
@@ -17,7 +17,7 @@
                 </defs>
                 <rect width="404" height="784" fill="url(#f210dbf6-a58d-4871-961e-36d5016a0f49)" />
             </svg>
-            <svg class="absolute left-full transform -translate-y-3/4 -translate-x-1/4 md:-translate-y-1/2 lg:-translate-x-1/2" width="404" height="784" fill="none" viewBox="0 0 404 784">
+            <svg class="absolute left-full transform -translate-y-3/4 -translate-x-1/4 lg:-translate-x-1/2" width="404" height="784" fill="none" viewBox="0 0 404 784">
                 <defs>
                     <pattern id="5d0dd344-b041-4d26-bec4-8d33ea57ec9b" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
                         <rect x="0" y="0" width="4" height="4" class="text-gray-200 dark:text-gray-800" fill="currentColor" />
@@ -33,7 +33,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center relative">
                 <!-- Decorative blur effects -->
-                <div class="absolute inset-0 -z-10">
+                <div class="absolute inset-0 -z-10 hidden sm:block">
                     <div class="absolute top-1/4 left-1/4 w-64 h-64 bg-purple-300 dark:bg-purple-900 rounded-full mix-blend-multiply dark:mix-blend-soft-light filter blur-3xl opacity-30 animate-blob"></div>
                     <div class="absolute top-1/3 right-1/4 w-64 h-64 bg-blue-300 dark:bg-blue-900 rounded-full mix-blend-multiply dark:mix-blend-soft-light filter blur-3xl opacity-30 animate-blob animation-delay-2000"></div>
                     <div class="absolute bottom-1/4 left-1/3 w-64 h-64 bg-pink-300 dark:bg-pink-900 rounded-full mix-blend-multiply dark:mix-blend-soft-light filter blur-3xl opacity-30 animate-blob animation-delay-4000"></div>
@@ -75,32 +75,32 @@
                     </div>
 
                     <!-- GitHub -->
-                    <div class="animate-float-1 p-4 bg-gradient-to-br from-gray-500/10 to-gray-700/10 rounded-full dark:from-gray-400/10 dark:to-gray-600/10 transform hover:scale-110 transition-transform duration-200">
+                    <div class="animate-float-1 p-4 bg-gradient-to-br from-gray-500/10 to-gray-700/10 dark:from-gray-400/10 dark:to-gray-600/10 rounded-full transform hover:scale-110 transition-transform duration-200">
                         <i class="fab fa-github text-3xl text-gray-700 dark:text-gray-300"></i>
                     </div>
                 </div>
 
                 <!-- Stats -->
-                <div class="mt-16 grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto">
-                    <div class="text-center transform hover:scale-105 transition-transform duration-200">
+                <div class="mt-16 flex flex-col sm:flex-row justify-center items-center gap-8 max-w-4xl mx-auto">
+                    <div class="text-center transform hover:scale-105 transition-transform duration-200 opacity-0 animate-fade-in-up" style="animation-delay: 0ms;">
                         <div class="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent animate-pulse">
                             {{ projects.count }}+
                         </div>
                         <div class="mt-2 text-sm text-gray-500 dark:text-gray-400">Projects Completed</div>
                     </div>
-                    <div class="text-center transform hover:scale-105 transition-transform duration-200">
+                    <div class="text-center transform hover:scale-105 transition-transform duration-200 opacity-0 animate-fade-in-up" style="animation-delay: 200ms;">
                         <div class="text-3xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent animate-pulse">
                             1+
                         </div>
                         <div class="mt-2 text-sm text-gray-500 dark:text-gray-400">Years Experience</div>
                     </div>
-                    <div class="text-center transform hover:scale-105 transition-transform duration-200">
+                    <div class="text-center transform hover:scale-105 transition-transform duration-200 opacity-0 animate-fade-in-up" style="animation-delay: 400ms;">
                         <div class="text-3xl font-bold bg-gradient-to-r from-pink-600 to-red-600 bg-clip-text text-transparent animate-pulse">
                             {{ skills.count }}+
                         </div>
                         <div class="mt-2 text-sm text-gray-500 dark:text-gray-400">Technologies</div>
                     </div>
-                    <div class="text-center transform hover:scale-105 transition-transform duration-200">
+                    <div class="text-center transform hover:scale-105 transition-transform duration-200 opacity-0 animate-fade-in-up" style="animation-delay: 600ms;">
                         <div class="text-3xl font-bold bg-gradient-to-r from-red-600 to-orange-600 bg-clip-text text-transparent animate-pulse">
                             100%
                         </div>
@@ -113,78 +113,80 @@
 </div>
 
 <!-- Latest Projects Section -->
-<section id="latest-projects" class="py-20 bg-gradient-to-b from-white to-gray-50 dark:from-gray-800 dark:to-gray-900">
+<section id="latest-projects" class="py-12 sm:py-16 bg-gradient-to-b from-white to-gray-50 dark:from-gray-800 dark:to-gray-900">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <!-- Section Header -->
-        <div class="text-center max-w-3xl mx-auto mb-16">
-            <h2 class="text-3xl font-extrabold">
+        <div class="text-center max-w-3xl mx-auto mb-12">
+            <h2 class="text-2xl sm:text-3xl font-extrabold">
                 <span class="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
                     Latest Projects
                 </span>
             </h2>
-            <p class="mt-4 text-base text-gray-600 dark:text-gray-300">
+            <p class="mt-3 text-sm sm:text-base text-gray-600 dark:text-gray-300">
                 Explore my recent work and creative solutions
             </p>
         </div>
 
         <!-- Projects Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-12">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-8">
             {% for project in projects %}
             <article class="group relative bg-white dark:bg-gray-900 rounded-2xl shadow-md hover:shadow-xl transition-all duration-300">
                 <!-- Project Image Container -->
-                <div class="aspect-w-16 aspect-h-9 rounded-t-2xl overflow-hidden">
+                <div class="relative aspect-[4/3] rounded-t-2xl overflow-hidden">
                     {% with first_image=project.images.first %}
                         {% if first_image %}
                             <img src="{{ first_image.image.url }}" 
                                  alt="{{ project.title }}" 
                                  class="w-full h-full object-cover transform transition-transform duration-500 group-hover:scale-110">
+                            <!-- Gradient Overlay for Image -->
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                         {% else %}
                             <div class="w-full h-full bg-gradient-to-br from-blue-500/10 to-purple-500/10 dark:from-blue-600/20 dark:to-purple-600/20 flex items-center justify-center">
-                                <i class="fas fa-code text-4xl text-blue-500/70 dark:text-blue-400/70"></i>
+                                <i class="fas fa-code text-3xl sm:text-4xl text-blue-500/70 dark:text-blue-400/70"></i>
                             </div>
+                            <!-- Gradient Overlay for Placeholder -->
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                         {% endif %}
                     {% endwith %}
-                    <!-- Gradient Overlay -->
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 </div>
 
                 <!-- Project Content -->
-                <div class="p-6">
+                <div class="p-4 sm:p-6">
                     <!-- Title -->
-                    <h3 class="text-2xl font-bold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-300">
+                    <h3 class="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-300">
                         {{ project.title }}
                     </h3>
 
                     <!-- Description -->
-                    <p class="mt-3 text-base text-gray-600 dark:text-gray-400 line-clamp-2 min-h-[48px]">
-                        {{ project.description|truncatechars:120 }}
+                    <p class="mt-2 text-sm sm:text-base text-gray-600 dark:text-gray-400 line-clamp-2 min-h-[40px] sm:min-h-[48px]">
+                        {{ project.description|truncatechars:100 }}
                     </p>
 
                     <!-- Technologies Used -->
-                    <div class="mt-4 flex flex-wrap gap-2">
+                    <div class="mt-3 flex flex-wrap gap-2">
                         {% for skill in project.skills.all|slice:":3" %}
-                        <span class="inline-flex items-center px-3 py-1 rounded-full text-base font-medium bg-blue-50 text-blue-600 dark:bg-blue-900/30 dark:text-blue-300 ring-1 ring-inset ring-blue-500/20">
+                        <span class="inline-flex items-center px-2 sm:px-3 py-0.5 sm:py-1 rounded-full text-xs sm:text-sm font-medium bg-blue-50 text-blue-600 dark:bg-blue-900/30 dark:text-blue-300 ring-1 ring-inset ring-blue-500/20">
                             {{ skill.name }}
                         </span>
                         {% endfor %}
                         {% if project.skills.count > 3 %}
-                        <span class="inline-flex items-center px-3 py-1 rounded-full text-base font-medium bg-gray-50 text-gray-600 dark:bg-gray-800 dark:text-gray-400 ring-1 ring-inset ring-gray-500/20">
+                        <span class="inline-flex items-center px-2 sm:px-3 py-0.5 sm:py-1 rounded-full text-xs sm:text-sm font-medium bg-gray-50 text-gray-600 dark:bg-gray-800 dark:text-gray-400 ring-1 ring-inset ring-gray-500/20">
                             +{{ project.skills.count|add:"-3" }}
                         </span>
                         {% endif %}
                     </div>
 
                     <!-- Footer: Links & Date -->
-                    <div class="mt-6 pt-4 border-t border-gray-100 dark:border-gray-800 flex items-center justify-between">
+                    <div class="mt-4 pt-3 border-t border-gray-100 dark:border-gray-800 flex items-center justify-between">
                         <!-- Project Links -->
-                        <div class="flex items-center space-x-4">
+                        <div class="flex items-center space-x-3">
                             {% if project.github_link %}
                             <a href="{{ project.github_link }}" 
                                target="_blank" 
                                rel="noopener noreferrer" 
                                class="text-gray-500 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400 transition-colors duration-300"
                                onclick="event.stopPropagation();">
-                                <i class="fab fa-github text-2xl"></i>
+                                <i class="fab fa-github text-lg sm:text-xl"></i>
                             </a>
                             {% endif %}
                             {% if project.live_link %}
@@ -193,12 +195,12 @@
                                rel="noopener noreferrer" 
                                class="text-gray-500 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400 transition-colors duration-300"
                                onclick="event.stopPropagation();">
-                                <i class="fas fa-external-link-alt text-lg"></i>
+                                <i class="fas fa-external-link-alt text-base sm:text-lg"></i>
                             </a>
                             {% endif %}
                         </div>
                         <!-- Date -->
-                        <span class="text-sm text-gray-500 dark:text-gray-400 font-medium">
+                        <span class="text-xs sm:text-sm text-gray-500 dark:text-gray-400 font-medium">
                             {{ project.created_at|date:"M Y" }}
                         </span>
                     </div>
@@ -214,11 +216,11 @@
         </div>
 
         <!-- View All Projects Button -->
-        <div class="mt-16 text-center">
+        <div class="mt-8 sm:mt-12 text-center">
             <a href="{% url 'portfolio:project_list' %}" 
-               class="inline-flex items-center px-6 py-3 text-base font-medium text-white bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl shadow-lg hover:from-blue-700 hover:to-purple-700 transform hover:scale-105 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+               class="inline-flex items-center px-4 sm:px-6 py-2 sm:py-3 text-sm sm:text-base font-medium text-white bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl shadow-lg hover:from-blue-700 hover:to-purple-700 transform hover:scale-105 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                 View All Projects
-                <svg class="ml-2 -mr-1 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg class="ml-2 -mr-1 w-4 sm:w-5 h-4 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
                 </svg>
             </a>
@@ -227,63 +229,63 @@
 </section>
 
 <!-- Experience Section -->
-<section class="py-20 bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-800">
+<section class="py-12 sm:py-16 bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-800">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <!-- Section Header -->
-        <div class="text-center max-w-3xl mx-auto mb-16">
-            <h2 class="text-3xl font-extrabold">
+        <div class="text-center max-w-3xl mx-auto mb-12">
+            <h2 class="text-2xl sm:text-3xl font-extrabold">
                 <span class="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
                     Professional Experience
                 </span>
             </h2>
-            <p class="mt-4 text-base text-gray-600 dark:text-gray-300">
+            <p class="mt-3 text-sm sm:text-base text-gray-600 dark:text-gray-300">
                 My journey and professional growth
             </p>
         </div>
 
         <!-- Timeline container -->
         <div class="relative">
-            <!-- Vertical line -->
-            <div class="absolute left-1/2 transform -translate-x-1/2 h-full w-0.5 bg-gradient-to-b from-blue-600 to-purple-600 opacity-30"></div>
+            <!-- Vertical line (hidden on mobile) -->
+            <div class="hidden sm:block absolute left-1/2 transform -translate-x-1/2 h-full w-0.5 bg-gradient-to-b from-blue-600 to-purple-600 opacity-30"></div>
 
             <!-- Experience Items -->
             {% for experience in experiences %}
-            <div class="relative mb-12">
-                <!-- Timeline dot -->
-                <div class="absolute left-1/2 transform -translate-x-1/2 -translate-y-4 w-4 h-4 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 shadow-lg"></div>
+            <div class="relative mb-8 sm:mb-12">
+                <!-- Timeline dot (hidden on mobile) -->
+                <div class="hidden sm:block absolute left-1/2 transform -translate-x-1/2 -translate-y-4 w-4 h-4 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 shadow-lg"></div>
 
                 <!-- Content container -->
-                <div class="relative {% if forloop.counter|divisibleby:2 %}ml-auto pl-12 pr-0{% else %}mr-auto pr-12 pl-0{% endif %} w-full md:w-[calc(50%-2rem)]">
+                <div class="relative w-full sm:w-[calc(50%-2rem)] {% if forloop.counter|divisibleby:2 %}sm:ml-auto sm:pl-12 sm:pr-0{% else %}sm:mr-auto sm:pr-12 sm:pl-0{% endif %}">
                     <a href="{% url 'portfolio:experience_detail' experience.pk %}" class="block group">
-                        <div class="bg-white dark:bg-gray-900 rounded-2xl shadow-lg p-6 transform transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+                        <div class="bg-white dark:bg-gray-900 rounded-2xl shadow-lg p-4 sm:p-6 transform transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
                             <!-- Company and Duration -->
-                            <div class="flex justify-between items-start mb-4">
+                            <div class="flex flex-col sm:flex-row justify-between items-start mb-3 sm:mb-4">
                                 <div>
-                                    <h3 class="text-2xl font-bold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-300">
+                                    <h3 class="text-lg sm:text-xl font-bold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-300">
                                         {{ experience.position }}
                                     </h3>
-                                    <p class="text-base text-blue-600 dark:text-blue-400 font-medium">{{ experience.company }}</p>
+                                    <p class="text-sm sm:text-base text-blue-600 dark:text-blue-400 font-medium">{{ experience.company }}</p>
                                 </div>
-                                <span class="text-sm text-gray-500 dark:text-gray-400 whitespace-nowrap">
+                                <span class="text-xs sm:text-sm text-gray-500 dark:text-gray-400 whitespace-nowrap">
                                     {{ experience.start_date|date:"M Y" }} - 
                                     {% if experience.current %}Present{% else %}{{ experience.end_date|date:"M Y" }}{% endif %}
                                 </span>
                             </div>
 
                             <!-- Location and Type -->
-                            <div class="flex items-center gap-4 mb-4 text-sm text-gray-600 dark:text-gray-300">
+                            <div class="flex flex-wrap items-center gap-3 sm:gap-4 mb-3 sm:mb-4 text-xs sm:text-sm text-gray-600 dark:text-gray-300">
                                 <span class="flex items-center">
-                                    <i class="fas fa-map-marker-alt mr-2 text-gray-400"></i>
+                                    <i class="fas fa-map-marker-alt mr-1.5 sm:mr-2 text-gray-400"></i>
                                     {{ experience.location }}
                                 </span>
                                 <span class="flex items-center">
-                                    <i class="fas fa-briefcase mr-2 text-gray-400"></i>
+                                    <i class="fas fa-briefcase mr-1.5 sm:mr-2 text-gray-400"></i>
                                     {{ experience.get_employment_type_display }}
                                 </span>
                             </div>
 
-                            <!-- Description - Limited to 2 lines -->
-                            <p class="text-sm text-gray-600 dark:text-gray-400 mb-4 line-clamp-2">
+                            <!-- Description -->
+                            <p class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mb-3 sm:mb-4 line-clamp-2">
                                 {{ experience.description|linebreaksbr }}
                             </p>
 
@@ -291,7 +293,7 @@
                             {% if experience.technologies_used.all %}
                             <div class="flex flex-wrap gap-2">
                                 {% for tech in experience.technologies_used.all %}
-                                <span class="inline-flex items-center px-3 py-1 rounded-full text-base font-medium bg-blue-50 text-blue-600 dark:bg-blue-900/30 dark:text-blue-300 ring-1 ring-inset ring-blue-500/20">
+                                <span class="inline-flex items-center px-2 sm:px-3 py-0.5 sm:py-1 rounded-full text-xs sm:text-sm font-medium bg-blue-50 text-blue-600 dark:bg-blue-900/30 dark:text-blue-300 ring-1 ring-inset ring-blue-500/20">
                                     {{ tech.name }}
                                 </span>
                                 {% endfor %}
@@ -299,10 +301,10 @@
                             {% endif %}
 
                             <!-- View Details Link -->
-                            <div class="mt-4 flex justify-end">
-                                <span class="inline-flex items-center text-sm font-medium text-blue-600 dark:text-blue-400 group-hover:text-blue-700 dark:group-hover:text-blue-300">
+                            <div class="mt-3 sm:mt-4 flex justify-end">
+                                <span class="inline-flex items-center text-xs sm:text-sm font-medium text-blue-600 dark:text-blue-400 group-hover:text-blue-700 dark:group-hover:text-blue-300">
                                     View Details
-                                    <svg class="ml-1 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <svg class="ml-1 w-3 sm:w-4 h-3 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                                     </svg>
                                 </span>
@@ -317,57 +319,57 @@
 </section>
 
 <!-- Education Section -->
-<section class="py-20 bg-white dark:bg-gray-800">
+<section class="py-12 sm:py-16 bg-white dark:bg-gray-800">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <!-- Section Header -->
-        <div class="text-center max-w-3xl mx-auto mb-16">
-            <h2 class="text-3xl font-extrabold">
+        <div class="text-center max-w-3xl mx-auto mb-12">
+            <h2 class="text-2xl sm:text-3xl font-extrabold">
                 <span class="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
                     Education
                 </span>
             </h2>
-            <p class="mt-4 text-base text-gray-600 dark:text-gray-300">
+            <p class="mt-3 text-sm sm:text-base text-gray-600 dark:text-gray-300">
                 Academic background and qualifications
             </p>
         </div>
 
         <!-- Timeline container -->
         <div class="relative">
-            <!-- Vertical line -->
-            <div class="absolute left-1/2 transform -translate-x-1/2 h-full w-0.5 bg-gradient-to-b from-blue-600 to-purple-600 opacity-30"></div>
+            <!-- Vertical line (hidden on mobile) -->
+            <div class="hidden sm:block absolute left-1/2 transform -translate-x-1/2 h-full w-0.5 bg-gradient-to-b from-blue-600 to-purple-600 opacity-30"></div>
 
             <!-- Education Items -->
             {% for education in educations %}
-            <div class="relative mb-12">
-                <!-- Timeline dot -->
-                <div class="absolute left-1/2 transform -translate-x-1/2 -translate-y-4 w-4 h-4 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 shadow-lg"></div>
+            <div class="relative mb-8 sm:mb-12">
+                <!-- Timeline dot (hidden on mobile) -->
+                <div class="hidden sm:block absolute left-1/2 transform -translate-x-1/2 -translate-y-4 w-4 h-4 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 shadow-lg"></div>
 
                 <!-- Content container -->
-                <div class="relative {% if forloop.counter|divisibleby:2 %}ml-auto pl-12 pr-0{% else %}mr-auto pr-12 pl-0{% endif %} w-full md:w-[calc(50%-2rem)]">
-                    <div class="bg-white dark:bg-gray-900 rounded-2xl shadow-lg p-6 transform transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+                <div class="relative w-full sm:w-[calc(50%-2rem)] {% if forloop.counter|divisibleby:2 %}sm:ml-auto sm:pl-12 sm:pr-0{% else %}sm:mr-auto sm:pr-12 sm:pl-0{% endif %}">
+                    <div class="bg-white dark:bg-gray-900 rounded-2xl shadow-lg p-4 sm:p-6 transform transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
                         <!-- Institution and Duration -->
-                        <div class="flex justify-between items-start mb-4">
+                        <div class="flex flex-col sm:flex-row justify-between items-start mb-3 sm:mb-4">
                             <div>
-                                <h3 class="text-2xl font-bold text-gray-900 dark:text-white">{{ education.degree }}</h3>
-                                <p class="text-base text-blue-600 dark:text-blue-400 font-medium">{{ education.institution }}</p>
+                                <h3 class="text-lg sm:text-xl font-bold text-gray-900 dark:text-white">{{ education.degree }}</h3>
+                                <p class="text-sm sm:text-base text-blue-600 dark:text-blue-400 font-medium">{{ education.institution }}</p>
                             </div>
-                            <span class="text-sm text-gray-500 dark:text-gray-400 whitespace-nowrap">
+                            <span class="text-xs sm:text-sm text-gray-500 dark:text-gray-400 whitespace-nowrap">
                                 {{ education.start_date|date:"M Y" }} - 
                                 {% if education.end_date %}{{ education.end_date|date:"M Y" }}{% else %}Present{% endif %}
                             </span>
                         </div>
 
                         <!-- Field of Study -->
-                        <div class="flex items-center gap-4 mb-4 text-sm text-gray-600 dark:text-gray-300">
+                        <div class="flex items-center gap-3 sm:gap-4 mb-3 sm:mb-4 text-xs sm:text-sm text-gray-600 dark:text-gray-300">
                             <span class="flex items-center">
-                                <i class="fas fa-graduation-cap mr-2 text-gray-400"></i>
+                                <i class="fas fa-graduation-cap mr-1.5 sm:mr-2 text-gray-400"></i>
                                 {{ education.field_of_study }}
                             </span>
                         </div>
 
                         <!-- Description -->
                         {% if education.description %}
-                        <p class="text-sm text-gray-600 dark:text-gray-400">{{ education.description|linebreaks }}</p>
+                        <p class="text-xs sm:text-sm text-gray-600 dark:text-gray-400">{{ education.description|linebreaks }}</p>
                         {% endif %}
                     </div>
                 </div>
@@ -378,59 +380,60 @@
 </section>
 
 <!-- Skills Section -->
-<section class="py-12 bg-white dark:bg-gray-800">
+<section class="py-12 sm:py-16 bg-white dark:bg-gray-800">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center space-y-4 mb-16">
-            <h2 class="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+        <div class="text-center space-y-3 sm:space-y-4 mb-12">
+            <h2 class="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
                 Skills & Technologies
             </h2>
-            <p class="text-base text-gray-600 dark:text-gray-400">Core technologies I work with</p>
+            <p class="text-sm sm:text-base text-gray-600 dark:text-gray-400">Core technologies I work with</p>
         </div>
         
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 sm:gap-6">
             {% for skill in skills %}
             <div class="group relative">
                 <div class="absolute inset-0.5 bg-gradient-to-r from-blue-500 to-purple-500 rounded-xl blur opacity-30 group-hover:opacity-100 transition duration-500"></div>
                 <a href="{% url 'portfolio:projects_by_skill' skill.name|slugify %}" 
-                   class="relative block bg-white dark:bg-gray-700 rounded-xl p-4 transform transition duration-500 hover:scale-[1.02] hover:rotate-1">
-                    <div class="flex flex-col items-center text-center space-y-3">
+                   class="relative block bg-white dark:bg-gray-700 rounded-xl p-3 sm:p-4 transform transition duration-500 hover:scale-[1.02] hover:rotate-1">
+                    <div class="flex flex-col items-center text-center space-y-2 sm:space-y-3">
                         <div class="relative">
                             <div class="absolute inset-0 bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-full blur-sm transform scale-125 transition-all duration-300 opacity-0 group-hover:opacity-100"></div>
-                            <div class="relative p-3 bg-gradient-to-br from-blue-500/10 to-purple-500/10 dark:from-blue-400/20 dark:to-purple-400/20 rounded-full group-hover:from-blue-500/30 group-hover:to-purple-500/30 transition-all duration-300">
+                            <div class="relative p-2 sm:p-3 bg-gradient-to-br from-blue-500/10 to-purple-500/10 dark:from-blue-400/20 dark:to-purple-400/20 rounded-full group-hover:from-blue-500/30 group-hover:to-purple-500/30 transition-all duration-300">
                                 {% if 'python' in skill.name|lower %}
-                                    <i class="fab fa-python text-2xl text-blue-500 group-hover:animate-bounce"></i>
+                                    <i class="fab fa-python text-xl sm:text-2xl text-blue-500 group-hover:animate-bounce"></i>
                                 {% elif 'javascript' in skill.name|lower or 'js' in skill.name|lower %}
-                                    <i class="fab fa-js text-2xl text-yellow-400 group-hover:animate-spin"></i>
+                                    <i class="fab fa-js text-xl sm:text-2xl text-yellow-400 group-hover:animate-spin"></i>
                                 {% elif 'react' in skill.name|lower %}
-                                    <i class="fab fa-react text-2xl text-blue-400 group-hover:animate-spin"></i>
+                                    <i class="fab fa-react text-xl sm:text-2xl text-blue-400 group-hover:animate-spin"></i>
                                 {% elif 'node' in skill.name|lower %}
-                                    <i class="fab fa-node-js text-2xl text-green-500 group-hover:animate-bounce"></i>
+                                    <i class="fab fa-node-js text-xl sm:text-2xl text-green-500 group-hover:animate-bounce"></i>
                                 {% elif 'html' in skill.name|lower %}
-                                    <i class="fab fa-html5 text-2xl text-orange-500 group-hover:animate-pulse"></i>
+                                    <i class="fab fa-html5 text-xl sm:text-2xl text-orange-500 group-hover:animate-pulse"></i>
                                 {% elif 'css' in skill.name|lower %}
-                                    <i class="fab fa-css3-alt text-2xl text-blue-500 group-hover:animate-pulse"></i>
+                                    <i class="fab fa-css3-alt text-xl sm:text-2xl text-blue-500 group-hover:animate-pulse"></i>
                                 {% elif 'django' in skill.name|lower and 'rest' in skill.name|lower %}
-                                    <i class="fa-solid fa-gears text-2xl text-green-600 group-hover:animate-spin"></i>
+                                    <i class="fa-solid fa-gears text-xl sm:text-2xl text-green-600 group-hover:animate-spin"></i>
                                 {% elif 'django' in skill.name|lower %}
-                                    <i class="fa-solid fa-cube text-2xl text-green-500 group-hover:animate-bounce"></i>
+                                    <i class="fa-solid fa-cube text-xl sm:text-2xl text-green-500 group-hover:animate-bounce"></i>
                                 {% elif 'docker' in skill.name|lower %}
-                                    <i class="fab fa-docker text-2xl text-blue-500 group-hover:animate-pulse"></i>
+                                    <i class="fab fa-docker text-xl sm:text-2xl text-blue-500 group-hover:animate-pulse"></i>
                                 {% elif 'redis' in skill.name|lower %}
-                                    <i class="fas fa-database text-2xl text-red-500 group-hover:animate-pulse"></i>
+                                    <i class="fas fa-database text-xl sm:text-2xl text-red-500 group-hover:animate-pulse"></i>
                                 {% elif 'mysql' in skill.name|lower or 'sql' in skill.name|lower %}
-                                    <i class="fas fa-database text-2xl text-blue-600 group-hover:animate-pulse"></i>
+                                    <i class="fas fa-database text-xl sm:text-2xl text-blue-600 group-hover:animate-pulse"></i>
                                 {% else %}
-                                    <i class="fas fa-code text-2xl text-gray-600 dark:text-gray-400 group-hover:animate-pulse"></i>
+                                    <i class="fas fa-code text-xl sm:text-2xl text-gray-600 dark:text-gray-400 group-hover:animate-pulse"></i>
                                 {% endif %}
                             </div>
                         </div>
                         <div>
-                            <h3 class="text-base font-semibold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-300">
+                            <h3 class="text-sm sm:text-base font-semibold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-300">
                                 {{ skill.name }}
                             </h3>
-                            <div class="mt-2 relative h-1.5 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                            <div class="mt-1 sm:mt-2 relative h-1.5 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
                                 <div class="absolute top-0 left-0 h-full bg-gradient-to-r from-blue-500 to-purple-500 rounded-full transform origin-left transition-transform duration-1000 skill-bar" 
-                                     style="width: {{ skill.proficiency }}%"></div>
+                                     data-width="{{ skill.proficiency }}" 
+                                     style="width: 0%"></div>
                             </div>
                             <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">{{ skill.get_proficiency_display }}</p>
                         </div>
@@ -442,10 +445,155 @@
     </div>
 </section>
 
+<style>
+    /* Fade-in-up animation for stats */
+    @keyframes fadeInUp {
+        0% {
+            opacity: 0;
+            transform: translateY(1.5rem);
+        }
+        100% {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .animate-fade-in-up {
+        animation: fadeInUp 0.7s ease-out forwards;
+    }
+
+    @media (max-width: 640px) {
+        /* Hero Section */
+        .hero-section {
+            padding-top: 4rem;
+            padding-bottom: 3rem;
+        }
+        .hero-section h1 {
+            font-size: 1.875rem; /* 30px */
+        }
+        .hero-section .tech-icons {
+            gap: 0.5rem;
+        }
+        .hero-section .tech-icons > div {
+            padding: 0.5rem;
+        }
+        .hero-section .stats {
+            flex-direction: column;
+            gap: 1rem;
+        }
+        .hero-section .stats > div {
+            padding: 0.5rem;
+        }
+        .hero-section .stats .text-3xl {
+            font-size: 1.5rem; /* 24px */
+        }
+        .hero-section .stats .text-sm {
+            font-size: 0.75rem; /* 12px */
+        }
+
+        /* Projects Section */
+        #latest-projects {
+            padding-top: 3rem;
+            padding-bottom: 3rem;
+        }
+        #latest-projects h2 {
+            font-size: 1.5rem; /* 24px */
+        }
+        #latest-projects p {
+            font-size: 0.875rem; /* 14px */
+        }
+        #latest-projects .grid {
+            grid-template-columns: 1fr;
+        }
+        #latest-projects article {
+            padding: 0.75rem;
+        }
+        #latest-projects h3 {
+            font-size: 1.125rem; /* 18px */
+        }
+        #latest-projects p {
+            font-size: 0.75rem; /* 12px */
+        }
+        #latest-projects .text-sm {
+            font-size: 0.75rem; /* 12px */
+        }
+        #latest-projects .text-base {
+            font-size: 0.875rem; /* 14px */
+        }
+        #latest-projects .aspect-[4/3] {
+            aspect-ratio: 4/3;
+        }
+
+        /* Experience and Education Sections */
+        .experience-section, .education-section {
+            padding-top: 3rem;
+            padding-bottom: 3rem;
+        }
+        .experience-section h2, .education-section h2 {
+            font-size: 1.5rem; /* 24px */
+        }
+        .experience-section p, .education-section p {
+            font-size: 0.875rem; /* 14px */
+        }
+        .experience-section .relative.mb-12, .education-section .relative.mb-12 {
+            margin-bottom: 2rem;
+        }
+        .experience-section h3, .education-section h3 {
+            font-size: 1.125rem; /* 18px */
+        }
+        .experience-section .text-sm, .education-section .text-sm {
+            font-size: 0.75rem; /* 12px */
+        }
+        .experience-section .text-base, .education-section .text-base {
+            font-size: 0.875rem; /* 14px */
+        }
+
+        /* Skills Section */
+        .skills-section {
+            padding-top: 3rem;
+            padding-bottom: 3rem;
+        }
+        .skills-section h2 {
+            font-size: 1.5rem; /* 24px */
+        }
+        .skills-section p {
+            font-size: 0.875rem; /* 14px */
+        }
+        .skills-section .grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 0.5rem;
+        }
+        .skills-section .group {
+            padding: 0.5rem;
+        }
+        .skills-section .text-base {
+            font-size: 0.875rem; /* 14px */
+        }
+        .skills-section .text-xl {
+            font-size: 1.125rem; /* 18px */
+        }
+        .skills-section .p-3 {
+            padding: 0.5rem;
+        }
+    }
+
+    @media (min-width: 640px) and (max-width: 1024px) {
+        .hero-section .stats {
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .hero-section .stats > div {
+            flex: 0 0 50%;
+            max-width: 50%;
+            padding: 0.5rem;
+        }
+    }
+</style>
+
 <script>
     // Animate skill bars when they come into view
     function animateSkillBars() {
-        const skillBars = document.querySelectorAll('.bg-gradient-to-r[data-width]');
+        const skillBars = document.querySelectorAll('.skill-bar');
         
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
@@ -471,7 +619,7 @@
         }
     }
 
-    // Run animation when the page loads
+    // Run animations when the page loads
     document.addEventListener('DOMContentLoaded', () => {
         animateSkillBars();
     });
