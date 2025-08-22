@@ -3,74 +3,76 @@
 {% block title %}Delete Multiple Contacts - Dashboard{% endblock %}
 
 {% block dashboard_content %}
-<div class="max-w-4xl mx-auto">
-    <div class="bg-white dark:bg-gray-800 shadow-lg rounded-lg overflow-hidden">
-        <div class="p-6 border-b border-gray-200 dark:border-gray-700">
-            <div class="flex items-center justify-between">
-                <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Confirm Multiple Deletion</h2>
-                <div class="flex space-x-3">
-                    <form method="post" class="inline">
-                        {% csrf_token %}
-                        {% for contact in contacts_to_delete %}
-                        <input type="hidden" name="contact_ids" value="{{ contact.id }}">
-                        {% endfor %}
-                        <input type="hidden" name="confirm" value="yes">
-                        <button type="submit" 
-                                class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 dark:bg-red-700 dark:hover:bg-red-800 transition duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800">
-                            Confirm Delete
-                        </button>
-                    </form>
-                    <a href="{% url 'dashboard:dashboard_contact_list' %}" 
-                       class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600 transition duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800">
-                        Cancel
-                    </a>
-                </div>
-            </div>
-        </div>
+<div class="bg-white dark:bg-gray-800 shadow rounded-lg p-4 sm:p-6">
+    <div class="mb-6">
+        <h2 class="text-xl sm:text-2xl font-semibold text-gray-900 dark:text-white mb-2">Confirm Multiple Deletion</h2>
+        <p class="text-sm sm:text-base text-gray-600 dark:text-gray-400">Are you sure you want to delete the selected contact messages? This action cannot be undone.</p>
+    </div>
 
-        <div class="p-6">
-            <div class="bg-red-50 dark:bg-red-900/30 border-l-4 border-red-400 dark:border-red-500 p-4 mb-6">
-                <div class="flex">
-                    <div class="flex-shrink-0">
-                        <svg class="h-5 w-5 text-red-400 dark:text-red-500" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
-                        </svg>
-                    </div>
-                    <div class="ml-3">
-                        <h3 class="text-sm font-medium text-red-800 dark:text-red-200">Warning</h3>
-                        <div class="mt-2 text-sm text-red-700 dark:text-red-300">
-                            <p>You are about to delete {{ contacts_to_delete|length }} contact message{% if contacts_to_delete|length != 1 %}s{% endif %}. This action cannot be undone.</p>
-                        </div>
-                    </div>
-                </div>
+        <div class="bg-red-50 dark:bg-red-900 border-l-4 border-red-400 dark:border-red-500 p-3 sm:p-4 mb-6 rounded-r">
+        <div class="flex">
+            <div class="flex-shrink-0">
+                <svg class="h-5 w-5 text-red-400 dark:text-red-500" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                    <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                </svg>
             </div>
-
-            <div class="space-y-4">
-                <h3 class="text-lg font-medium text-gray-900 dark:text-white">Selected Messages</h3>
-                <div class="bg-gray-50 dark:bg-gray-700/50 rounded-lg divide-y divide-gray-200 dark:divide-gray-700">
-                    {% for contact in contacts_to_delete %}
-                    <div class="p-4 hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-150 ease-in-out">
-                        <div class="flex justify-between items-start">
-                            <div class="space-y-2 flex-1">
-                                <div class="flex items-center space-x-2">
-                                    <span class="text-sm font-medium text-gray-900 dark:text-white">{{ contact.name }}</span>
-                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {% if contact.is_read %}bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200{% else %}bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200{% endif %}">
-                                        {{ contact.is_read|yesno:"Read,Unread" }}
-                                    </span>
-                                </div>
-                                <p class="text-sm text-gray-500 dark:text-gray-400">{{ contact.email }}</p>
-                                {% if contact.subject %}
-                                <p class="text-sm font-medium text-gray-700 dark:text-gray-300">{{ contact.subject }}</p>
-                                {% endif %}
-                                <p class="text-sm text-gray-600 dark:text-gray-400">{{ contact.message|truncatechars:150 }}</p>
-                                <p class="text-xs text-gray-500 dark:text-gray-400">Received: {{ contact.created_at|date:"M d, Y H:i" }}</p>
-                            </div>
-                        </div>
-                    </div>
-                    {% endfor %}
-                </div>
+            <div class="ml-3">
+                <p class="text-sm text-red-700 dark:text-red-200">
+                    Warning: This will permanently delete {{ contacts_to_delete|length }} contact message{% if contacts_to_delete|length != 1 %}s{% endif %}.
+                </p>
             </div>
         </div>
     </div>
+
+    <div class="mb-6">
+        <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-3">Selected Messages:</h3>
+        <div class="bg-gray-50 dark:bg-gray-700/50 rounded-lg max-h-80 overflow-y-auto">
+            <ul class="divide-y divide-gray-200 dark:divide-gray-600">
+                {% for contact in contacts_to_delete %}
+                <li class="p-3 sm:p-4">
+                    <div class="space-y-2">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <div>
+                                <p class="text-xs font-medium text-gray-500 dark:text-gray-400">From</p>
+                                <p class="text-sm font-medium text-gray-900 dark:text-white">{{ contact.name }}</p>
+                            </div>
+                            <div>
+                                <p class="text-xs font-medium text-gray-500 dark:text-gray-400">Email</p>
+                                <p class="text-sm text-gray-600 dark:text-gray-300 break-all">{{ contact.email }}</p>
+                            </div>
+                        </div>
+                        <div>
+                            <p class="text-xs font-medium text-gray-500 dark:text-gray-400">Subject</p>
+                            <p class="text-sm text-gray-900 dark:text-white break-words">{{ contact.subject }}</p>
+                        </div>
+                        <div>
+                            <p class="text-xs font-medium text-gray-500 dark:text-gray-400">Message</p>
+                            <p class="text-sm text-gray-600 dark:text-gray-300 break-words">{{ contact.message|truncatechars:100 }}</p>
+                        </div>
+                        <div class="text-xs text-gray-500 dark:text-gray-400 pt-1 border-t border-gray-200 dark:border-gray-600/50">
+                            Received: {{ contact.created_at|date:"M d, Y H:i" }}
+                        </div>
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    <form method="post">
+        {% csrf_token %}
+        {% for contact in contacts_to_delete %}
+        <input type="hidden" name="contact_ids" value="{{ contact.id }}">
+        {% endfor %}
+        <input type="hidden" name="confirm" value="yes">
+        <div class="flex flex-col sm:flex-row justify-end space-y-3 sm:space-y-0 sm:space-x-3">
+            <a href="{% url 'dashboard:dashboard_contact_list' %}" class="px-4 py-2 text-center bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600 transition duration-150 ease-in-out">
+                Cancel
+            </a>
+            <button type="submit" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 dark:bg-red-700 dark:hover:bg-red-800">
+                Delete Selected Messages
+            </button>
+        </div>
+    </form>
 </div>
 {% endblock %}
