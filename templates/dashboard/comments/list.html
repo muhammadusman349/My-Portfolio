@@ -33,17 +33,22 @@
         </div>
     </div>
 
+    <!-- Desktop Table -->
     <div class="overflow-x-auto">
         <form id="comments-form" method="post" action="{% url 'dashboard:dashboard_comment_delete_multiple' %}">
             {% csrf_token %}
-            <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+            <div id="selected-items-container" style="display: none;">
+                <!-- Hidden inputs will be added here by JavaScript -->
+            </div>
+            <div class="hidden md:block">
+                <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                 <thead class="bg-gray-50 dark:bg-gray-700">
                     <tr>
                         <th scope="col" class="px-6 py-3 text-left">
                             <div class="flex items-center">
-                                <input type="checkbox" id="select-all" 
-                                       class="rounded border-gray-300 dark:border-gray-600 text-indigo-600 focus:ring-indigo-500 dark:bg-gray-800 transition duration-150 ease-in-out">
-                                <label for="select-all" class="ml-2 text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Select</label>
+                                <input type="checkbox" id="select-all-desktop" 
+                                       class="rounded border-gray-300 dark:border-gray-600 text-indigo-600 focus:ring-indigo-500 dark:bg-gray-800 transition duration-150 ease-in-out select-all-checkbox">
+                                <label for="select-all-desktop" class="ml-2 text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Select</label>
                             </div>
                         </th>
                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Project</th>
@@ -114,6 +119,102 @@
                     {% endfor %}
                 </tbody>
             </table>
+            </div>
+            
+            <!-- Mobile Card View -->
+            <div class="md:hidden space-y-4 p-4">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="flex items-center">
+                        <input type="checkbox" id="select-all-mobile"
+                               class="rounded border-gray-300 dark:border-gray-600 text-indigo-600 focus:ring-indigo-500 dark:bg-gray-800 transition duration-150 ease-in-out select-all-checkbox">
+                        <label for="select-all-mobile" class="ml-2 text-sm font-medium text-gray-700 dark:text-gray-300">Select All</label>
+                    </div>
+                    <span class="text-sm text-gray-500 dark:text-gray-400">{{ comment_items|length }} comments</span>
+                </div>
+                
+                {% for comment in comment_items %}
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow border border-gray-200 dark:border-gray-700 overflow-hidden">
+                    <div class="p-4">
+                        <div class="flex items-start justify-between">
+                            <div class="flex-1 min-w-0">
+                                <div class="flex items-center space-x-2">
+                                    <input type="checkbox" name="comment_ids" value="{{ comment.id }}" 
+                                           class="comment-checkbox rounded border-gray-300 dark:border-gray-600 text-indigo-600 focus:ring-indigo-500 dark:bg-gray-800 transition duration-150 ease-in-out">
+                                    <h3 class="text-base font-medium text-gray-900 dark:text-white truncate">{{ comment.user.username }}</h3>
+                                </div>
+                                <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">On: {{ comment.project.title }}</p>
+                                
+                                <div class="mt-2 flex flex-wrap gap-2 items-center">
+                                    <span class="px-2 py-1 text-xs font-medium rounded-full 
+                                        {% if comment.status == 'approved' %}bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200
+                                        {% elif comment.status == 'rejected' %}bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200
+                                        {% else %}bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200{% endif %}">
+                                        {{ comment.get_status_display }}
+                                    </span>
+                                    <span class="text-xs text-gray-500 dark:text-gray-400">
+                                        {{ comment.created_at|date:"M d, Y H:i" }}
+                                    </span>
+                                </div>
+                                
+                                <div class="mt-2 text-sm text-gray-700 dark:text-gray-300 line-clamp-2">
+                                    {{ comment.content|truncatewords:20 }}
+                                </div>
+                            </div>
+                            
+                            <div class="ml-4 flex-shrink-0 flex flex-col space-y-2">
+                                <a href="{% url 'dashboard:dashboard_comment_detail' comment.id %}" 
+                                   class="inline-flex items-center p-1.5 border border-transparent rounded-full text-indigo-700 bg-indigo-100 hover:bg-indigo-200 dark:bg-indigo-900 dark:text-indigo-200 dark:hover:bg-indigo-800 transition duration-150 ease-in-out"
+                                   title="View">
+                                    <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                                    </svg>
+                                </a>
+                                
+                                {% if comment.status != 'approved' %}
+                                <button type="button" 
+                                        onclick="updateCommentStatus('{{ comment.id }}', 'approve')"
+                                        class="inline-flex items-center p-1.5 border border-transparent rounded-full text-green-700 bg-green-100 hover:bg-green-200 dark:bg-green-900 dark:text-green-200 dark:hover:bg-green-800 transition duration-150 ease-in-out"
+                                        title="Approve">
+                                    <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                </button>
+                                {% endif %}
+                                
+                                {% if comment.status != 'rejected' %}
+                                <button type="button" 
+                                        onclick="updateCommentStatus('{{ comment.id }}', 'reject')"
+                                        class="inline-flex items-center p-1.5 border border-transparent rounded-full text-yellow-700 bg-yellow-100 hover:bg-yellow-200 dark:bg-yellow-900 dark:text-yellow-200 dark:hover:bg-yellow-800 transition duration-150 ease-in-out"
+                                        title="Reject">
+                                    <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                    </svg>
+                                </button>
+                                {% endif %}
+                                
+                                <button type="button" 
+                                        onclick="confirmDelete('{{ comment.id }}')"
+                                        class="inline-flex items-center p-1.5 border border-transparent rounded-full text-red-700 bg-red-100 hover:bg-red-200 dark:bg-red-900 dark:text-red-200 dark:hover:bg-red-800 transition duration-150 ease-in-out"
+                                        title="Delete">
+                                    <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="text-center py-12">
+                    <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+                    </svg>
+                    <h3 class="mt-2 text-sm font-medium text-gray-900 dark:text-white">No comments</h3>
+                    <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">You don't have any comments yet.</p>
+                </div>
+                {% endfor %}
+            </div>
         </form>
     </div>
 
@@ -197,42 +298,92 @@
 {% block extra_js %}
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        const selectAll = document.getElementById('select-all');
-        const checkboxes = document.getElementsByClassName('comment-checkbox');
-        const deleteSelected = document.getElementById('delete-selected');
-        const form = document.getElementById('comments-form');
+        const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+        const selectAllDesktop = document.getElementById('select-all-desktop');
+        const selectAllMobile = document.getElementById('select-all-mobile');
+        const checkboxes = document.querySelectorAll('.comment-checkbox');
+        const deleteButton = document.getElementById('delete-selected');
         const deleteModal = document.getElementById('deleteModal');
+        const confirmDeleteBtn = document.getElementById('confirmDelete');
         const cancelDelete = document.getElementById('cancelDelete');
+        let commentToDelete = null;
         const deleteForm = document.getElementById('deleteForm');
+        const commentsForm = document.getElementById('comments-form');
     
         function updateDeleteButton() {
             const checkedBoxes = document.querySelectorAll('.comment-checkbox:checked');
-            deleteSelected.disabled = checkedBoxes.length === 0;
-            deleteSelected.classList.toggle('hidden', checkedBoxes.length === 0);
+            deleteButton.disabled = checkedBoxes.length === 0;
+            deleteButton.classList.toggle('hidden', checkedBoxes.length === 0);
+            
+            // Update select all checkboxes state
+            const allChecked = checkboxes.length > 0 && checkedBoxes.length === checkboxes.length;
+            if (selectAllDesktop) selectAllDesktop.checked = allChecked;
+            if (selectAllMobile) selectAllMobile.checked = allChecked;
+            
+            // Show/hide delete button based on screen size
+            if (checkedBoxes.length > 0) {
+                deleteButton.classList.remove('hidden');
+            } else if (window.innerWidth < 768) {
+                deleteButton.classList.add('hidden');
+            }
         }
     
-        selectAll.addEventListener('change', function() {
-            Array.from(checkboxes).forEach(checkbox => {
-                checkbox.checked = selectAll.checked;
-            });
-            updateDeleteButton();
-        });
-    
-        Array.from(checkboxes).forEach(checkbox => {
-            checkbox.addEventListener('change', function() {
-                selectAll.checked = Array.from(checkboxes).every(cb => cb.checked);
+        // Setup select all functionality
+        function setupSelectAll(selectAllElement) {
+            if (!selectAllElement) return;
+            
+            selectAllElement.addEventListener('change', function() {
+                const isChecked = this.checked;
+                Array.from(checkboxes).forEach(checkbox => {
+                    checkbox.checked = isChecked;
+                });
                 updateDeleteButton();
             });
+        }
+
+        // Setup select all for both desktop and mobile
+        setupSelectAll(selectAllDesktop);
+        setupSelectAll(selectAllMobile);
+
+        // Update individual checkboxes
+        checkboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', updateDeleteButton);
         });
-    
-        deleteSelected.addEventListener('click', function(e) {
-            e.preventDefault();
-            const checkedBoxes = document.querySelectorAll('.comment-checkbox:checked');
-            if (checkedBoxes.length > 0) {
-                form.submit();
+        
+        // Handle window resize to update delete button visibility
+        let resizeTimer;
+        window.addEventListener('resize', function() {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(function() {
+                updateDeleteButton();
+            }, 250);
+        });
+
+        deleteButton.addEventListener('click', (e) => {
+            if (!deleteButton.disabled) {
+                // Prevent the default form submission
+                e.preventDefault();
+                
+                // Get all checked checkboxes
+                const checkedCheckboxes = document.querySelectorAll('.comment-checkbox:checked');
+                
+                // Update the form with the selected comment IDs
+                const container = document.getElementById('selected-items-container');
+                container.innerHTML = ''; // Clear previous inputs
+                
+                checkedCheckboxes.forEach(checkbox => {
+                    const input = document.createElement('input');
+                    input.type = 'hidden';
+                    input.name = 'comment_ids';
+                    input.value = checkbox.value;
+                    container.appendChild(input);
+                });
+                
+                // Submit the form
+                commentsForm.submit();
             }
         });
-    
+
         window.confirmDelete = function(commentId) {
             deleteModal.classList.remove('hidden');
             deleteForm.action = "{% url 'dashboard:dashboard_comment_delete' 0 %}".replace('0', commentId);
