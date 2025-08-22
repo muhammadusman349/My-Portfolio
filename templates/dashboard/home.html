@@ -3,60 +3,105 @@
 {% block dashboard_content %}
 <!-- Welcome Section -->
 <div class="mb-6 sm:mb-8 animate-[fadeIn_0.5s_ease-out]">
-    <div class="bg-gradient-to-r from-primary-500 to-primary-600 rounded-lg shadow-md p-4 sm:p-6 lg:p-8 text-white">
-        <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
-            <div>
-                <h1 class="text-xl sm:text-2xl lg:text-3xl font-bold mb-2 tracking-tight">Welcome, {{ request.user.username }}!</h1>
-                <p class="text-sm sm:text-base text-gray-100">Manage your portfolio with ease.</p>
-            </div>
-            <div class="mt-4 sm:mt-0 sm:text-right">
-                <p class="text-xs sm:text-sm text-gray-200">Last Login</p>
-                <p class="font-medium text-sm sm:text-base">{{ request.user.last_login|date:"F j, Y, g:i a" }}</p>
+    <div class="bg-gradient-to-r from-primary-500 to-primary-600 rounded-2xl shadow-xl p-6 sm:p-8 lg:p-10 text-white relative overflow-hidden">
+        <div class="absolute top-0 right-0 w-40 h-40 bg-white bg-opacity-10 rounded-full -translate-y-20 translate-x-20"></div>
+        <div class="absolute bottom-0 left-0 w-32 h-32 bg-white bg-opacity-5 rounded-full translate-y-16 -translate-x-16"></div>
+        <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-white bg-opacity-5 rounded-full"></div>
+        <div class="relative z-10">
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-6">
+                <div>
+                    <h1 class="text-2xl sm:text-3xl lg:text-4xl font-bold mb-3 tracking-tight">Welcome, {{ request.user.username }}!</h1>
+                    <p class="text-base sm:text-lg text-gray-100 max-w-2xl">Manage your portfolio with ease and efficiency. Track your projects, skills, and user interactions all in one place.</p>
+                </div>
+                <div class="mt-4 sm:mt-0 sm:text-right bg-white/10 backdrop-blur-sm rounded-xl p-4">
+                    <p class="text-sm sm:text-base text-gray-200">Last Login</p>
+                    <p class="font-medium text-lg sm:text-xl">{{ request.user.last_login|date:"F j, Y, g:i a" }}</p>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
 <!-- Summary Statistics -->
-<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-6 sm:mb-8">
-    <div class="bg-white dark:bg-dark-card rounded-lg shadow-sm p-4 sm:p-5 transition-all duration-300 hover:shadow-md animate-card" style="--index: 0;">
-        <p class="text-xs sm:text-sm text-gray-500 dark:text-gray-400">Total Projects</p>
-        <p class="text-xl sm:text-2xl lg:text-3xl font-semibold text-gray-900 dark:text-dark-text">{{ projects_count }}</p>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6 mb-6 sm:mb-8">
+    <div class="bg-white dark:bg-dark-card rounded-2xl shadow-lg p-5 sm:p-6 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 animate-card border border-gray-100 dark:border-dark-border" style="--index: 0;">
+        <div class="flex items-center justify-between">
+            <p class="text-sm sm:text-base text-gray-600 dark:text-gray-300 font-medium">Total Projects</p>
+            <div class="p-3 rounded-xl bg-blue-100 dark:bg-blue-900/50">
+                <svg class="w-5 h-5 text-blue-500 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+                </svg>
+            </div>
+        </div>
+        <p class="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 dark:text-dark-text mt-3">{{ projects_count }}</p>
+        <div class="mt-3 w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5">
+            <div class="bg-blue-500 h-2.5 rounded-full progress-bar animate-pulse-slow" data-value="{{ projects_count }}" data-max="100"></div>
+        </div>
     </div>
-    <div class="bg-white dark:bg-dark-card rounded-lg shadow-sm p-4 sm:p-5 transition-all duration-300 hover:shadow-md animate-card" style="--index: 1;">
-        <p class="text-xs sm:text-sm text-gray-500 dark:text-gray-400">Total Skills</p>
-        <p class="text-xl sm:text-2xl lg:text-3xl font-semibold text-gray-900 dark:text-dark-text">{{ skills_count }}</p>
+    <div class="bg-white dark:bg-dark-card rounded-2xl shadow-lg p-5 sm:p-6 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 animate-card border border-gray-100 dark:border-dark-border" style="--index: 1;">
+        <div class="flex items-center justify-between">
+            <p class="text-sm sm:text-base text-gray-600 dark:text-gray-300 font-medium">Total Skills</p>
+            <div class="p-3 rounded-xl bg-green-100 dark:bg-green-900/50">
+                <svg class="w-5 h-5 text-green-500 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+                </svg>
+            </div>
+        </div>
+        <p class="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 dark:text-dark-text mt-3">{{ skills_count }}</p>
+        <div class="mt-3 w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5">
+            <div class="bg-green-500 h-2.5 rounded-full progress-bar animate-pulse-slow" data-value="{{ skills_count }}" data-max="100"></div>
+        </div>
     </div>
-    <div class="bg-white dark:bg-dark-card rounded-lg shadow-sm p-4 sm:p-5 transition-all duration-300 hover:shadow-md animate-card" style="--index: 2;">
-        <p class="text-xs sm:text-sm text-gray-500 dark:text-gray-400">Total Users</p>
-        <p class="text-xl sm:text-2xl lg:text-3xl font-semibold text-gray-900 dark:text-dark-text">{{ users_count }}</p>
+    <div class="bg-white dark:bg-dark-card rounded-2xl shadow-lg p-5 sm:p-6 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 animate-card border border-gray-100 dark:border-dark-border" style="--index: 2;">
+        <div class="flex items-center justify-between">
+            <p class="text-sm sm:text-base text-gray-600 dark:text-gray-300 font-medium">Total Users</p>
+            <div class="p-3 rounded-xl bg-purple-100 dark:bg-purple-900/50">
+                <svg class="w-5 h-5 text-purple-500 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
+                </svg>
+            </div>
+        </div>
+        <p class="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 dark:text-dark-text mt-3">{{ users_count }}</p>
+        <div class="mt-3 w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5">
+            <div class="bg-purple-500 h-2.5 rounded-full progress-bar animate-pulse-slow" data-value="{{ users_count }}" data-max="100"></div>
+        </div>
     </div>
-    <div class="bg-white dark:bg-dark-card rounded-lg shadow-sm p-4 sm:p-5 transition-all duration-300 hover:shadow-md animate-card" style="--index: 3;">
-        <p class="text-xs sm:text-sm text-gray-500 dark:text-gray-400">Total Messages</p>
-        <p class="text-xl sm:text-2xl lg:text-3xl font-semibold text-gray-900 dark:text-dark-text">{{ unread_contacts }}</p>
+    <div class="bg-white dark:bg-dark-card rounded-2xl shadow-lg p-5 sm:p-6 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 animate-card border border-gray-100 dark:border-dark-border" style="--index: 3;">
+        <div class="flex items-center justify-between">
+            <p class="text-sm sm:text-base text-gray-600 dark:text-gray-300 font-medium">Total Messages</p>
+            <div class="p-3 rounded-xl bg-red-100 dark:bg-red-900/50">
+                <svg class="w-5 h-5 text-red-500 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                </svg>
+            </div>
+        </div>
+        <p class="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 dark:text-dark-text mt-3">{{ unread_contacts }}</p>
+        <div class="mt-3 w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5">
+            <div class="bg-red-500 h-2.5 rounded-full progress-bar animate-pulse-slow" data-value="{{ unread_contacts }}" data-max="100"></div>
+        </div>
     </div>
 </div>
 
 <!-- Main Grid -->
 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
     <!-- Projects Card -->
-    <div class="bg-white dark:bg-dark-card rounded-lg shadow-sm p-4 sm:p-6 transition-all duration-300 hover:shadow-md hover:-translate-y-1 animate-card" style="--index: 0;">
+    <div class="bg-white dark:bg-dark-card rounded-xl shadow-lg p-5 sm:p-6 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 animate-card border border-gray-100 dark:border-dark-border" style="--index: 0;">
         <div class="flex items-center">
-            <div class="p-3 rounded-full bg-gradient-to-br from-primary-500 to-primary-600">
-                <svg class="w-5 sm:w-6 lg:w-7 h-5 sm:h-6 lg:h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div class="p-3 rounded-full bg-gradient-to-br from-primary-500 to-primary-600 shadow-md">
+                <svg class="w-6 sm:w-7 lg:w-8 h-6 sm:h-7 lg:h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
                 </svg>
             </div>
-            <div class="ml-4 flex-1">
-                <h2 class="text-base sm:text-lg lg:text-xl font-semibold text-gray-700 dark:text-dark-text">Projects</h2>
-                <p class="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 dark:text-dark-text">{{ projects_count }}</p>
+            <div class="ml-5 flex-1">
+                <h2 class="text-lg sm:text-xl lg:text-2xl font-bold text-gray-800 dark:text-dark-text">Projects</h2>
+                <p class="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 dark:text-dark-text mt-1">{{ projects_count }}</p>
             </div>
         </div>
-        <div class="mt-4 sm:mt-6">
+        <div class="mt-5 sm:mt-6">
             <a href="{% url 'dashboard:dashboard_project_list' %}" 
-               class="inline-flex items-center px-4 py-2 bg-primary-500 hover:bg-primary-600 text-white text-sm sm:text-base font-medium rounded-md transition-all duration-300 shadow-sm hover:shadow-md">
+               class="inline-flex items-center justify-center w-full px-4 py-3 bg-primary-500 hover:bg-primary-600 text-white text-base sm:text-lg font-medium rounded-lg transition-all duration-300 shadow-md hover:shadow-lg">
                 View Projects
-                <svg class="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg class="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
                 </svg>
             </a>
@@ -64,23 +109,23 @@
     </div>
 
     <!-- Skills Card -->
-    <div class="bg-white dark:bg-dark-card rounded-lg shadow-sm p-4 sm:p-6 transition-all duration-300 hover:shadow-md hover:-translate-y-1 animate-card" style="--index: 1;">
+    <div class="bg-white dark:bg-dark-card rounded-xl shadow-lg p-5 sm:p-6 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 animate-card border border-gray-100 dark:border-dark-border" style="--index: 1;">
         <div class="flex items-center">
-            <div class="p-3 rounded-full bg-gradient-to-br from-accent-teal to-teal-600">
-                <svg class="w-5 sm:w-6 lg:w-7 h-5 sm:h-6 lg:h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div class="p-3 rounded-full bg-gradient-to-br from-accent-teal to-teal-600 shadow-md">
+                <svg class="w-6 sm:w-7 lg:w-8 h-6 sm:h-7 lg:h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
                 </svg>
             </div>
-            <div class="ml-4 flex-1">
-                <h2 class="text-base sm:text-lg lg:text-xl font-semibold text-gray-700 dark:text-dark-text">Skills</h2>
-                <p class="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 dark:text-dark-text">{{ skills_count }}</p>
+            <div class="ml-5 flex-1">
+                <h2 class="text-lg sm:text-xl lg:text-2xl font-bold text-gray-800 dark:text-dark-text">Skills</h2>
+                <p class="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 dark:text-dark-text mt-1">{{ skills_count }}</p>
             </div>
         </div>
-        <div class="mt-4 sm:mt-6">
+        <div class="mt-5 sm:mt-6">
             <a href="{% url 'dashboard:dashboard_skill_list' %}" 
-               class="inline-flex items-center px-4 py-2 bg-accent-teal hover:bg-teal-600 text-white text-sm sm:text-base font-medium rounded-md transition-all duration-300 shadow-sm hover:shadow-md">
+               class="inline-flex items-center justify-center w-full px-4 py-3 bg-accent-teal hover:bg-teal-600 text-white text-base sm:text-lg font-medium rounded-lg transition-all duration-300 shadow-md hover:shadow-lg">
                 View Skills
-                <svg class="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg class="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
                 </svg>
             </a>
@@ -88,24 +133,24 @@
     </div>
 
     <!-- Education Card -->
-    <div class="bg-white dark:bg-dark-card rounded-lg shadow-sm p-4 sm:p-6 transition-all duration-300 hover:shadow-md hover:-translate-y-1 animate-card" style="--index: 2;">
+    <div class="bg-white dark:bg-dark-card rounded-xl shadow-lg p-5 sm:p-6 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 animate-card border border-gray-100 dark:border-dark-border" style="--index: 2;">
         <div class="flex items-center">
-            <div class="p-3 rounded-full bg-gradient-to-br from-purple-500 to-purple-600">
-                <svg class="w-5 sm:w-6 lg:w-7 h-5 sm:h-6 lg:h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div class="p-3 rounded-full bg-gradient-to-br from-purple-500 to-purple-600 shadow-md">
+                <svg class="w-6 sm:w-7 lg:w-8 h-6 sm:h-7 lg:h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path d="M12 14l9-5-9-5-9 5 9 5z"/>
                     <path d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"/>
                 </svg>
             </div>
-            <div class="ml-4 flex-1">
-                <h2 class="text-base sm:text-lg lg:text-xl font-semibold text-gray-700 dark:text-dark-text">Education</h2>
-                <p class="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 dark:text-dark-text">{{ education_count }}</p>
+            <div class="ml-5 flex-1">
+                <h2 class="text-lg sm:text-xl lg:text-2xl font-bold text-gray-800 dark:text-dark-text">Education</h2>
+                <p class="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 dark:text-dark-text mt-1">{{ education_count }}</p>
             </div>
         </div>
-        <div class="mt-4 sm:mt-6">
+        <div class="mt-5 sm:mt-6">
             <a href="{% url 'dashboard:dashboard_education_list' %}" 
-               class="inline-flex items-center px-4 py-2 bg-purple-500 hover:bg-purple-600 text-white text-sm sm:text-base font-medium rounded-md transition-all duration-300 shadow-sm hover:shadow-md">
+               class="inline-flex items-center justify-center w-full px-4 py-3 bg-purple-500 hover:bg-purple-600 text-white text-base sm:text-lg font-medium rounded-lg transition-all duration-300 shadow-md hover:shadow-lg">
                 View Education
-                <svg class="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg class="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
                 </svg>
             </a>
@@ -113,23 +158,23 @@
     </div>
 
     <!-- Experience Card -->
-    <div class="bg-white dark:bg-dark-card rounded-lg shadow-sm p-4 sm:p-6 transition-all duration-300 hover:shadow-md hover:-translate-y-1 animate-card" style="--index: 3;">
+    <div class="bg-white dark:bg-dark-card rounded-xl shadow-lg p-5 sm:p-6 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 animate-card border border-gray-100 dark:border-dark-border" style="--index: 3;">
         <div class="flex items-center">
-            <div class="p-3 rounded-full bg-gradient-to-br from-indigo-500 to-indigo-600">
-                <svg class="w-5 sm:w-6 lg:w-7 h-5 sm:h-6 lg:h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div class="p-3 rounded-full bg-gradient-to-br from-indigo-500 to-indigo-600 shadow-md">
+                <svg class="w-6 sm:w-7 lg:w-8 h-6 sm:h-7 lg:h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
                 </svg>
             </div>
-            <div class="ml-4 flex-1">
-                <h2 class="text-base sm:text-lg lg:text-xl font-semibold text-gray-700 dark:text-dark-text">Experience</h2>
-                <p class="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 dark:text-dark-text">{{ experience_count }}</p>
+            <div class="ml-5 flex-1">
+                <h2 class="text-lg sm:text-xl lg:text-2xl font-bold text-gray-800 dark:text-dark-text">Experience</h2>
+                <p class="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 dark:text-dark-text mt-1">{{ experience_count }}</p>
             </div>
         </div>
-        <div class="mt-4 sm:mt-6">
+        <div class="mt-5 sm:mt-6">
             <a href="{% url 'dashboard:dashboard_experience_list' %}" 
-               class="inline-flex items-center px-4 py-2 bg-indigo-500 hover:bg-indigo-600 text-white text-sm sm:text-base font-medium rounded-md transition-all duration-300 shadow-sm hover:shadow-md">
+               class="inline-flex items-center justify-center w-full px-4 py-3 bg-indigo-500 hover:bg-indigo-600 text-white text-base sm:text-lg font-medium rounded-lg transition-all duration-300 shadow-md hover:shadow-lg">
                 View Experience
-                <svg class="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg class="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
                 </svg>
             </a>
@@ -137,28 +182,28 @@
     </div>
 
     <!-- Messages Card -->
-    <div class="bg-white dark:bg-dark-card rounded-lg shadow-sm p-4 sm:p-6 transition-all duration-300 hover:shadow-md hover:-translate-y-1 animate-card" style="--index: 4;">
+    <div class="bg-white dark:bg-dark-card rounded-xl shadow-lg p-5 sm:p-6 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 animate-card border border-gray-100 dark:border-dark-border" style="--index: 4;">
         <div class="flex items-center">
-            <div class="p-3 rounded-full bg-gradient-to-br from-accent-red to-red-600">
-                <svg class="w-5 sm:w-6 lg:w-7 h-5 sm:h-6 lg:h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div class="p-3 rounded-full bg-gradient-to-br from-accent-red to-red-600 shadow-md">
+                <svg class="w-6 sm:w-7 lg:w-8 h-6 sm:h-7 lg:h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
                 </svg>
             </div>
-            <div class="ml-4 flex-1">
+            <div class="ml-5 flex-1">
                 <div class="flex justify-between items-center">
-                    <h2 class="text-base sm:text-lg lg:text-xl font-semibold text-gray-700 dark:text-dark-text">Messages</h2>
+                    <h2 class="text-lg sm:text-xl lg:text-2xl font-bold text-gray-800 dark:text-dark-text">Messages</h2>
                     {% if unread_contacts > 0 %}
-                    <span class="px-2 py-1 text-xs bg-red-100 text-accent-red dark:bg-red-900 dark:text-red-200 rounded-full animate-pulse">{{ unread_contacts }} New</span>
+                    <span class="px-3 py-1 text-sm bg-red-100 text-accent-red dark:bg-red-900 dark:text-red-200 rounded-full animate-pulse font-medium">{{ unread_contacts }} New</span>
                     {% endif %}
                 </div>
-                <p class="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 dark:text-dark-text">{{ unread_contacts }}</p>
+                <p class="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 dark:text-dark-text mt-1">{{ unread_contacts }}</p>
             </div>
         </div>
-        <div class="mt-4 sm:mt-6">
+        <div class="mt-5 sm:mt-6">
             <a href="{% url 'dashboard:dashboard_contact_list' %}" 
-               class="inline-flex items-center px-4 py-2 bg-accent-red hover:bg-red-600 text-white text-sm sm:text-base font-medium rounded-md transition-all duration-300 shadow-sm hover:shadow-md">
+               class="inline-flex items-center justify-center w-full px-4 py-3 bg-accent-red hover:bg-red-600 text-white text-base sm:text-lg font-medium rounded-lg transition-all duration-300 shadow-md hover:shadow-lg">
                 View Messages
-                <svg class="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg class="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
                 </svg>
             </a>
@@ -166,28 +211,28 @@
     </div>
 
     <!-- Comments Card -->
-    <div class="bg-white dark:bg-dark-card rounded-lg shadow-sm p-4 sm:p-6 transition-all duration-300 hover:shadow-md hover:-translate-y-1 animate-card" style="--index: 5;">
+    <div class="bg-white dark:bg-dark-card rounded-xl shadow-lg p-5 sm:p-6 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 animate-card border border-gray-100 dark:border-dark-border" style="--index: 5;">
         <div class="flex items-center">
-            <div class="p-3 rounded-full bg-gradient-to-br from-blue-500 to-blue-600">
-                <svg class="w-5 sm:w-6 lg:w-7 h-5 sm:h-6 lg:h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div class="p-3 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 shadow-md">
+                <svg class="w-6 sm:w-7 lg:w-8 h-6 sm:h-7 lg:h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"/>
                 </svg>
             </div>
-            <div class="ml-4 flex-1">
+            <div class="ml-5 flex-1">
                 <div class="flex justify-between items-center">
-                    <h2 class="text-base sm:text-lg lg:text-xl font-semibold text-gray-700 dark:text-dark-text">Comments</h2>
+                    <h2 class="text-lg sm:text-xl lg:text-2xl font-bold text-gray-800 dark:text-dark-text">Comments</h2>
                     {% if unresponded_comments > 0 %}
-                    <span class="px-2 py-1 text-xs bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200 rounded-full animate-pulse">{{ unresponded_comments }} New</span>
+                    <span class="px-3 py-1 text-sm bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200 rounded-full animate-pulse font-medium">{{ unresponded_comments }} New</span>
                     {% endif %}
                 </div>
-                <p class="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 dark:text-dark-text">{{ unresponded_comments }}</p>
+                <p class="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 dark:text-dark-text mt-1">{{ unresponded_comments }}</p>
             </div>
         </div>
-        <div class="mt-4 sm:mt-6">
+        <div class="mt-5 sm:mt-6">
             <a href="{% url 'dashboard:dashboard_comment_list' %}" 
-               class="inline-flex items-center px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white text-sm sm:text-base font-medium rounded-md transition-all duration-300 shadow-sm hover:shadow-md">
+               class="inline-flex items-center justify-center w-full px-4 py-3 bg-blue-500 hover:bg-blue-600 text-white text-base sm:text-lg font-medium rounded-lg transition-all duration-300 shadow-md hover:shadow-lg">
                 View Comments
-                <svg class="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg class="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
                 </svg>
             </a>
@@ -195,28 +240,28 @@
     </div>
 
     <!-- Users Card -->
-    <div class="bg-white dark:bg-dark-card rounded-lg shadow-sm p-4 sm:p-6 transition-all duration-300 hover:shadow-md hover:-translate-y-1 animate-card" style="--index: 6;">
+    <div class="bg-white dark:bg-dark-card rounded-xl shadow-lg p-5 sm:p-6 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 animate-card border border-gray-100 dark:border-dark-border" style="--index: 6;">
         <div class="flex items-center">
-            <div class="p-3 rounded-full bg-gradient-to-br from-gray-500 to-gray-600">
-                <svg class="w-5 sm:w-6 lg:w-7 h-5 sm:h-6 lg:h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div class="p-3 rounded-full bg-gradient-to-br from-gray-500 to-gray-600 shadow-md">
+                <svg class="w-6 sm:w-7 lg:w-8 h-6 sm:h-7 lg:h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
                 </svg>
             </div>
-            <div class="ml-4 flex-1">
+            <div class="ml-5 flex-1">
                 <div class="flex justify-between items-center">
-                    <h2 class="text-base sm:text-lg lg:text-xl font-semibold text-gray-700 dark:text-dark-text">Users</h2>
-                    <span class="px-2 py-1 text-xs bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200 font-medium rounded-full">
+                    <h2 class="text-lg sm:text-xl lg:text-2xl font-bold text-gray-800 dark:text-dark-text">Users</h2>
+                    <span class="px-3 py-1 text-sm bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200 font-medium rounded-full">
                         Manage Users
                     </span>
                 </div>
-                <p class="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 dark:text-dark-text mt-2">{{ users_count }}</p>
+                <p class="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 dark:text-dark-text mt-1">{{ users_count }}</p>
             </div>
         </div>
-        <div class="mt-4 sm:mt-6">
-            <a href="{% url 'dashboard:user_list' %}" 
-               class="inline-flex items-center px-4 py-2 bg-gray-500 hover:bg-gray-600 text-white text-sm sm:text-base font-medium rounded-md transition-all duration-300 shadow-sm hover:shadow-md">
+        <div class="mt-5 sm:mt-6">
+            <a href="{% url 'dashboard:dashboard_users_list' %}" 
+               class="inline-flex items-center justify-center w-full px-4 py-3 bg-gray-500 hover:bg-gray-600 text-white text-base sm:text-lg font-medium rounded-lg transition-all duration-300 shadow-md hover:shadow-lg">
                 View Users
-                <svg class="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg class="ml-2 w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
                 </svg>
             </a>

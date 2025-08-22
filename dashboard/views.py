@@ -358,7 +358,7 @@ def education_delete_multiple(request):
             return redirect('dashboard:dashboard_education_list')
 
         context = {
-            'education_items': education_to_delete,
+            'education_to_delete': education_to_delete,
             'is_dashboard': True,
         }
         return render(request, 'dashboard/education/delete_multiple.html', context)
@@ -380,7 +380,7 @@ def experience_list(request):
     page_obj = paginator.get_page(page_number)
 
     context = {
-        'experience_items': page_obj,
+        'experience_list': page_obj,
         'sort': sort,
         'is_dashboard': True,
     }
@@ -433,17 +433,35 @@ def experience_delete_multiple(request):
             messages.error(request, 'No experience items selected for deletion.')
             return redirect('dashboard:dashboard_experience_list')
 
-        experience_to_delete = Experience.objects.filter(id__in=experience_ids)
-        if request.POST.get('confirm') == 'yes':
-            experience_to_delete.delete()
-            messages.success(request, 'Selected experience items were successfully deleted.')
-            return redirect('dashboard:dashboard_experience_list')
+        try:
+            # Convert string IDs to integers
+            experience_ids = [int(id) for id in experience_ids if id.isdigit()]
+            experience_to_delete = Experience.objects.filter(id__in=experience_ids)
+            
+            # Check if we have any valid experiences to delete
+            if not experience_to_delete.exists():
+                messages.error(request, 'No valid experience items found for deletion.')
+                return redirect('dashboard:dashboard_experience_list')
 
-        context = {
-            'experience_items': experience_to_delete,
-            'is_dashboard': True,
-        }
-        return render(request, 'dashboard/experience/delete_multiple.html', context)
+            # If confirm=yes is in the POST data, delete the experiences
+            if request.POST.get('confirm') == 'yes':
+                count = experience_to_delete.count()
+                experience_to_delete.delete()
+                messages.success(request, f'Successfully deleted {count} experience item(s).')
+                return redirect('dashboard:dashboard_experience_list')
+
+            # Show confirmation page with the experiences to be deleted
+            context = {
+                'experience_items': experience_to_delete,
+                'is_dashboard': True,
+            }
+            return render(request, 'dashboard/experience/delete_multiple.html', context)
+            
+        except Exception as e:
+            messages.error(request, f'An error occurred while deleting experience items: {str(e)}')
+            return redirect('dashboard:dashboard_experience_list')
+    
+    # If not a POST request, redirect to the experience list
     return redirect('dashboard:dashboard_experience_list')
 
 
@@ -778,10 +796,8 @@ def toggle_user_status(request, user_id):
         user = User.objects.get(id=user_id)
 
         if user.is_superuser:
-            return JsonResponse({
-                'status': 'error',
-                'message': 'Cannot modify superuser status'
-            }, status=403)
+            messages.error(request, 'Cannot modify superuser status')
+            return redirect('dashboard:dashboard_users_list')
 
         user.is_active = not user.is_active
         user.save()
@@ -789,21 +805,14 @@ def toggle_user_status(request, user_id):
         action = "unblocked" if user.is_active else "blocked"
         messages.success(request, f'User {user.username} has been {action} successfully.')
 
-        return JsonResponse({
-            'status': 'success',
-            'message': f'User has been {action}',
-            'is_active': user.is_active
-        })
+        return redirect('dashboard:dashboard_users_list')
+        
     except User.DoesNotExist:
-        return JsonResponse({
-            'status': 'error',
-            'message': 'User not found'
-        }, status=404)
+        messages.error(request, 'User not found')
+        return redirect('dashboard:dashboard_users_list')
     except Exception as e:
-        return JsonResponse({
-            'status': 'error',
-            'message': str(e)
-        }, status=500)
+        messages.error(request, f'An error occurred: {str(e)}')
+        return redirect('dashboard:dashboard_users_list')
 
 
 @login_required
@@ -813,71 +822,61 @@ def user_delete(request, user_id):
         user = User.objects.get(id=user_id)
 
         if user.is_superuser:
-            return JsonResponse({
-                'status': 'error',
-                'message': 'Cannot delete superuser account'
-            }, status=403)
+            messages.error(request, 'Cannot delete superuser account')
+            return redirect('dashboard:dashboard_users_list')
 
         username = user.username
         user.delete()
 
         messages.success(request, f'User {username} has been deleted successfully.')
-
-        return JsonResponse({
-            'status': 'success',
-            'message': f'User {username} has been deleted'
-        })
+        return redirect('dashboard:dashboard_users_list')
+        
     except User.DoesNotExist:
-        return JsonResponse({
-            'status': 'error',
-            'message': 'User not found'
-        }, status=404)
+        messages.error(request, 'User not found')
+        return redirect('dashboard:dashboard_users_list')
     except Exception as e:
-        return JsonResponse({
-            'status': 'error',
-            'message': str(e)
-        }, status=500)
+        messages.error(request, f'An error occurred: {str(e)}')
+        return redirect('dashboard:dashboard_users_list')
 
 
 @login_required
-@require_POST
 def user_delete_multiple(request):
-    try:
-        data = json.loads(request.body)
-        user_ids = data.get('user_ids', [])
+    if request.method == 'POST':
+        try:
+            user_ids = request.POST.getlist('user_ids')
+            if not user_ids:
+                messages.error(request, 'No users selected for deletion.')
+                return redirect('dashboard:dashboard_users_list')
 
-        if not user_ids:
-            return JsonResponse({
-                'status': 'error',
-                'message': 'No users selected'
-            }, status=400)
+            users_to_delete = User.objects.filter(id__in=user_ids).exclude(is_superuser=True)
+            
+            # If confirm=yes is in POST, delete the users
+            if request.POST.get('confirm') == 'yes':
+                count = users_to_delete.count()
+                users_to_delete.delete()
+                messages.success(request, f'Successfully deleted {count} user(s).')
+                return redirect('dashboard:dashboard_users_list')
+            
+            messages.error(request, 'Invalid request.')
+            return redirect('dashboard:dashboard_users_list')
+            
+        except Exception as e:
+            messages.error(request, f'An error occurred while processing your request: {str(e)}')
+            return redirect('dashboard:dashboard_users_list')
+    
+    # Handle GET request for confirmation page
+    user_ids = request.GET.getlist('user_ids')
+    if not user_ids:
+        messages.error(request, 'No users selected for deletion.')
+        return redirect('dashboard:dashboard_users_list')
 
-        # Exclude superusers from deletion
-        users = User.objects.filter(id__in=user_ids).exclude(is_superuser=True)
-        deleted_count = users.count()
+    users_to_delete = User.objects.filter(id__in=user_ids).exclude(is_superuser=True)
+    if not users_to_delete.exists():
+        messages.error(request, 'Selected users not found.')
+        return redirect('dashboard:dashboard_users_list')
 
-        if deleted_count == 0:
-            return JsonResponse({
-                'status': 'error',
-                'message': 'No valid users to delete'
-            }, status=400)
-
-        # Store usernames before deletion
-        usernames = list(users.values_list('username', flat=True))
-        # Delete users
-        users.delete()
-
-        if deleted_count == 1:
-            messages.success(request, f'User {usernames[0]} has been deleted successfully.')
-        else:
-            messages.success(request, f'{deleted_count} users have been deleted successfully.')
-
-        return JsonResponse({
-            'status': 'success',
-            'message': f'{deleted_count} users deleted successfully'
-        })
-    except Exception as e:
-        return JsonResponse({
-            'status': 'error',
-            'message': str(e)
-        }, status=500)
+    context = {
+        'users_to_delete': users_to_delete,
+        'is_dashboard': True,
+    }
+    return render(request, 'dashboard/users/delete_multiple.html', context)

@@ -52,7 +52,7 @@ urlpatterns = [
     path('comments/delete/multiple/', views.dashboard_comment_delete_multiple, name='dashboard_comment_delete_multiple'),
 
     # Users
-    path('users/', views.user_list, name='user_list'),
+    path('users/', views.user_list, name='dashboard_users_list'),
     path('users/<int:user_id>/delete/', views.user_delete, name='user_delete'),
     path('users/<int:user_id>/toggle-status/', views.toggle_user_status, name='toggle_user_status'),
     path('users/delete-multiple/', views.user_delete_multiple, name='user_delete_multiple'),
