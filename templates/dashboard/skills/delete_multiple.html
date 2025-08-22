@@ -1,79 +1,47 @@
 {% extends 'dashboard/base.html' %}
-{% load static %}
 
 {% block title %}Delete Skills - Dashboard{% endblock %}
 
-{% block content %}
-<div class="container mx-auto px-4 py-8">
-    <div class="max-w-3xl mx-auto">
-        <div class="bg-white dark:bg-gray-800 shadow-lg rounded-lg overflow-hidden">
-            <div class="p-6">
-                <div class="text-center mb-8">
-                    <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Delete Selected Skills</h2>
-                    <p class="mt-2 text-gray-600 dark:text-gray-400">Are you sure you want to delete the following skills?</p>
-                </div>
+{% block dashboard_content %}
+<div class="bg-white dark:bg-gray-800 shadow rounded-lg p-4 sm:p-6">
+    <div class="max-w-2xl mx-auto">
+        <div class="text-center mb-6">
+            <svg class="mx-auto h-12 w-12 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+            </svg>
+            <h2 class="text-2xl font-semibold text-gray-900 dark:text-white mt-4">Confirm Bulk Deletion</h2>
+            <p class="text-gray-600 dark:text-gray-400 mt-2">You are about to delete <span class="font-bold">{{ skills|length }}</span> skill{{ skills|length|pluralize }}. This action is irreversible.</p>
+        </div>
 
-                <!-- Warning Message -->
-                <div class="mb-8">
-                    <div class="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800/30 rounded-lg p-4">
-                        <div class="flex items-center mb-3">
-                            <svg class="h-6 w-6 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
-                            </svg>
-                            <h3 class="ml-3 text-lg font-medium text-red-800 dark:text-red-300">Warning</h3>
-                        </div>
-                        <p class="text-sm text-red-700 dark:text-red-300">This action cannot be undone. These skills will be permanently deleted from the system.</p>
-                    </div>
+        <div class="border-t border-b border-gray-200 dark:border-gray-700 py-4 mb-6">
+            <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-3">Selected Skills:</h3>
+            <div class="max-h-60 overflow-y-auto bg-gray-50 dark:bg-gray-700/50 rounded-lg p-3 space-y-3">
+                {% for skill in skills %}
+                <div class="p-3 bg-white dark:bg-gray-800 rounded-md shadow-sm">
+                    <p class="text-base font-semibold text-gray-900 dark:text-white truncate">{{ skill.name }}</p>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">{{ skill.get_proficiency_display }}</p>
                 </div>
-
-                <!-- Skill List -->
-                <div class="mb-8">
-                    <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-4">Selected Skills:</h3>
-                    <div class="bg-gray-50 dark:bg-gray-700/50 rounded-lg overflow-hidden">
-                        <ul class="divide-y divide-gray-200 dark:divide-gray-600">
-                            {% for skill in skills %}
-                            <li class="p-4 hover:bg-gray-100 dark:hover:bg-gray-600/50 transition duration-150">
-                                <div class="flex items-center">
-                                    <svg class="h-5 w-5 text-gray-400 dark:text-gray-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-                                    </svg>
-                                    <div>
-                                        <p class="text-sm font-medium text-gray-900 dark:text-white">{{ skill.name }}</p>
-                                        <p class="text-sm text-gray-500 dark:text-gray-400">Proficiency: {{ skill.proficiency }}</p>
-                                    </div>
-                                </div>
-                            </li>
-                            {% endfor %}
-                        </ul>
-                    </div>
-                </div>
-
-                <!-- Action Buttons -->
-                <div class="flex justify-end items-center space-x-4 mt-8">
-                    <a href="{% url 'dashboard:dashboard_skill_list' %}" 
-                       class="inline-flex items-center px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 dark:focus:ring-offset-gray-800 transition-colors duration-150">
-                        <svg class="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
-                        </svg>
-                        Cancel
-                    </a>
-                    <form method="post" class="inline-flex">
-                        {% csrf_token %}
-                        {% for id in skill_ids %}
-                        <input type="hidden" name="skill_ids" value="{{ id }}">
-                        {% endfor %}
-                        <input type="hidden" name="confirm" value="yes">
-                        <button type="submit" 
-                                class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 dark:bg-red-700 dark:hover:bg-red-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 dark:focus:ring-offset-gray-800 transition-colors duration-150">
-                            <svg class="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
-                            </svg>
-                            Delete Skills
-                        </button>
-                    </form>
-                </div>
+                {% endfor %}
             </div>
         </div>
+
+        <form method="post">
+            {% csrf_token %}
+            {% for skill in skills %}
+            <input type="hidden" name="skill_ids" value="{{ skill.id }}">
+            {% endfor %}
+            
+            <div class="flex flex-col sm:flex-row-reverse gap-3">
+                <button type="submit" 
+                        class="w-full sm:w-auto inline-flex justify-center px-4 py-2 bg-red-600 text-white font-medium rounded-lg hover:bg-red-700 dark:bg-red-700 dark:hover:bg-red-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 dark:focus:ring-offset-gray-800 transition duration-150 ease-in-out">
+                    Delete {{ skills|length }} Skill{{ skills|length|pluralize }}
+                </button>
+                <a href="{% url 'dashboard:dashboard_skill_list' %}" 
+                   class="w-full sm:w-auto inline-flex justify-center px-4 py-2 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800 transition duration-150 ease-in-out">
+                    Cancel
+                </a>
+            </div>
+        </form>
     </div>
 </div>
 {% endblock %}
