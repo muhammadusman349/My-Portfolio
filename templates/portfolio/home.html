@@ -41,11 +41,35 @@
 
                 <!-- Main heading -->
                 <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight mb-8">
-                    <span class="block text-gray-900 dark:text-white mb-4">Welcome to My Portfolio</span>
-                    <span class="block bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 bg-clip-text text-transparent">
-                        Backend Developer
+                    <span class="block text-gray-900 dark:text-white mb-2">Hi, I'm</span>
+                    <span class="block bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 bg-clip-text text-transparent mb-2">
+                        Muhammad Usman
+                    </span>
+                    <span class="block text-2xl sm:text-3xl md:text-4xl font-semibold text-gray-700 dark:text-gray-300">
+                        Backend Developer & Problem Solver
                     </span>
                 </h1>
+
+                <!-- Description -->
+                <p class="text-lg sm:text-xl text-gray-600 dark:text-gray-300 mb-8 max-w-3xl mx-auto leading-relaxed">
+                    Passionate about building scalable web applications and solving complex problems with clean, efficient code. 
+                    Specialized in Django, REST APIs, and modern backend technologies.
+                </p>
+
+                <!-- CTA Buttons -->
+                <div class="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16">
+                    <a href="{% url 'portfolio:project_list' %}" 
+                       class="inline-flex items-center px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300">
+                        <i class="fas fa-code mr-2"></i>
+                        View My Work
+                    </a>
+                    <a href="{% static 'resume/Muhammad_Usman_Resume.pdf' %}" 
+                       download="Muhammad_Usman_Resume.pdf"
+                       class="inline-flex items-center px-6 py-3 bg-gradient-to-r from-green-600 to-emerald-600 text-white font-medium rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-300">
+                        <i class="fas fa-download mr-2 text-sm"></i>
+                        Download CV
+                    </a>
+                </div>
 
                 <!-- Animated Tech Stack Icons -->
                 <div class="mt-16 flex flex-wrap justify-center items-center gap-8">
