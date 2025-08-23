@@ -25,23 +25,23 @@
 
     <form method="post" class="space-y-6">
         {% csrf_token %}
-        <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
-            <div class="sm:col-span-4">
+        <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6 w-full"
+            <div class="sm:col-span-4 w-full">
                 {{ form.institution|as_crispy_field }}
             </div>
-            <div class="sm:col-span-2">
+            <div class="sm:col-span-2 w-full">
                 {{ form.degree|as_crispy_field }}
             </div>
-            <div class="sm:col-span-6">
+            <div class="sm:col-span-6 w-full">
                 {{ form.field_of_study|as_crispy_field }}
             </div>
-            <div class="sm:col-span-3">
+            <div class="sm:col-span-3 w-full">
                 {{ form.start_date|as_crispy_field }}
             </div>
-            <div class="sm:col-span-3">
+            <div class="sm:col-span-3 w-full">
                 {{ form.end_date|as_crispy_field }}
             </div>
-            <div class="sm:col-span-6">
+            <div class="sm:col-span-6 w-full">
                 {{ form.description|as_crispy_field }}
             </div>
         </div>

@@ -54,16 +54,16 @@
     <!-- Original Comment -->
     <div class="mb-8">
         <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-6">
-            <div class="flex items-start space-x-3 sm:space-x-4">
+            <div class="flex items-start space-x-3 sm:space-x-4 flex-col sm:flex-row sm:items-start">
                 <div class="flex-shrink-0">
-                    <div class="h-9 w-9 sm:h-10 sm:w-10 rounded-full bg-gray-300 dark:bg-gray-600 flex items-center justify-center">
+                    <div class="h-9 w-9 sm:h-10 sm:w-10 rounded-full bg-gray-300 dark:bg-gray-600 flex items-center justify-center mx-auto">
                         <span class="text-base sm:text-lg font-medium text-gray-700 dark:text-gray-300">{{ comment.user.username|first|upper }}</span>
                     </div>
                 </div>
-                <div class="flex-grow">
-                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                        <div class="space-y-0.5">
-                            <h3 class="text-sm font-medium text-gray-900 dark:text-white break-words">{{ comment.user.username }}</h3>
+                <div class="flex-grow w-full mt-3 sm:mt-0">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 w-full">
+                        <div class="space-y-0.5 text-center sm:text-left"
+                            <h3 class="text-sm font-medium text-gray-900 dark:text-white break-words text-center sm:text-left">{{ comment.user.username }}</h3>
                             <p class="text-xs sm:text-sm text-gray-500 dark:text-gray-400">{{ comment.created_at|date:"M d, Y H:i" }}</p>
                         </div>
                         <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
@@ -90,7 +90,7 @@
     <div class="mb-8 space-y-4">
         <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-4">Replies</h3>
         {% for reply in replies %}
-        <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-6 ml-8 border-l-4 {% if reply.is_owner_reply %}border-blue-500{% else %}border-gray-300{% endif %}">
+        <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 sm:p-6 ml-0 sm:ml-8 border-l-4 {% if reply.is_owner_reply %}border-blue-500{% else %}border-gray-300{% endif %}">
             <div class="flex items-start space-x-4">
                 <div class="flex-shrink-0">
                     <div class="h-10 w-10 rounded-full {% if reply.is_owner_reply %}bg-blue-100 dark:bg-blue-800{% else %}bg-gray-300 dark:bg-gray-600{% endif %} flex items-center justify-center">
@@ -149,8 +149,8 @@
                 <label for="id_response" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Your Reply</label>
                 <div class="mt-1">
                     <textarea name="{{ form.response.name }}" id="{{ form.response.id_for_label }}" 
-                        class="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md p-2 h-32"
-                        placeholder="Type your reply here...">{{ form.response.value|default:'' }}</textarea>
+                        class="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full text-sm border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md p-2 h-32"
+                        placeholder="Type your reply here...">{{ form.response.value|default: }}</textarea>
                 </div>
                 {% if form.response.errors %}
                 <p class="mt-2 text-sm text-red-600 dark:text-red-400">{{ form.response.errors|join:", " }}</p>
