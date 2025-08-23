@@ -1,0 +1,40 @@
+{% extends 'dashboard/base.html' %}
+{% load static %}
+
+{% block title %}Resume | Dashboard{% endblock %}
+
+{% block dashboard_content %}
+<div class="space-y-6">
+    <div class="flex items-center justify-between">
+        <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Manage Resume</h1>
+    </div>
+
+    {% if latest_resume %}
+    <div class="p-4 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
+        <p class="text-sm text-gray-600 dark:text-gray-300">Current Resume:</p>
+        <a href="{{ latest_resume.file.url }}" target="_blank" class="inline-flex items-center mt-2 px-4 py-2 bg-primary-500 text-white rounded-lg hover:bg-primary-600 transition">
+            <i class="fas fa-download mr-2"></i> Download Current
+        </a>
+        <p class="mt-2 text-xs text-gray-500">Uploaded at: {{ latest_resume.uploaded_at }}</p>
+    </div>
+    {% endif %}
+
+    <div class="p-6 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
+        <form method="post" enctype="multipart/form-data" class="space-y-4">
+            {% csrf_token %}
+            <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Upload New Resume (PDF/DOC/DOCX)</label>
+                {{ form.file }}
+                {% if form.file.errors %}
+                    <p class="text-sm text-red-600 mt-1">{{ form.file.errors.0 }}</p>
+                {% endif %}
+            </div>
+            <div class="pt-2">
+                <button type="submit" class="inline-flex items-center px-6 py-2 bg-primary-500 text-white rounded-lg hover:bg-primary-600 transition">
+                    <i class="fas fa-upload mr-2"></i> Upload
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
