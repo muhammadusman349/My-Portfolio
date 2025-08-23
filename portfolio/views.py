@@ -5,15 +5,15 @@ from django.http import JsonResponse
 from django.template.loader import render_to_string
 from django.utils import timezone
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from .models import Project, ProjectComment, Skill, Education, Experience, Contact, ProjectImage
-from .forms import CommentForm, ProjectForm
+from .models import Project, ProjectComment, Skill, Education, Experience, Contact, Resume
 from django.contrib import messages
+from .forms import CommentForm
 
 
 def project_list(request):
     project_list = Project.objects.all().order_by('-created_at')
     paginator = Paginator(project_list, 6)  # Show 6 projects per page
-    
+
     page = request.GET.get('page')
     try:
         projects = paginator.page(page)
@@ -21,7 +21,7 @@ def project_list(request):
         projects = paginator.page(1)
     except EmptyPage:
         projects = paginator.page(paginator.num_pages)
-    
+
     return render(request, 'portfolio/project_list.html', {'projects': projects})
 
 
@@ -31,7 +31,7 @@ def add_comment(request, pk):
     """Add a new comment or reply to a project."""
     project = get_object_or_404(Project, pk=pk)
     is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
-    
+
     # Get the text from POST data
     text = request.POST.get('text', '').strip()
     parent_id = request.POST.get('parent_id')
@@ -51,7 +51,7 @@ def add_comment(request, pk):
             status='approved' if request.user == project.user else 'pending',
             is_owner_reply=request.user == project.user
         )
-        
+
         # Set parent comment if provided
         if parent_id:
             try:
@@ -243,12 +243,12 @@ def experience_list(request):
 
 def experience_detail(request, pk):
     experience = get_object_or_404(Experience, pk=pk)
-    
+
     # Get related projects by matching the skills used in the experience
     related_projects = Project.objects.filter(
         skills__in=experience.technologies_used.all()
     ).distinct().order_by('-created_at')
-    
+
     return render(request, 'portfolio/experience_detail.html', {
         'experience': experience,
         'related_projects': related_projects,
@@ -322,12 +322,14 @@ def home(request):
     experiences = Experience.objects.all().order_by('-start_date')[:3]
     educations = Education.objects.all().order_by('-start_date')
     skills = Skill.objects.all().order_by('-proficiency')[:8]  # Reduced from 10 to 8 skills
-    
+    latest_resume = Resume.objects.first()
+
     return render(request, 'portfolio/home.html', {
         'projects': projects,
         'experiences': experiences,
         'educations': educations,
         'skills': skills,
+        'latest_resume': latest_resume,
     })
 
 
@@ -352,3 +354,11 @@ def privacy_policy(request):
 
 def terms_of_service(request):
     return render(request, 'portfolio/terms_of_service.html')
+
+
+def resume_latest(request):
+    latest_resume = Resume.objects.first()
+    if latest_resume and latest_resume.file:
+        return redirect(latest_resume.file.url)
+    messages.error(request, 'Resume is not available yet.')
+    return redirect('portfolio:home')

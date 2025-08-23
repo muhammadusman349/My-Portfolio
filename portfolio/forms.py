@@ -1,5 +1,9 @@
 from django import forms
-from .models import Project, Skill, Education, Experience, Contact, ProjectComment, ProjectImage
+from .models import (
+    Project, Skill, Education,
+    Experience, ProjectComment,
+    ProjectImage, Resume
+)
 
 
 class ProjectForm(forms.ModelForm):
@@ -120,3 +124,27 @@ class ProjectImageForm(forms.ModelForm):
                 'min': '0'
             })
         }
+
+
+class ResumeForm(forms.ModelForm):
+    class Meta:
+        model = Resume
+        fields = ['file']
+        widgets = {
+            'file': forms.ClearableFileInput(attrs={
+                'class': 'block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-300 dark:bg-gray-700 dark:border-gray-600',
+                'accept': '.pdf,.doc,.docx'
+            })
+        }
+
+    def clean_file(self):
+        f = self.cleaned_data.get('file')
+        if not f:
+            raise forms.ValidationError('Please select a file to upload.')
+        if f.size and f.size > 10 * 1024 * 1024:
+            raise forms.ValidationError('File too large (max 10MB).')
+        valid_exts = ['.pdf', '.doc', '.docx']
+        name = (f.name or '').lower()
+        if not any(name.endswith(ext) for ext in valid_exts):
+            raise forms.ValidationError('Invalid file type. Allowed: PDF, DOC, DOCX.')
+        return f

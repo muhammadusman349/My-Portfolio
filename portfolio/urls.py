@@ -30,6 +30,9 @@ urlpatterns = [
     path('contact/', views.contact_view, name='contact'),
     path('contact/list/', views.contact_list, name='contact_list'),
 
+    # Resume URLs
+    path('resume/latest/', views.resume_latest, name='resume_latest'),
+
     # Privacy Policy URL
     path('privacy-policy/', views.privacy_policy, name='privacy_policy'),
     path('terms-of-service/', views.terms_of_service, name='terms_of_service'),

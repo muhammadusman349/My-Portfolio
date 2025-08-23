@@ -3,7 +3,7 @@ from .models import (
     Project, ProjectComment,
     Skill, Education,
     Contact, Experience,
-    ProjectImage
+    ProjectImage, Resume
     )
 
 # Register your models here.
@@ -69,3 +69,11 @@ class ExperienceAdmin(admin.ModelAdmin):
     list_filter = ('start_date', 'end_date', 'current')
     search_fields = ('company', 'position', 'user__username')
     date_hierarchy = 'start_date'
+
+
+@admin.register(Resume)
+class ResumeAdmin(admin.ModelAdmin):
+    list_display = ('id', 'file', 'user', 'uploaded_at')
+    list_filter = ('uploaded_at',)
+    search_fields = ('user__username',)
+    date_hierarchy = 'uploaded_at'
