@@ -231,7 +231,7 @@
                     </div>
 
                     <!-- Project Link Overlay -->
-                    <a href="{% url 'portfolio:project_detail' project.id %}" 
+                    <a href="{% url 'portfolio:project_detail' project.id %}?next={{ request.get_full_path|urlencode }}" 
                        class="absolute inset-0 z-10 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded-2xl">
                         <span class="sr-only">View project {{ project.title }}</span>
                     </a>
@@ -407,18 +407,43 @@
 <!-- Skills Section -->
 <section class="py-12 sm:py-16 bg-white dark:bg-gray-800">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center space-y-3 sm:space-y-4 mb-12">
+        <div class="text-center space-y-3 sm:space-y-4 mb-8">
             <h2 class="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
                 Skills & Technologies
             </h2>
             <p class="text-sm sm:text-base text-gray-600 dark:text-gray-400">Core technologies I work with</p>
         </div>
-        
-        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 sm:gap-6">
+
+        <!-- Controls -->
+        <div class="flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between mb-6">
+            <div class="flex items-center gap-2 flex-1">
+                <div class="relative w-full sm:max-w-xs">
+                    <input id="skill-search" type="text" placeholder="Search skills..." class="w-full pl-9 pr-3 py-2 text-sm rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-blue-500" />
+                    <span class="absolute left-3 top-2.5 text-gray-400"><i class="fas fa-search"></i></span>
+                </div>
+            </div>
+            <div class="flex flex-wrap gap-2">
+                <button class="skill-filter px-3 py-1.5 text-xs sm:text-sm rounded-full border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 active-filter" data-filter="all">All</button>
+                <button class="skill-filter px-3 py-1.5 text-xs sm:text-sm rounded-full border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700" data-filter="backend">Backend</button>
+                <button class="skill-filter px-3 py-1.5 text-xs sm:text-sm rounded-full border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700" data-filter="frontend">Frontend</button>
+                <button class="skill-filter px-3 py-1.5 text-xs sm:text-sm rounded-full border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700" data-filter="db">Database</button>
+                <button class="skill-filter px-3 py-1.5 text-xs sm:text-sm rounded-full border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700" data-filter="devops">DevOps</button>
+                <button class="skill-filter px-3 py-1.5 text-xs sm:text-sm rounded-full border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700" data-filter="tools">Tools</button>
+            </div>
+        </div>
+
+        <div id="skills-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 sm:gap-6">
             {% for skill in skills %}
-            <div class="group relative">
+            <div class="group relative" 
+                 data-name="{{ skill.name|lower }}"
+                 {% comment %}quick tag inference for filtering{% endcomment %}
+                 {% if 'python' in skill.name|lower or 'django' in skill.name|lower or 'node' in skill.name|lower or 'rest' in skill.name|lower %}data-tags="backend"
+                 {% elif 'react' in skill.name|lower or 'javascript' in skill.name|lower or 'js' in skill.name|lower or 'html' in skill.name|lower or 'css' in skill.name|lower %}data-tags="frontend"
+                 {% elif 'mysql' in skill.name|lower or 'postgres' in skill.name|lower or 'sql' in skill.name|lower or 'redis' in skill.name|lower %}data-tags="db"
+                 {% elif 'docker' in skill.name|lower or 'kubernetes' in skill.name|lower or 'aws' in skill.name|lower %}data-tags="devops"
+                 {% else %}data-tags="tools"{% endif %}>
                 <div class="absolute inset-0.5 bg-gradient-to-r from-blue-500 to-purple-500 rounded-xl blur opacity-30 group-hover:opacity-100 transition duration-500"></div>
-                <a href="{% url 'portfolio:projects_by_skill' skill.name|slugify %}" 
+                <a href="{% url 'portfolio:projects_by_skill' skill.name|slugify %}"
                    class="relative block bg-white dark:bg-gray-700 rounded-xl p-3 sm:p-4 transform transition duration-500 hover:scale-[1.02] hover:rotate-1">
                     <div class="flex flex-col items-center text-center space-y-2 sm:space-y-3">
                         <div class="relative">
@@ -444,7 +469,7 @@
                                     <i class="fab fa-docker text-xl sm:text-2xl text-blue-500 group-hover:animate-pulse"></i>
                                 {% elif 'redis' in skill.name|lower %}
                                     <i class="fas fa-database text-xl sm:text-2xl text-red-500 group-hover:animate-pulse"></i>
-                                {% elif 'mysql' in skill.name|lower or 'sql' in skill.name|lower %}
+                                {% elif 'mysql' in skill.name|lower or 'sql' in skill.name|lower or 'postgres' in skill.name|lower %}
                                     <i class="fas fa-database text-xl sm:text-2xl text-blue-600 group-hover:animate-pulse"></i>
                                 {% else %}
                                     <i class="fas fa-code text-xl sm:text-2xl text-gray-600 dark:text-gray-400 group-hover:animate-pulse"></i>
@@ -455,9 +480,9 @@
                             <h3 class="text-sm sm:text-base font-semibold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-300">
                                 {{ skill.name }}
                             </h3>
-                            <div class="mt-1 sm:mt-2 relative h-1.5 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
-                                <div class="absolute top-0 left-0 h-full bg-gradient-to-r from-blue-500 to-purple-500 rounded-full transform origin-left transition-transform duration-1000 skill-bar" 
-                                     data-width="{{ skill.proficiency }}" 
+                            <div class="mt-1 sm:mt-2 relative h-1.5 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden" title="{{ skill.get_proficiency_display }}">
+                                <div class="absolute top-0 left-0 h-full rounded-full transform origin-left transition-all duration-1000 skill-bar" 
+                                     data-width="{{ skill.proficiency }}"
                                      style="width: 0%"></div>
                             </div>
                             <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">{{ skill.get_proficiency_display }}</p>
@@ -466,6 +491,13 @@
                 </a>
             </div>
             {% endfor %}
+        </div>
+
+        <div class="mt-8 text-center">
+            <a href="{% url 'portfolio:skill_list' %}" class="inline-flex items-center px-4 py-2 text-sm font-medium rounded-lg bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-600 transition">
+                View all skills
+                <svg class="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+            </a>
         </div>
     </div>
 </section>
@@ -625,15 +657,55 @@
                 if (entry.isIntersecting) {
                     const bar = entry.target;
                     const width = bar.getAttribute('data-width');
-                    setTimeout(() => {
-                        bar.style.width = `${width}%`;
-                    }, 200);
+                    // color by proficiency
+                    const pct = parseInt(width || '0', 10);
+                    bar.classList.remove('bg-red-500','bg-yellow-500','bg-green-500','bg-gradient-to-r','from-blue-500','to-purple-500');
+                    if (pct < 40) {
+                        bar.classList.add('bg-red-500');
+                    } else if (pct < 70) {
+                        bar.classList.add('bg-yellow-500');
+                    } else {
+                        bar.classList.add('bg-green-500');
+                    }
+                    setTimeout(() => { bar.style.width = `${pct}%`; }, 150);
                     observer.unobserve(bar);
                 }
             });
         }, { threshold: 0.5 });
 
         skillBars.forEach(bar => observer.observe(bar));
+    }
+
+    // Filtering logic
+    function initSkillFilters() {
+        const grid = document.getElementById('skills-grid');
+        const items = Array.from(grid.querySelectorAll('.group.relative'));
+        const search = document.getElementById('skill-search');
+        const buttons = document.querySelectorAll('.skill-filter');
+
+        let activeFilter = 'all';
+
+        function applyFilters() {
+            const term = (search?.value || '').trim().toLowerCase();
+            items.forEach(item => {
+                const name = item.getAttribute('data-name') || '';
+                const tags = (item.getAttribute('data-tags') || '').split(',');
+                const matchesText = !term || name.includes(term);
+                const matchesTag = activeFilter === 'all' || tags.includes(activeFilter);
+                item.style.display = (matchesText && matchesTag) ? '' : 'none';
+            });
+        }
+
+        buttons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                buttons.forEach(b => b.classList.remove('active-filter','bg-gray-200','dark:bg-gray-600'));
+                btn.classList.add('active-filter','bg-gray-200','dark:bg-gray-600');
+                activeFilter = btn.getAttribute('data-filter');
+                applyFilters();
+            });
+        });
+
+        search?.addEventListener('input', applyFilters);
     }
 
     // Scroll to next section function
@@ -647,6 +719,7 @@
     // Run animations when the page loads
     document.addEventListener('DOMContentLoaded', () => {
         animateSkillBars();
+        initSkillFilters();
     });
 </script>
 {% endblock %}

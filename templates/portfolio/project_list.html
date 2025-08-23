@@ -131,7 +131,7 @@
                         <div class="p-4 text-white w-full">
                             <p class="text-sm font-medium mb-2">Quick Preview</p>
                             <div class="flex space-x-2">
-                                <a href="{% url 'portfolio:project_detail' project.id %}" 
+                                <a href="{% url 'portfolio:project_detail' project.id %}?next={{ request.get_full_path|urlencode }}" 
                                    class="flex-1 bg-white/20 backdrop-blur-sm text-center py-2 rounded-lg text-xs font-medium hover:bg-white/30 transition-colors">
                                     View Details
                                 </a>
@@ -179,7 +179,7 @@
 
                     <!-- Action Buttons -->
                     <div class="flex items-center justify-between">
-                        <a href="{% url 'portfolio:project_detail' project.id %}"
+                        <a href="{% url 'portfolio:project_detail' project.id %}?next={{ request.get_full_path|urlencode }}"
                            class="inline-flex items-center px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white text-sm font-medium rounded-lg hover:from-blue-700 hover:to-purple-700 transform hover:scale-105 transition-all duration-300 shadow-md">
                             <i class="fas fa-eye mr-2"></i>
                             View Project
@@ -258,11 +258,6 @@
                 Ready to bring your ideas to life? I'm always excited to work on new projects and challenges.
             </p>
             <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                <a href="{% url 'portfolio:contact' %}" 
-                   class="inline-flex items-center px-8 py-4 bg-white text-blue-600 font-semibold rounded-xl hover:bg-gray-100 transform hover:scale-105 transition-all duration-300 shadow-lg">
-                    <i class="fas fa-envelope mr-3"></i>
-                    Get In Touch
-                </a>
                 <a href="{% url 'portfolio:home' %}" 
                    class="inline-flex items-center px-8 py-4 bg-white/10 backdrop-blur-sm text-white font-semibold rounded-xl border border-white/30 hover:bg-white/20 transform hover:scale-105 transition-all duration-300">
                     <i class="fas fa-home mr-3"></i>
