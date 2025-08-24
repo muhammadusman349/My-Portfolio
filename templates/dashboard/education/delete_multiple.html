@@ -47,6 +47,7 @@
             <div class="mt-8 pt-5 border-t border-gray-200 dark:border-gray-700">
                 <form method="post" action="{% url 'dashboard:dashboard_education_delete_multiple' %}">
                     {% csrf_token %}
+                    <input type="hidden" name="confirm" value="yes">
                     {% for education in education_to_delete %}
                         <input type="hidden" name="education_ids" value="{{ education.id }}">
                     {% endfor %}

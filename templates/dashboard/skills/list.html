@@ -7,61 +7,63 @@
 {% block dashboard_content %}
 <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-4 sm:p-6">
     <!-- Header -->
-    <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-6">
-        <div>
-            <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Skills</h1>
-            <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Manage your skills and proficiency levels.</p>
-        </div>
-        <div class="flex items-center gap-2">
-            <a href="{% url 'dashboard:dashboard_skill_create' %}" 
-               class="w-full sm:w-auto inline-flex items-center justify-center px-4 py-2 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 dark:focus:ring-offset-gray-800 transition duration-150 ease-in-out">
-                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
-                Add Skill
-            </a>
-            <button id="delete-selected-btn" 
-                    class="w-full sm:w-auto inline-flex items-center justify-center px-4 py-2 bg-red-600 text-white font-medium rounded-lg hover:bg-red-700 dark:bg-red-700 dark:hover:bg-red-800 disabled:opacity-50 disabled:cursor-not-allowed hidden" 
-                    disabled>
-                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
-                Delete
-            </button>
+    <div class="border-b border-gray-200 dark:border-gray-700 pb-5 mb-6">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+            <div class="mb-4 sm:mb-0">
+                <h1 class="text-2xl font-semibold text-gray-900 dark:text-white">My Skills</h1>
+                <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">Manage and showcase your professional skills and expertise</p>
+            </div>
+            <div class="flex flex-col sm:flex-row gap-3">
+                <a href="{% url 'dashboard:dashboard_skill_create' %}" 
+                   class="inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 dark:bg-blue-700 dark:hover:bg-blue-600 dark:focus:ring-blue-600 transition-colors">
+                    <svg class="-ml-1 mr-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                        <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
+                    </svg>
+                    Add New Skill
+                </a>
+                <button id="delete-selected-btn" 
+                        class="inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 dark:bg-red-700 dark:hover:bg-red-600 dark:focus:ring-red-600 disabled:opacity-50 disabled:cursor-not-allowed hidden transition-colors" 
+                        disabled>
+                    <svg class="-ml-1 mr-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                        <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+                    </svg>
+                    Delete Selected
+                </button>
+            </div>
         </div>
     </div>
 
     <!-- Filters -->
-    <div class="mb-4">
-        <form method="get" class="flex flex-col sm:flex-row gap-3">
-            <div class="flex-grow">
+    <form method="get" class="mb-6">
+        <div class="flex flex-col sm:flex-row items-center gap-4">
+            <div class="w-full sm:w-auto">
                 <label for="sort" class="sr-only">Sort By</label>
-                <select id="sort" name="sort" class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                <select id="sort" name="sort" onchange="this.form.submit()" class="w-full sm:max-w-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                     <option value="name" {% if sort == 'name' %}selected{% endif %}>Name (A-Z)</option>
                     <option value="-name" {% if sort == '-name' %}selected{% endif %}>Name (Z-A)</option>
                     <option value="-proficiency" {% if sort == '-proficiency' %}selected{% endif %}>Highest Proficiency</option>
                     <option value="proficiency" {% if sort == 'proficiency' %}selected{% endif %}>Lowest Proficiency</option>
                 </select>
             </div>
-            <button type="submit" class="w-full sm:w-auto px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 font-medium">
-                Apply
-            </button>
-        </form>
-    </div>
+        </div>
+    </form>
 
     <form id="skills-form" method="post" action="{% url 'dashboard:dashboard_skill_delete_multiple' %}">
         {% csrf_token %}
         <!-- Mobile View -->
         <div class="md:hidden">
             <div class="flex items-center px-4 py-2 bg-gray-50 dark:bg-gray-700/50 rounded-t-lg border-b border-gray-200 dark:border-gray-700">
-                <input type="checkbox" id="select-all-mobile" class="h-4 w-4 rounded border-gray-300 dark:border-gray-600 text-indigo-600 focus:ring-indigo-500 dark:bg-gray-900">
+                <input type="checkbox" id="select-all-mobile" class="h-3 w-3 rounded border-gray-300 dark:border-gray-600 text-indigo-600 focus:ring-indigo-500 dark:bg-gray-900">
                 <label for="select-all-mobile" class="ml-3 text-sm font-medium text-gray-900 dark:text-white">Select All</label>
             </div>
             <div class="space-y-3 p-4">
                 {% for skill in skills %}
                 <div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm p-4">
                     <div class="flex items-start gap-4">
-                        <input type="checkbox" name="skill_ids" value="{{ skill.id }}" class="skill-checkbox mt-1 h-4 w-4 rounded border-gray-300 dark:border-gray-600 text-indigo-600 focus:ring-indigo-500 dark:bg-gray-900">
+                        <input type="checkbox" name="skill_ids" value="{{ skill.id }}" class="skill-checkbox mt-0.5 h-3 w-3 rounded border-gray-300 dark:border-gray-600 text-indigo-600 focus:ring-indigo-500 dark:bg-gray-900">
                         <div class="flex-grow">
                             <p class="font-semibold text-gray-900 dark:text-white">{{ skill.name }}</p>
-                            <p class="text-sm text-gray-500 dark:text-gray-400">{{ skill.category }}</p>
-                            <div class="mt-2">
+                                <div class="mt-2">
                                 <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
                                     <div class="bg-blue-600 dark:bg-blue-500 h-2 rounded-full" style="width: {{ skill.proficiency|multiply:20 }}%"></div>
                                 </div>
@@ -70,8 +72,18 @@
                         </div>
                     </div>
                     <div class="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700 flex justify-end gap-2">
-                        <a href="{% url 'dashboard:dashboard_skill_edit' skill.id %}" class="px-3 py-1 text-sm font-medium text-blue-600 bg-blue-50 dark:text-blue-400 dark:bg-blue-900/50 rounded-md hover:bg-blue-100 dark:hover:bg-blue-900">Edit</a>
-                        <a href="{% url 'dashboard:dashboard_skill_delete' skill.id %}" class="px-3 py-1 text-sm font-medium text-red-600 bg-red-50 dark:text-red-400 dark:bg-red-900/50 rounded-md hover:bg-red-100 dark:hover:bg-red-900">Delete</a>
+                        <a href="{% url 'dashboard:dashboard_skill_edit' skill.id %}" class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md text-blue-700 bg-blue-100 hover:bg-blue-200 dark:bg-blue-900/50 dark:text-blue-300 dark:hover:bg-blue-800/50 transition-colors">
+                            <svg class="-ml-0.5 mr-1 h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                            </svg>
+                            Edit
+                        </a>
+                        <a href="{% url 'dashboard:dashboard_skill_delete' skill.id %}" class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md text-red-700 bg-red-100 hover:bg-red-200 dark:bg-red-900/50 dark:text-red-300 dark:hover:bg-red-800/50 transition-colors">
+                            <svg class="-ml-0.5 mr-1 h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                            </svg>
+                            Delete
+                        </a>
                     </div>
                 </div>
                 {% empty %}
@@ -85,11 +97,12 @@
             <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                 <thead class="bg-gray-50 dark:bg-gray-700">
                     <tr>
-                        <th scope="col" class="p-4">
-                            <input type="checkbox" id="select-all-desktop" class="h-4 w-4 rounded border-gray-300 dark:border-gray-600 text-indigo-600 focus:ring-indigo-500 dark:bg-gray-900">
+                        <th scope="col" class="px-6 py-3 text-left">
+                            <input type="checkbox" id="select-all-desktop"
+                                        class="rounded border-gray-300 dark:border-gray-600 text-indigo-600 focus:ring-indigo-500 dark:bg-gray-800 transition duration-150 ease-in-out select-all-checkbox">
+                            <label for="select-all-desktop" class="ml-2 text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Select</label>
                         </th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Name</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Category</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Level</th>
                         <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Actions</th>
                     </tr>
@@ -98,10 +111,9 @@
                     {% for skill in skills %}
                     <tr>
                         <td class="p-4">
-                            <input type="checkbox" name="skill_ids" value="{{ skill.id }}" class="skill-checkbox h-4 w-4 rounded border-gray-300 dark:border-gray-600 text-indigo-600 focus:ring-indigo-500 dark:bg-gray-900">
+                            <input type="checkbox" name="skill_ids" value="{{ skill.id }}" class="skill-checkbox h-3 w-3 rounded border-gray-300 dark:border-gray-600 text-indigo-600 focus:ring-indigo-500 dark:bg-gray-900">
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">{{ skill.name }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">{{ skill.category }}</td>
                         <td class="px-6 py-4 whitespace-nowrap">
                             <div class="flex items-center">
                                 <div class="w-24 bg-gray-200 dark:bg-gray-700 rounded-full h-2">
@@ -111,8 +123,20 @@
                             </div>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                            <a href="{% url 'dashboard:dashboard_skill_edit' skill.id %}" class="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300">Edit</a>
-                            <a href="{% url 'dashboard:dashboard_skill_delete' skill.id %}" class="ml-4 text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300">Delete</a>
+                            <div class="flex justify-end space-x-3">
+                                <a href="{% url 'dashboard:dashboard_skill_edit' skill.id %}" class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md text-blue-700 bg-blue-100 hover:bg-blue-200 dark:bg-blue-900/50 dark:text-blue-300 dark:hover:bg-blue-800/50 transition-colors">
+                                    <svg class="-ml-0.5 mr-1.5 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                    </svg>
+                                    Edit
+                                </a>
+                                <a href="{% url 'dashboard:dashboard_skill_delete' skill.id %}" class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md text-red-700 bg-red-100 hover:bg-red-200 dark:bg-red-900/50 dark:text-red-300 dark:hover:bg-red-800/50 transition-colors">
+                                    <svg class="-ml-0.5 mr-1.5 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                    </svg>
+                                    Delete
+                                </a>
+                            </div>
                         </td>
                     </tr>
                     {% empty %}

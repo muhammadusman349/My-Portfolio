@@ -19,7 +19,6 @@ from portfolio.forms import (
     EducationForm, ExperienceForm,
     ContactResponseForm, CommentResponseForm, ResumeForm
     )
-import json
 
 
 User = get_user_model()
@@ -311,7 +310,9 @@ def education_create(request):
     if request.method == 'POST':
         form = EducationForm(request.POST)
         if form.is_valid():
-            education = form.save()
+            education = form.save(commit=False)
+            education.user = request.user
+            education.save()
             messages.success(request, 'Education created successfully!')
             return redirect('dashboard:dashboard_education_list')
     else:
@@ -393,7 +394,9 @@ def experience_create(request):
     if request.method == 'POST':
         form = ExperienceForm(request.POST)
         if form.is_valid():
-            experience = form.save()
+            experience = form.save(commit=False)
+            experience.user = request.user
+            experience.save()
             messages.success(request, 'Experience created successfully!')
             return redirect('dashboard:dashboard_experience_list')
     else:

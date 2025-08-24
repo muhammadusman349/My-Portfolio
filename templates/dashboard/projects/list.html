@@ -27,19 +27,19 @@
     </div>
 
     <!-- Filters -->
-    <div class="mb-4">
-        <div class="relative">
-            <label for="sort" class="sr-only">Sort By</label>
-            <select name="sort" id="sort" 
-                    class="block w-full sm:w-auto pl-3 pr-10 py-2 text-base border-gray-300 dark:border-gray-600 dark:bg-gray-700 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md"
-                    onchange="window.location.href='?sort=' + this.value">
-                <option value="-created_at" {% if sort == '-created_at' %}selected{% endif %}>Newest First</option>
-                <option value="created_at" {% if sort == 'created_at' %}selected{% endif %}>Oldest First</option>
-                <option value="title" {% if sort == 'title' %}selected{% endif %}>Title (A-Z)</option>
-                <option value="-title" {% if sort == '-title' %}selected{% endif %}>Title (Z-A)</option>
-            </select>
+    <form method="get" class="mb-6">
+        <div class="flex flex-col sm:flex-row items-center gap-4">
+            <div class="w-full sm:w-auto">
+                <label for="sort" class="sr-only">Sort By</label>
+                <select id="sort" name="sort" onchange="this.form.submit()" class="w-full sm:max-w-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                    <option value="-created_at" {% if sort == '-created_at' %}selected{% endif %}>Newest First</option>
+                    <option value="created_at" {% if sort == 'created_at' %}selected{% endif %}>Oldest First</option>
+                    <option value="title" {% if sort == 'title' %}selected{% endif %}>Title (A-Z)</option>
+                    <option value="-title" {% if sort == '-title' %}selected{% endif %}>Title (Z-A)</option>
+                </select>
+            </div>
         </div>
-    </div>
+    </form>
 
     <!-- Table -->
     <div class="overflow-x-auto">

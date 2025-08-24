@@ -275,7 +275,6 @@
 <script>
 // Initialize variables
 document.addEventListener('DOMContentLoaded', function() {
-    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
     const selectAllDesktop = document.getElementById('select-all-desktop');
     const selectAllMobile = document.getElementById('select-all-mobile');
     const allCheckboxes = document.querySelectorAll('.contact-checkbox');
@@ -322,40 +321,42 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Initial state update
     updateDeleteButtonState();
-});
 
-function toggleReadStatus(contactId, isRead) {
-    const url = isRead 
-        ? `/dashboard/contacts/${contactId}/mark-read/`
-        : `/dashboard/contacts/${contactId}/mark-unread/`;
-    
-    fetch(url, {
-        method: 'POST',
-        headers: {
-            'X-CSRFToken': csrfToken,
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-        },
-        credentials: 'same-origin'
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-        return response.json();
-    })
-    .then(data => {
-        if (data.status === 'success') {
-            window.location.reload();
-        } else {
-            alert('Error: ' + (data.message || 'Failed to update status'));
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('Failed to update contact status. Please try again.');
-    });
-}
+    // Expose toggleReadStatus globally and fetch CSRF token within the function scope
+    window.toggleReadStatus = function(contactId, isRead) {
+        const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]')?.value || '';
+        const url = isRead 
+            ? `/dashboard/contacts/${contactId}/mark-read/`
+            : `/dashboard/contacts/${contactId}/mark-unread/`;
+
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': csrfToken,
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            credentials: 'same-origin'
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.status === 'success') {
+                window.location.reload();
+            } else {
+                alert('Error: ' + (data.message || 'Failed to update status'));
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Failed to update contact status. Please try again.');
+        });
+    }
+});
 </script>
 {% endblock %}
 {% endblock %}
