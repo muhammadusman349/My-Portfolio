@@ -5,15 +5,29 @@ from django.http import JsonResponse
 from django.template.loader import render_to_string
 from django.utils import timezone
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.db.models import Q
 from .models import Project, ProjectComment, Skill, Education, Experience, Contact, Resume
 from django.contrib import messages
 from .forms import CommentForm
 
 
 def project_list(request):
-    project_list = Project.objects.all().order_by('-created_at')
-    paginator = Paginator(project_list, 6)  # Show 6 projects per page
+    project_qs = Project.objects.all().order_by('-created_at')
 
+    # Filters
+    search = request.GET.get('search', '').strip()
+    skill_ids = request.GET.getlist('skills')  # expects list of Skill IDs
+
+    if search:
+        project_qs = project_qs.filter(
+            Q(title__icontains=search) | Q(description__icontains=search)
+        )
+
+    if skill_ids:
+        project_qs = project_qs.filter(skills__in=skill_ids).distinct()
+
+    # Pagination
+    paginator = Paginator(project_qs, 6)  # Show 6 projects per page
     page = request.GET.get('page')
     try:
         projects = paginator.page(page)
@@ -22,7 +36,32 @@ def project_list(request):
     except EmptyPage:
         projects = paginator.page(paginator.num_pages)
 
-    return render(request, 'portfolio/project_list.html', {'projects': projects})
+    # Real-time metrics
+    total_projects = Project.objects.count()
+    total_skills = Skill.objects.filter(projects__isnull=False).distinct().count()
+    filtered_projects_count = project_qs.count()
+    filtered_skills_count = Skill.objects.filter(projects__in=project_qs).distinct().count()
+
+    # Preserve query params (without page) for pagination links
+    query_params = request.GET.copy()
+    if 'page' in query_params:
+        query_params.pop('page')
+    querystring = query_params.urlencode()
+
+    # Skills for filter UI
+    all_skills = Skill.objects.all().order_by('name')
+
+    return render(request, 'portfolio/project_list.html', {
+        'projects': projects,
+        'total_projects': total_projects,
+        'total_skills': total_skills,
+        'filtered_projects_count': filtered_projects_count,
+        'filtered_skills_count': filtered_skills_count,
+        'all_skills': all_skills,
+        'selected_skill_ids': list(map(int, skill_ids)) if skill_ids else [],
+        'search_query': search,
+        'querystring': querystring,
+    })
 
 
 @login_required
@@ -206,8 +245,8 @@ def projects_by_skill(request, skill_slug):
     try:
         # Get all skills with the given name and combine their projects
         skills = Skill.objects.filter(name__iexact=skill_name)
-        project_list = Project.objects.filter(skills__in=skills).distinct().order_by('-created_at')
-        paginator = Paginator(project_list, 6)  # Show 6 projects per page
+        project_qs = Project.objects.filter(skills__in=skills).distinct().order_by('-created_at')
+        paginator = Paginator(project_qs, 6)  # Show 6 projects per page
 
         page = request.GET.get('page')
         try:
@@ -216,12 +255,23 @@ def projects_by_skill(request, skill_slug):
             projects = paginator.page(1)
         except EmptyPage:
             projects = paginator.page(paginator.num_pages)
+
+        filtered_projects_count = project_qs.count()
+        filtered_skills_count = Skill.objects.filter(projects__in=project_qs).distinct().count()
     except Skill.DoesNotExist:
         projects = Project.objects.none()
+        filtered_projects_count = 0
+        filtered_skills_count = 0
 
     context = {
         'projects': projects,
         'skill_name': skill_name,
+        # Overall metrics
+        'total_projects': Project.objects.count(),
+        'total_skills': Skill.objects.filter(projects__isnull=False).distinct().count(),
+        # Filter-specific metrics
+        'filtered_projects_count': filtered_projects_count,
+        'filtered_skills_count': filtered_skills_count,
     }
     return render(request, 'portfolio/project_list.html', context)
 
