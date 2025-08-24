@@ -450,31 +450,89 @@
                         <div class="relative">
                             <div class="absolute inset-0 bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-full blur-sm transform scale-125 transition-all duration-300 opacity-0 group-hover:opacity-100"></div>
                             <div class="relative p-2 sm:p-3 bg-gradient-to-br from-blue-500/10 to-purple-500/10 dark:from-blue-400/20 dark:to-purple-400/20 rounded-full group-hover:from-blue-500/30 group-hover:to-purple-500/30 transition-all duration-300">
-                                {% if 'python' in skill.name|lower %}
+                                {% with lname=skill.name|lower %}
+                                {% if 'python' in lname %}
                                     <i class="fab fa-python text-xl sm:text-2xl text-blue-500 group-hover:animate-bounce"></i>
-                                {% elif 'javascript' in skill.name|lower or 'js' in skill.name|lower %}
+                                {% elif 'javascript' in lname or 'js' in lname %}
                                     <i class="fab fa-js text-xl sm:text-2xl text-yellow-400 group-hover:animate-spin"></i>
-                                {% elif 'react' in skill.name|lower %}
+                                {% elif 'react' in lname %}
                                     <i class="fab fa-react text-xl sm:text-2xl text-blue-400 group-hover:animate-spin"></i>
-                                {% elif 'node' in skill.name|lower %}
+                                {% elif 'node' in lname %}
                                     <i class="fab fa-node-js text-xl sm:text-2xl text-green-500 group-hover:animate-bounce"></i>
-                                {% elif 'html' in skill.name|lower %}
+                                {% elif 'html' in lname %}
                                     <i class="fab fa-html5 text-xl sm:text-2xl text-orange-500 group-hover:animate-pulse"></i>
-                                {% elif 'css' in skill.name|lower %}
+                                {% elif 'css' in lname %}
                                     <i class="fab fa-css3-alt text-xl sm:text-2xl text-blue-500 group-hover:animate-pulse"></i>
-                                {% elif 'django' in skill.name|lower and 'rest' in skill.name|lower %}
+                                {% elif 'github' in lname or 'git' in lname %}
+                                    <i class="fab fa-github text-xl sm:text-2xl text-gray-800 dark:text-gray-200 group-hover:animate-pulse"></i>
+                                {% elif 'django' in lname and 'rest' in lname or 'drf' in lname %}
                                     <i class="fa-solid fa-gears text-xl sm:text-2xl text-green-600 group-hover:animate-spin"></i>
-                                {% elif 'django' in skill.name|lower %}
+                                {% elif 'django' in lname %}
                                     <i class="fa-solid fa-cube text-xl sm:text-2xl text-green-500 group-hover:animate-bounce"></i>
-                                {% elif 'docker' in skill.name|lower %}
+                                {% elif 'docker' in lname %}
                                     <i class="fab fa-docker text-xl sm:text-2xl text-blue-500 group-hover:animate-pulse"></i>
-                                {% elif 'redis' in skill.name|lower %}
+                                {% elif 'redis' in lname %}
                                     <i class="fas fa-database text-xl sm:text-2xl text-red-500 group-hover:animate-pulse"></i>
-                                {% elif 'mysql' in skill.name|lower or 'sql' in skill.name|lower or 'postgres' in skill.name|lower %}
+                                {% elif 'mysql' in lname or 'postgres' in lname or 'sql' in lname %}
                                     <i class="fas fa-database text-xl sm:text-2xl text-blue-600 group-hover:animate-pulse"></i>
+                                {% elif 'bootstrap' in lname %}
+                                    <i class="fab fa-bootstrap text-xl sm:text-2xl text-purple-600 group-hover:animate-bounce"></i>
+                                {% elif 'tailwind' in lname %}
+                                    <i class="fa-solid fa-wind text-xl sm:text-2xl text-cyan-500 group-hover:animate-pulse"></i>
+                                {% elif 'vue' in lname %}
+                                    <i class="fab fa-vuejs text-xl sm:text-2xl text-green-500 group-hover:animate-spin"></i>
+                                {% elif 'angular' in lname %}
+                                    <i class="fab fa-angular text-xl sm:text-2xl text-red-600 group-hover:animate-spin"></i>
+                                {% elif 'aws' in lname %}
+                                    <i class="fab fa-aws text-xl sm:text-2xl text-orange-500 group-hover:animate-pulse"></i>
+                                {% elif 'linux' in lname %}
+                                    <i class="fab fa-linux text-xl sm:text-2xl text-gray-800 dark:text-gray-200 group-hover:animate-pulse"></i>
+                                {% elif 'ubuntu' in lname %}
+                                    <i class="fab fa-ubuntu text-xl sm:text-2xl text-orange-600 group-hover:animate-pulse"></i>
+                                {% elif 'figma' in lname %}
+                                    <i class="fab fa-figma text-xl sm:text-2xl text-purple-500 group-hover:animate-pulse"></i>
+                                {% elif 'photoshop' in lname %}
+                                    <i class="fa-solid fa-image text-xl sm:text-2xl text-blue-600 group-hover:animate-pulse"></i>
+                                {% elif 'api' in lname or 'rest' in lname %}
+                                    <i class="fa-solid fa-plug text-xl sm:text-2xl text-indigo-600 group-hover:animate-pulse"></i>
+                                {% elif 'mongodb' in lname or 'mongo' in lname %}
+                                    <i class="fa-solid fa-leaf text-xl sm:text-2xl text-green-600 group-hover:animate-bounce"></i>
+                                {% elif 'firebase' in lname %}
+                                    <i class="fa-solid fa-fire text-xl sm:text-2xl text-orange-500 group-hover:animate-bounce"></i>
+                                {% elif 'typescript' in lname or 'ts' in lname %}
+                                    <i class="fa-solid fa-code text-xl sm:text-2xl text-blue-600 group-hover:animate-pulse"></i>
+                                {% elif 'sass' in lname or 'scss' in lname %}
+                                    <i class="fab fa-sass text-xl sm:text-2xl text-pink-500 group-hover:animate-pulse"></i>
+                                {% elif 'webpack' in lname %}
+                                    <i class="fa-solid fa-cube text-xl sm:text-2xl text-blue-500 group-hover:animate-bounce"></i>
+                                {% elif 'npm' in lname %}
+                                    <i class="fab fa-npm text-xl sm:text-2xl text-red-600 group-hover:animate-pulse"></i>
+                                {% elif 'yarn' in lname %}
+                                    <i class="fab fa-yarn text-xl sm:text-2xl text-blue-500 group-hover:animate-pulse"></i>
+                                {% elif 'postman' in lname %}
+                                    <i class="fa-solid fa-paper-plane text-xl sm:text-2xl text-orange-500 group-hover:animate-bounce"></i>
+                                {% elif 'vscode' in lname or 'vs code' in lname %}
+                                    <i class="fa-solid fa-code text-xl sm:text-2xl text-blue-600 group-hover:animate-pulse"></i>
+                                {% elif 'jupyter' in lname %}
+                                    <i class="fa-solid fa-book text-xl sm:text-2xl text-orange-500 group-hover:animate-pulse"></i>
+                                {% elif 'pandas' in lname %}
+                                    <i class="fa-solid fa-table text-xl sm:text-2xl text-blue-600 group-hover:animate-pulse"></i>
+                                {% elif 'numpy' in lname %}
+                                    <i class="fa-solid fa-calculator text-xl sm:text-2xl text-blue-500 group-hover:animate-pulse"></i>
+                                {% elif 'tensorflow' in lname %}
+                                    <i class="fa-solid fa-brain text-xl sm:text-2xl text-orange-600 group-hover:animate-pulse"></i>
+                                {% elif 'pytorch' in lname %}
+                                    <i class="fa-solid fa-fire text-xl sm:text-2xl text-red-600 group-hover:animate-bounce"></i>
+                                {% elif 'machine learning' in lname or 'ml' in lname %}
+                                    <i class="fa-solid fa-robot text-xl sm:text-2xl text-purple-600 group-hover:animate-bounce"></i>
+                                {% elif 'ai' in lname or 'artificial intelligence' in lname %}
+                                    <i class="fa-solid fa-brain text-xl sm:text-2xl text-indigo-600 group-hover:animate-pulse"></i>
+                                {% elif 'celery' in lname %}
+                                    <i class="fa-solid fa-tasks text-xl sm:text-2xl text-green-500 group-hover:animate-pulse"></i>
                                 {% else %}
                                     <i class="fas fa-code text-xl sm:text-2xl text-gray-600 dark:text-gray-400 group-hover:animate-pulse"></i>
                                 {% endif %}
+                                {% endwith %}
                             </div>
                         </div>
                         <div>

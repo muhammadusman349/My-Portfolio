@@ -150,7 +150,9 @@
                                             <i class="fab fa-html5 text-lg text-orange-500"></i>
                                         {% elif 'css' in lname %}
                                             <i class="fab fa-css3-alt text-lg text-blue-500"></i>
-                                        {% elif 'django' in lname and 'rest' in lname %}
+                                        {% elif 'github' in lname or 'git' in lname %}
+                                            <i class="fab fa-github text-lg text-gray-800 dark:text-gray-200"></i>
+                                        {% elif 'django' in lname and 'rest' in lname or 'drf' in lname %}
                                             <i class="fa-solid fa-gears text-lg text-green-600"></i>
                                         {% elif 'django' in lname %}
                                             <i class="fa-solid fa-cube text-lg text-green-500"></i>
@@ -160,6 +162,60 @@
                                             <i class="fas fa-database text-lg text-red-500"></i>
                                         {% elif 'mysql' in lname or 'postgres' in lname or 'sql' in lname %}
                                             <i class="fas fa-database text-lg text-blue-600"></i>
+                                        {% elif 'bootstrap' in lname %}
+                                            <i class="fab fa-bootstrap text-lg text-purple-600"></i>
+                                        {% elif 'tailwind' in lname %}
+                                            <i class="fa-solid fa-wind text-lg text-cyan-500"></i>
+                                        {% elif 'vue' in lname %}
+                                            <i class="fab fa-vuejs text-lg text-green-500"></i>
+                                        {% elif 'angular' in lname %}
+                                            <i class="fab fa-angular text-lg text-red-600"></i>
+                                        {% elif 'aws' in lname %}
+                                            <i class="fab fa-aws text-lg text-orange-500"></i>
+                                        {% elif 'linux' in lname %}
+                                            <i class="fab fa-linux text-lg text-gray-800 dark:text-gray-200"></i>
+                                        {% elif 'ubuntu' in lname %}
+                                            <i class="fab fa-ubuntu text-lg text-orange-600"></i>
+                                        {% elif 'figma' in lname %}
+                                            <i class="fab fa-figma text-lg text-purple-500"></i>
+                                        {% elif 'photoshop' in lname %}
+                                            <i class="fa-solid fa-image text-lg text-blue-600"></i>
+                                        {% elif 'api' in lname or 'rest' in lname %}
+                                            <i class="fa-solid fa-plug text-lg text-indigo-600"></i>
+                                        {% elif 'mongodb' in lname or 'mongo' in lname %}
+                                            <i class="fa-solid fa-leaf text-lg text-green-600"></i>
+                                        {% elif 'firebase' in lname %}
+                                            <i class="fa-solid fa-fire text-lg text-orange-500"></i>
+                                        {% elif 'typescript' in lname or 'ts' in lname %}
+                                            <i class="fa-solid fa-code text-lg text-blue-600"></i>
+                                        {% elif 'sass' in lname or 'scss' in lname %}
+                                            <i class="fab fa-sass text-lg text-pink-500"></i>
+                                        {% elif 'webpack' in lname %}
+                                            <i class="fa-solid fa-cube text-lg text-blue-500"></i>
+                                        {% elif 'npm' in lname %}
+                                            <i class="fab fa-npm text-lg text-red-600"></i>
+                                        {% elif 'yarn' in lname %}
+                                            <i class="fab fa-yarn text-lg text-blue-500"></i>
+                                        {% elif 'postman' in lname %}
+                                            <i class="fa-solid fa-paper-plane text-lg text-orange-500"></i>
+                                        {% elif 'vscode' in lname or 'vs code' in lname %}
+                                            <i class="fa-solid fa-code text-lg text-blue-600"></i>
+                                        {% elif 'jupyter' in lname %}
+                                            <i class="fa-solid fa-book text-lg text-orange-500"></i>
+                                        {% elif 'pandas' in lname %}
+                                            <i class="fa-solid fa-table text-lg text-blue-600"></i>
+                                        {% elif 'numpy' in lname %}
+                                            <i class="fa-solid fa-calculator text-lg text-blue-500"></i>
+                                        {% elif 'tensorflow' in lname %}
+                                            <i class="fa-solid fa-brain text-lg text-orange-600"></i>
+                                        {% elif 'pytorch' in lname %}
+                                            <i class="fa-solid fa-fire text-lg text-red-600"></i>
+                                        {% elif 'machine learning' in lname or 'ml' in lname %}
+                                            <i class="fa-solid fa-robot text-lg text-purple-600"></i>
+                                        {% elif 'ai' in lname or 'artificial intelligence' in lname %}
+                                            <i class="fa-solid fa-brain text-lg text-indigo-600"></i>
+                                        {% elif 'celery' in lname %}
+                                            <i class="fa-solid fa-tasks text-lg text-green-500"></i>
                                         {% else %}
                                             {{ skill.name|first|upper }}
                                         {% endif %}
