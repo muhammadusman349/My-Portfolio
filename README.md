@@ -27,51 +27,38 @@ A professional portfolio website showcasing my work, built with Django and moder
 
 </div>
 
-## ✨ Key Features
+## Key Features
 
-### 💫 User Interface
+### User Interface
 - **Responsive Design**: Seamlessly adapts to all devices and screen sizes
 - **Dark/Light Mode**: Toggle between themes for comfortable viewing
-- **Modern UI Elements**: 
-  - Smooth animations and transitions
+- **Modern UI Elements**:
+  - Smooth transitions
   - Interactive project cards
-  - Dynamic timeline for experience
-  - Skill progress visualization
-  - Custom loading animations
+  - Experience timeline
+  - Skill chips with colored icons
 
-### 🛠 Technical Features
+### Technical Features
 - **Authentication System**:
   - Secure user registration and login
-  - Social authentication integration
-  - Password reset functionality
-  - Login With Social Media (Google,Github)
+  - Social authentication (Google, GitHub) via django-allauth
   - Profile management
 
 - **Content Management**:
-  - Dynamic project portfolio
-  - Experience timeline
-  - Education history
+  - Projects
+  - Experience
+  - Education
   - Skills and technologies
-  - Blog posts (Coming Soon)
 
 - **Admin Dashboard**:
-  - Custom admin interface
-  - Content management system
-  - User analytics
-  - SEO optimization tools
+  - Custom dashboard UI
+  - CRUD for portfolio content
 
 ### 🔧 Backend Features
-- **Django Framework**:
-  - MVT architecture
-  - Custom user models
-  - Advanced querysets
-  - Middleware implementations
-
+- **Django Framework**
 - **Database**:
-  - Optimized database schema
-  - Efficient queries
-  - Data validation
-  - Backup systems
+  - SQLite by default (development)
+  - PostgreSQL supported (optional)
 
 ## 🚀 Installation
 
@@ -125,25 +112,26 @@ python manage.py runserver
 ### Backend
 - **Django** - Web framework
 - **Python** - Programming language
-- **PostgreSQL** - Database
-- **Django REST Framework** - API development
-- **Celery** - Task queue (Coming Soon)
-- **Redis** - Caching (Coming Soon)
+- **SQLite** - Default development database
+- **PostgreSQL** - Optional for production
 
 ### Frontend
 - **HTML5** - Structure
-- **Tailwind CSS** - Styling
+- **Tailwind CSS (CDN)** - Styling
 - **JavaScript** - Interactivity
-- **Alpine.js** - Frontend framework
+- **jQuery** - Used in dashboard UI
 - **Font Awesome** - Icons
-- **GSAP** - Animations (Coming Soon)
+
+#### Branding (Logo & Favicon)
+- SVG logo mark: `static/logo/portfolio-logo-mark.svg`
+- Site and Dashboard use the SVG as favicon via `<link rel="icon" type="image/svg+xml" href="{% static 'logo/portfolio-logo-mark.svg' %}">` in:
+  - `templates/base.html`
+  - `templates/dashboard/base.html`
+- `/favicon.ico` is redirected to the SVG in `conf/urls.py`.
 
 ### Development Tools
 - **Git** - Version control
 - **VS Code** - IDE
-- **Docker** - Containerization
-- **Nginx** - Web server
-- **Gunicorn** - WSGI server
 
 ## 📁 Project Structure
 
@@ -162,7 +150,8 @@ Django-Portfolio_Website/
 │   └── portfolio/         # Portfolio templates
 ├── static/                # Static files
 │   ├── css/              # Stylesheets
-│   └── js/               # JavaScript files
+│   ├── js/               # JavaScript files
+│   └── logo/             # Branding assets (SVG favicon/logo)
 ├── media/                 # User uploads
 ├── requirements.txt       # Dependencies
 └── manage.py             # Django CLI
@@ -170,16 +159,8 @@ Django-Portfolio_Website/
 
 ## 🔐 Security Features
 
-- Django's built-in security
-- CSRF protection
-- XSS prevention
-- SQL injection prevention
+- Django's built-in protections (CSRF, XSS, SQL injection)
 - Secure password hashing
-- Rate limiting
-- Session security
-- HTTPS enforcement
-- Security headers
-- Input validation
 
 <!-- ## 🚀 Deployment
 
@@ -213,6 +194,20 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 🤝 Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
+
+## 🎨 Skill Icon Colors
+
+- Bright, brand-consistent icon colors are applied via a Django template filter `skill_color` in `portfolio/templatetags/project_filters.py`.
+- Used in `templates/portfolio/project_detail.html` and `templates/portfolio/experience_detail.html` on Font Awesome icons.
+- Tailwind note: if you later add a Tailwind build step, safelist the dynamic classes returned by `skill_color` to avoid purging.
+
+## 🔧 Configuration Snippets
+
+- Favicon link (in `templates/base.html` and `templates/dashboard/base.html`):
+  ```html
+  <link rel="icon" type="image/svg+xml" href="{% static 'logo/portfolio-logo-mark.svg' %}">
+  ```
+- Favicon redirect (in `conf/urls.py`): `/favicon.ico` → `static/logo/portfolio-logo-mark.svg`
 
 ## 📧 Contact
 
