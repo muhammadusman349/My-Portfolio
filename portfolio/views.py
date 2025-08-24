@@ -311,8 +311,15 @@ def contact_view(request):
         email = request.POST.get('email', '').strip()
         subject = request.POST.get('subject', '').strip()
         message = request.POST.get('message', '').strip()
+        is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
 
+        # Basic validation
         if not all([name, email, subject, message]):
+            if is_ajax:
+                return JsonResponse({
+                    'status': 'error',
+                    'message': 'Please fill in all fields.'
+                }, status=400)
             messages.error(request, 'Please fill in all fields.')
             return render(request, 'portfolio/contact.html', {
                 'name': name,
@@ -322,15 +329,27 @@ def contact_view(request):
             })
 
         try:
-            contact = Contact.objects.create(
+            Contact.objects.create(
                 name=name,
                 email=email,
                 subject=subject,
                 message=message
             )
+
+            if is_ajax:
+                return JsonResponse({
+                    'status': 'success',
+                    'message': 'Your message has been sent successfully!'
+                })
+
             messages.success(request, 'Your message has been sent successfully!')
             return redirect('portfolio:contact')
-        except Exception as e:
+        except Exception:
+            if is_ajax:
+                return JsonResponse({
+                    'status': 'error',
+                    'message': 'An error occurred while sending your message. Please try again.'
+                }, status=500)
             messages.error(request, 'An error occurred while sending your message. Please try again.')
             return render(request, 'portfolio/contact.html', {
                 'name': name,

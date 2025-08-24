@@ -4,9 +4,11 @@ from django.contrib import messages
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
 from django.utils import timezone
-from django.core.mail import send_mail
+from django.core.mail import send_mail, EmailMultiAlternatives
 from django.conf import settings
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
 from django.db.models import Q
 from django.contrib.auth import get_user_model
 from portfolio.models import (
@@ -514,46 +516,49 @@ def contact_detail(request, pk):
             contact.response = response
             contact.responded_at = timezone.now()
 
-            # Prepare email content
+            # Prepare email content (HTML + text)
             email_subject = f'Re: {contact.subject}'
-            email_body = f"""Dear {contact.name},
+            context = {
+                'contact': contact,
+                'response': response,
+                'responder_name': request.user.get_full_name() or request.user.username,
+                'responder_email': request.user.email,
+                'site_url': request.build_absolute_uri('/').rstrip('/'),
+            }
 
-Thank you for your message regarding "{contact.subject}".
+            html_body = render_to_string('emails/contact_response.html', context)
+            text_body = strip_tags(html_body)
 
-{response}
-
-Best regards,
-{request.user.get_full_name() or request.user.username}"""
- 
             # Send email response
             try:
-                # First, try sending to contact
-                send_mail(
+                email = EmailMultiAlternatives(
                     subject=email_subject,
-                    message=email_body,
+                    body=text_body,
                     from_email=settings.EMAIL_HOST_USER,
-                    recipient_list=[contact.email],
-                    fail_silently=False,
+                    to=[contact.email],
+                    reply_to=[request.user.email] if request.user.email else None,
                 )
+                email.attach_alternative(html_body, "text/html")
+                email.send(fail_silently=False)
+
                 # Save the response only after email is sent successfully
                 contact.save()
-                # Send confirmation email to admin
-                admin_confirmation = f"""Response sent to {contact.name} ({contact.email})
 
-Original Message:
-Subject: {contact.subject}
-Sent: {contact.created_at.strftime('%Y-%m-%d %H:%M:%S')}
-
-Your Response:
-{response}"""
-
-                send_mail(
-                    subject=f'Confirmation: Response sent to {contact.name}',
-                    message=admin_confirmation,
-                    from_email=settings.EMAIL_HOST_USER,
-                    recipient_list=[request.user.email],
-                    fail_silently=True,
+                # Send confirmation email to admin (plain text is fine)
+                admin_confirmation = (
+                    f"Response sent to {contact.name} ({contact.email})\n\n"
+                    f"Original Message:\nSubject: {contact.subject}\n"
+                    f"Sent: {contact.created_at.strftime('%Y-%m-%d %H:%M:%S')}\n\n"
+                    f"Your Response:\n{response}"
                 )
+                if request.user.email:
+                    send_mail(
+                        subject=f'Confirmation: Response sent to {contact.name}',
+                        message=admin_confirmation,
+                        from_email=settings.EMAIL_HOST_USER,
+                        recipient_list=[request.user.email],
+                        fail_silently=True,
+                    )
 
                 messages.success(request, f'Response sent successfully to {contact.email}!')
                 return redirect('dashboard:dashboard_contact_list')
