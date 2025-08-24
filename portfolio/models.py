@@ -36,10 +36,19 @@ class Skill(models.Model):
 
 
 class Project(models.Model):
+    STATUS_CHOICES = [
+        ('planning', 'Planning'),
+        ('in_progress', 'In Progress'),
+        ('on_hold', 'On Hold'),
+        ('completed', 'Completed'),
+        ('discontinued', 'Discontinued'),
+    ]
+    
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     title = models.CharField(max_length=200)
     description = models.TextField()
     skills = models.ManyToManyField(Skill, related_name='projects', blank=True)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='in_progress')
     github_link = models.URLField(blank=True)
     live_link = models.URLField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -83,6 +92,7 @@ class ProjectComment(models.Model):
     is_owner_reply = models.BooleanField(default=False)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
     likes = models.ManyToManyField(get_user_model(), related_name='liked_comments', blank=True)
+    is_read = models.BooleanField(default=False)
 
     class Meta:
         ordering = ['-created_at']

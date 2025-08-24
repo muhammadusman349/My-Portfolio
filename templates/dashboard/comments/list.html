@@ -60,7 +60,7 @@
                 </thead>
                 <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
                     {% for comment in comment_items %}
-                    <tr class="hover:bg-gray-50 dark:hover:bg-gray-700 transition duration-150 ease-in-out">
+                    <tr class="{% if not comment.is_read %}bg-blue-50 dark:bg-blue-900/30{% else %}bg-white dark:bg-gray-800{% endif %} hover:bg-gray-50 dark:hover:bg-gray-700 transition duration-150 ease-in-out">
                         <td class="px-6 py-4 whitespace-nowrap">
                             <input type="checkbox" name="comment_ids" value="{{ comment.id }}" 
                                    class="comment-checkbox rounded border-gray-300 dark:border-gray-600 text-indigo-600 focus:ring-indigo-500 dark:bg-gray-800 transition duration-150 ease-in-out">
@@ -69,7 +69,16 @@
                             <div class="text-sm font-medium text-gray-900 dark:text-gray-200">{{ comment.project.title }}</div>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
-                            <div class="text-sm text-gray-900 dark:text-gray-200">{{ comment.user.username }}</div>
+                            <div class="flex items-center">
+                                <div class="text-sm font-medium text-gray-900 dark:text-gray-200">
+                                    {{ comment.user.username }}
+                                </div>
+                                {% if not comment.is_read %}
+                                <span class="ml-2 inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
+                                    New
+                                </span>
+                                {% endif %}
+                            </div>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
                             <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 

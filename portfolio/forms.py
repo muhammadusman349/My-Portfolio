@@ -9,11 +9,20 @@ from .models import (
 class ProjectForm(forms.ModelForm):
     class Meta:
         model = Project
-        fields = ['title', 'description', 'skills', 'github_link', 'live_link']
+        fields = ['title', 'description', 'status', 'skills', 'github_link', 'live_link']
         widgets = {
-            'description': forms.Textarea(attrs={'rows': 4}),
+            'description': forms.Textarea(attrs={'rows': 4, 'class': 'form-textarea mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white'}),
+            'status': forms.Select(attrs={
+                'class': 'form-select mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white'
+            }),
             'skills': forms.SelectMultiple(attrs={
-                'class': 'form-multiselect block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300'
+                'class': 'form-multiselect block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white'
+            }),
+            'github_link': forms.URLInput(attrs={
+                'class': 'form-input mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white'
+            }),
+            'live_link': forms.URLInput(attrs={
+                'class': 'form-input mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white'
             }),
         }
 

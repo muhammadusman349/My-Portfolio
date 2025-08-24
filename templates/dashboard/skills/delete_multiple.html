@@ -27,6 +27,7 @@
 
         <form method="post">
             {% csrf_token %}
+            <input type="hidden" name="confirm" value="yes">
             {% for skill in skills %}
             <input type="hidden" name="skill_ids" value="{{ skill.id }}">
             {% endfor %}

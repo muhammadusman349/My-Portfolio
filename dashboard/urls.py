@@ -10,6 +10,7 @@ urlpatterns = [
     path('projects/', views.project_list, name='dashboard_project_list'),
     path('projects/create/', views.project_create, name='dashboard_project_create'),
     path('projects/<int:pk>/edit/', views.project_edit, name='dashboard_project_edit'),
+    path('projects/<int:pk>/', views.project_detail, name='dashboard_project_detail'),
     path('projects/<int:pk>/delete/', views.project_delete, name='dashboard_project_delete'),
     path('projects/delete-multiple/', views.project_delete_multiple, name='dashboard_project_delete_multiple'),
     path('projects/image/<int:image_id>/delete/', views.project_image_delete, name='project_image_delete'),
@@ -56,4 +57,7 @@ urlpatterns = [
     path('users/<int:user_id>/delete/', views.user_delete, name='user_delete'),
     path('users/<int:user_id>/toggle-status/', views.toggle_user_status, name='toggle_user_status'),
     path('users/delete-multiple/', views.user_delete_multiple, name='user_delete_multiple'),
+
+    # Resume
+    path('resume/', views.resume_upload, name='dashboard_resume'),
 ]

@@ -12,12 +12,12 @@ from django.contrib.auth import get_user_model
 from portfolio.models import (
     Project, Skill,
     Education, Experience,
-    Contact, ProjectComment, ProjectImage
+    Contact, ProjectComment, ProjectImage, Resume
     )
 from portfolio.forms import (
     ProjectForm, SkillForm,
     EducationForm, ExperienceForm,
-    ContactResponseForm, CommentResponseForm
+    ContactResponseForm, CommentResponseForm, ResumeForm
     )
 import json
 
@@ -642,6 +642,12 @@ def dashboard_comment_list(request):
 @login_required
 def dashboard_comment_detail(request, pk):
     comment = get_object_or_404(ProjectComment, pk=pk)
+    
+    # Mark comment as read when viewed
+    if not comment.is_read:
+        comment.is_read = True
+        comment.save()
+        
     replies = comment.get_replies().order_by('created_at')
 
     if request.method == 'POST':
@@ -880,3 +886,37 @@ def user_delete_multiple(request):
         'is_dashboard': True,
     }
     return render(request, 'dashboard/users/delete_multiple.html', context)
+
+
+@login_required
+def resume_upload(request):
+    if not request.user.is_superuser:
+        messages.error(request, "You don't have permission to access this page.")
+        return redirect('portfolio:home')
+
+    latest_resume = Resume.objects.first()
+
+    if request.method == 'POST':
+        form = ResumeForm(request.POST, request.FILES)
+        if form.is_valid():
+            resume = form.save(commit=False)
+            resume.user = request.user
+            resume.save()
+            messages.success(request, 'Resume uploaded successfully!')
+            return redirect('dashboard:dashboard_resume')
+    else:
+        form = ResumeForm()
+
+    return render(request, 'dashboard/resume/form.html', {
+        'form': form,
+        'latest_resume': latest_resume,
+        'is_dashboard': True,
+    })
+
+@login_required
+def project_detail(request, pk):
+    project = get_object_or_404(Project, pk=pk)
+    return render(request, 'dashboard/projects/detail.html', {
+        'project': project,
+        'is_dashboard': True
+    })

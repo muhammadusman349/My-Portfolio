@@ -1,0 +1,148 @@
+{% extends 'dashboard/base.html' %}
+{% load static %}
+
+{% block title %}{{ project.title }} - Project Details - Dashboard{% endblock %}
+
+{% block dashboard_content %}
+<div class="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
+    <!-- Header with Back and Action buttons -->
+    <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-6 gap-4">
+        <div>
+            <h2 class="text-2xl font-semibold text-gray-900 dark:text-white">{{ project.title }}</h2>
+            <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">Project Details</p>
+        </div>
+        <div class="flex items-center space-x-2">
+            <a href="{% url 'dashboard:dashboard_project_edit' project.pk %}"
+               class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                </svg>
+                Edit Project
+            </a>
+            <a href="{% url 'dashboard:dashboard_project_list' %}"
+               class="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-200 dark:border-gray-600 dark:hover:bg-gray-600">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                </svg>
+                Back to Projects
+            </a>
+        </div>
+    </div>
+
+    <!-- Project Details -->
+    <div class="space-y-6">
+        <!-- Featured Image -->
+        {% if project.featured_image %}
+        <div class="rounded-lg overflow-hidden">
+            <img src="{{ project.featured_image.url }}" alt="{{ project.title }}" class="w-full h-auto max-h-96 object-cover">
+        </div>
+        {% endif %}
+
+        <!-- Project Info -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <!-- Main Content -->
+            <div class="md:col-span-2 space-y-6">
+                <!-- Description -->
+                <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+                    <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-2">Description</h3>
+                    <div class="prose dark:prose-invert max-w-none">
+                        {{ project.description|linebreaks }}
+                    </div>
+                </div>
+
+                <!-- Skills -->
+                {% if project.skills.all %}
+                <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+                    <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-3">Skills Used</h3>
+                    <div class="space-y-2">
+                        {% for skill in project.skills.all %}
+                        <div>
+                            <div class="flex justify-between text-sm font-medium mb-1">
+                                <span class="text-gray-700 dark:text-gray-200">{{ skill.name }}</span>
+                                <span class="text-gray-500 dark:text-gray-400">{{ skill.get_proficiency_display }}</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2 dark:bg-gray-600">
+                                <div class="bg-blue-600 h-2 rounded-full" style="width: {{ skill.proficiency_percent }}%"></div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+
+                <!-- Project URL -->
+                {% if project.project_url %}
+                <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+                    <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-2">Project URL</h3>
+                    <a href="{{ project.project_url }}" target="_blank" rel="noopener noreferrer"
+                       class="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 break-all">
+                        {{ project.project_url }}
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- Sidebar -->
+            <div class="space-y-4">
+                <!-- Project Info Card -->
+                <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+                    <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-3">Project Information</h3>
+                    <dl class="space-y-3">
+                        <div>
+                            <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Status</dt>
+                            <dd class="mt-1">
+                                <span class="px-2.5 py-1 inline-flex text-xs leading-4 font-semibold rounded-full 
+                                    {% if project.status == 'completed' %}
+                                        bg-green-100 text-green-800 dark:bg-green-900/50 dark:text-green-200
+                                    {% elif project.status == 'in_progress' %}
+                                        bg-blue-100 text-blue-800 dark:bg-blue-900/50 dark:text-blue-200
+                                    {% elif project.status == 'on_hold' %}
+                                        bg-yellow-100 text-yellow-800 dark:bg-yellow-900/50 dark:text-yellow-200
+                                    {% elif project.status == 'discontinued' %}
+                                        bg-red-100 text-red-800 dark:bg-red-900/50 dark:text-red-200
+                                    {% else %}
+                                        bg-gray-100 text-gray-800 dark:bg-gray-600/50 dark:text-gray-200
+                                    {% endif %}">
+                                    {{ project.get_status_display }}
+                                </span>
+                            </dd>
+                        </div>
+                        <div>
+                            <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Created</dt>
+                            <dd class="mt-1 text-sm text-gray-900 dark:text-white">{{ project.created_at|date:"F j, Y" }}</dd>
+                        </div>
+                        {% if project.updated_at %}
+                        <div>
+                            <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Last Updated</dt>
+                            <dd class="mt-1 text-sm text-gray-900 dark:text-white">{{ project.updated_at|date:"F j, Y" }}</dd>
+                        </div>
+                        {% endif %}
+                    </dl>
+                </div>
+
+                <!-- Project Images -->
+                {% if project.images.all %}
+                <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+                    <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-3">Project Images</h3>
+                    <div class="grid grid-cols-2 gap-2">
+                        {% for image in project.images.all %}
+                        <div class="relative group">
+                            <img src="{{ image.image.url }}" alt="{{ project.title }} - Image {{ forloop.counter }}"
+                                 class="w-full h-24 object-cover rounded">
+                            <div class="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
+                                <a href="{{ image.image.url }}" target="_blank" class="text-white p-1 hover:text-blue-300">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m0 0V7m0 6h6" />
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

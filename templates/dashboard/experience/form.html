@@ -25,7 +25,7 @@
 
     <form method="post" class="space-y-6">
         {% csrf_token %}
-        <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6 w-full"
+        <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6 w-full">
             <div class="sm:col-span-3 w-full">
                 {{ form.company|as_crispy_field }}
             </div>

@@ -31,7 +31,21 @@
                                 {% if field.field.required %}required{% endif %}>
                             {% for choice in field.field.choices %}
                                 <option value="{{ choice.0 }}" 
-                                        {% if choice.0|stringformat:"i" in field.value|default_if_none:'' %}selected{% endif %}>
+                                        {% if choice.0|stringformat:"i" in field.value|default_if_none:''|stringformat:"i" %}selected{% endif %}>
+                                    {{ choice.1 }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                {% elif field.name == 'status' %}
+                        <select name="{{ field.html_name }}"
+                                id="{{ field.id_for_label }}"
+                                class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600
+                                       shadow-sm focus:border-blue-500 focus:ring-blue-500
+                                       dark:bg-gray-700 dark:text-white sm:text-sm"
+                                {% if field.field.required %}required{% endif %}>
+                            {% for choice in field.field.choices %}
+                                <option value="{{ choice.0 }}" 
+                                        {% if field.value == choice.0|stringformat:"s" %}selected{% endif %}>
                                     {{ choice.1 }}
                                 </option>
                             {% endfor %}
