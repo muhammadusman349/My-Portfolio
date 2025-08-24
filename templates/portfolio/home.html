@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load custom_filters %}
 
 {% block title %}Welcome to My Portfolio{% endblock %}
 
@@ -243,9 +244,9 @@
         <!-- View All Projects Button -->
         <div class="mt-8 sm:mt-12 text-center">
             <a href="{% url 'portfolio:project_list' %}" 
-               class="inline-flex items-center px-4 sm:px-6 py-2 sm:py-3 text-sm sm:text-base font-medium text-white bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl shadow-lg hover:from-blue-700 hover:to-purple-700 transform hover:scale-105 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+               class="inline-flex items-center px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm font-medium text-white bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl shadow-lg hover:from-blue-700 hover:to-purple-700 transform hover:scale-105 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                 View All Projects
-                <svg class="ml-2 -mr-1 w-4 sm:w-5 h-4 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg class="ml-2 -mr-1 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
                 </svg>
             </a>
@@ -423,12 +424,12 @@
                 </div>
             </div>
             <div class="flex flex-wrap gap-2">
-                <button class="skill-filter px-3 py-1.5 text-xs sm:text-sm rounded-full border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700 active-filter" data-filter="all">All</button>
-                <button class="skill-filter px-3 py-1.5 text-xs sm:text-sm rounded-full border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700" data-filter="backend">Backend</button>
-                <button class="skill-filter px-3 py-1.5 text-xs sm:text-sm rounded-full border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700" data-filter="frontend">Frontend</button>
-                <button class="skill-filter px-3 py-1.5 text-xs sm:text-sm rounded-full border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700" data-filter="db">Database</button>
-                <button class="skill-filter px-3 py-1.5 text-xs sm:text-sm rounded-full border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700" data-filter="devops">DevOps</button>
-                <button class="skill-filter px-3 py-1.5 text-xs sm:text-sm rounded-full border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700" data-filter="tools">Tools</button>
+                <button class="skill-filter px-3 py-1.5 text-xs sm:text-sm rounded-full border active-filter bg-indigo-600 text-white border-indigo-500" data-filter="all">All</button>
+                <button class="skill-filter px-3 py-1.5 text-xs sm:text-sm rounded-full border bg-transparent text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700" data-filter="backend">Backend</button>
+                <button class="skill-filter px-3 py-1.5 text-xs sm:text-sm rounded-full border bg-transparent text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700" data-filter="frontend">Frontend</button>
+                <button class="skill-filter px-3 py-1.5 text-xs sm:text-sm rounded-full border bg-transparent text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700" data-filter="db">Database</button>
+                <button class="skill-filter px-3 py-1.5 text-xs sm:text-sm rounded-full border bg-transparent text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700" data-filter="devops">DevOps</button>
+                <button class="skill-filter px-3 py-1.5 text-xs sm:text-sm rounded-full border bg-transparent text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700" data-filter="tools">Tools</button>
             </div>
         </div>
 
@@ -443,7 +444,7 @@
                  {% elif 'docker' in skill.name|lower or 'kubernetes' in skill.name|lower or 'aws' in skill.name|lower %}data-tags="devops"
                  {% else %}data-tags="tools"{% endif %}>
                 <div class="absolute inset-0.5 bg-gradient-to-r from-blue-500 to-purple-500 rounded-xl blur opacity-30 group-hover:opacity-100 transition duration-500"></div>
-                <a href="{% url 'portfolio:projects_by_skill' skill.name|slugify %}"
+                <a href="{% url 'portfolio:projects_by_skill' skill_slug=skill.name|slugify %}"
                    class="relative block bg-white dark:bg-gray-700 rounded-xl p-3 sm:p-4 transform transition duration-500 hover:scale-[1.02] hover:rotate-1">
                     <div class="flex flex-col items-center text-center space-y-2 sm:space-y-3">
                         <div class="relative">
@@ -480,12 +481,12 @@
                             <h3 class="text-sm sm:text-base font-semibold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-300">
                                 {{ skill.name }}
                             </h3>
-                            <div class="mt-1 sm:mt-2 relative h-1.5 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden" title="{{ skill.get_proficiency_display }}">
+                            <div class="mt-1 sm:mt-2 relative h-1.5 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden" title="{{ skill.get_proficiency_display }} ({{ skill.proficiency|multiply:20 }}%)">
                                 <div class="absolute top-0 left-0 h-full rounded-full transform origin-left transition-all duration-1000 skill-bar" 
-                                     data-width="{{ skill.proficiency }}"
+                                     data-width="{{ skill.proficiency|multiply:20 }}"
                                      style="width: 0%"></div>
                             </div>
-                            <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">{{ skill.get_proficiency_display }}</p>
+                            <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">{{ skill.get_proficiency_display }} • {{ skill.proficiency|multiply:20 }}%</p>
                         </div>
                     </div>
                 </a>
@@ -494,9 +495,10 @@
         </div>
 
         <div class="mt-8 text-center">
-            <a href="{% url 'portfolio:skill_list' %}" class="inline-flex items-center px-4 py-2 text-sm font-medium rounded-lg bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-600 transition">
+            <a href="{% url 'portfolio:skill_list' %}" 
+               class="inline-flex items-center px-2 sm:px-3 py-1.5 sm:py-2 text-xs sm:text-sm font-medium text-white bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl shadow-lg hover:from-blue-700 hover:to-purple-700 transform hover:scale-105 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                 View all skills
-                <svg class="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                <svg class="ml-2 -mr-1 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
             </a>
         </div>
     </div>
@@ -698,8 +700,12 @@
 
         buttons.forEach(btn => {
             btn.addEventListener('click', () => {
-                buttons.forEach(b => b.classList.remove('active-filter','bg-gray-200','dark:bg-gray-600'));
-                btn.classList.add('active-filter','bg-gray-200','dark:bg-gray-600');
+                buttons.forEach(b => {
+                    b.classList.remove('active-filter','bg-indigo-600','text-white','border-indigo-500');
+                    b.classList.add('bg-transparent','text-gray-700','dark:text-gray-300','border-gray-300','dark:border-gray-600');
+                });
+                btn.classList.add('active-filter','bg-indigo-600','text-white','border-indigo-500');
+                btn.classList.remove('bg-transparent','text-gray-700','dark:text-gray-300','border-gray-300','dark:border-gray-600');
                 activeFilter = btn.getAttribute('data-filter');
                 applyFilters();
             });

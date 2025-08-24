@@ -22,6 +22,14 @@ class Skill(models.Model):
     def __str__(self):
         return f"{self.name} - {self.get_proficiency_display()}"
 
+    @property
+    def proficiency_percent(self) -> int:
+        """Return proficiency as a percentage in 20% steps (1->20, 5->100)."""
+        try:
+            return int(self.proficiency) * 20
+        except Exception:
+            return 0
+
     class Meta:
         ordering = ['name']
         verbose_name_plural = 'Skills'
