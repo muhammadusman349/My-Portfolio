@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="256" height="256" viewBox="0 0 256 256" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Portfolio Mark">
+  <defs>
+    <linearGradient id="grad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#667eea"/>
+      <stop offset="50%" stop-color="#764ba2"/>
+      <stop offset="100%" stop-color="#f093fb"/>
+    </linearGradient>
+    <filter id="softGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="6" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Gradient ring -->
+  <circle cx="128" cy="128" r="108" stroke="url(#grad)" stroke-width="16" fill="none" filter="url(#softGlow)"/>
+
+  <!-- Inner dark plate for contrast (auto adapts on dark bg by being semi-transparent) -->
+  <circle cx="128" cy="128" r="86" fill="#0f172a" fill-opacity="0.12"/>
+
+  <!-- Monogram U using a rounded stroke -->
+  <path d="M84 96v40c0 26.5 17.5 40 44 40s44-13.5 44-40V96" stroke="white" stroke-width="16" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

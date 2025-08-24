@@ -26,7 +26,7 @@ urlpatterns = [
     path('dashboard/', include('dashboard.urls')),
     path('accounts/', include('accounts.urls')),
     path('accounts/', include('allauth.urls')),
-    path('favicon.ico', RedirectView.as_view(url=settings.STATIC_URL + 'logo/logo.png', permanent=True)),
+    path('favicon.ico', RedirectView.as_view(url=settings.STATIC_URL + 'logo/portfolio-logo-mark.svg', permanent=True)),
 
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
