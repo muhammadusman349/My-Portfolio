@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.template.loader import render_to_string
 from django.utils import timezone
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -9,6 +9,8 @@ from django.db.models import Q
 from .models import Project, ProjectComment, Skill, Education, Experience, Contact, Resume
 from django.contrib import messages
 from .forms import CommentForm
+from urllib.parse import urlparse
+from django.urls import reverse
 
 
 def project_list(request):
@@ -106,23 +108,34 @@ def add_comment(request, pk):
 
         comment.save()
 
-        if is_ajax:
+        if is_ajax or request.headers.get('HX-Request'):
             context = {
                 'comment': comment,
                 'project': project,
                 'user': request.user,
             }
-            comment_html = render_to_string(
-                'portfolio/includes/comment.html',
-                context,
-                request=request
-            )
-            return JsonResponse({
-                'status': 'success',
-                'message': 'Comment posted successfully' if comment.status == 'approved' else 'Your comment is pending approval',
-                'html': comment_html,
-                'comment_id': comment.id,
-            })
+            # If replying, return the updated parent comment; else return the new comment
+            if parent_id:
+                parent_comment = comment.parent_comment
+                parent_comment._request_user = request.user
+                html = render_to_string('portfolio/includes/comment.html',
+                                        {'comment': parent_comment, 'project': project},
+                                        request=request)
+            else:
+                comment._request_user = request.user
+                html = render_to_string('portfolio/includes/comment.html',
+                                        context,
+                                        request=request)
+            # HTMX: return raw HTML; AJAX: wrap in JSON
+            if request.headers.get('HX-Request'):
+                return HttpResponse(html)
+            else:
+                return JsonResponse({
+                    'status': 'success',
+                    'message': 'Comment posted successfully' if comment.status == 'approved' else 'Your comment is pending approval',
+                    'html': html,
+                    'comment_id': comment.id,
+                })
 
         messages.success(
             request,
@@ -141,58 +154,80 @@ def add_comment(request, pk):
 @require_POST
 def edit_comment(request, pk):
     """Edit an existing comment."""
-    if not request.headers.get('X-Requested-With') == 'XMLHttpRequest':
-        return JsonResponse({'error': 'Invalid request'}, status=400)
-
     comment = get_object_or_404(ProjectComment, pk=pk)
 
+    # Permission check
     if request.user != comment.user:
-        return JsonResponse({'error': 'Permission denied'}, status=403)
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            return JsonResponse({'error': 'Permission denied'}, status=403)
+        messages.error(request, 'Permission denied')
+        return redirect('portfolio:project_detail', pk=comment.project_id)
 
     text = request.POST.get('text', '').strip()
     if not text:
-        return JsonResponse({'error': 'Comment text is required'}, status=400)
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            return JsonResponse({'error': 'Comment text is required'}, status=400)
+        messages.error(request, 'Comment text is required')
+        return redirect('portfolio:project_detail', pk=comment.project_id)
 
     try:
         comment.text = text
         comment.is_edited = True
         comment.save()
 
-        return JsonResponse({
-            'status': 'success',
-            'text': comment.text,
-            'is_edited': True
-        })
+        # HTMX partial update
+        if request.headers.get('HX-Request'):
+            comment._request_user = request.user
+            html = render_to_string('portfolio/includes/comment.html',
+                                    {'comment': comment, 'project': comment.project},
+                                    request=request)
+            return HttpResponse(html)
+        # AJAX response
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            return JsonResponse({'status': 'success', 'text': comment.text, 'is_edited': True})
+        # Non-AJAX redirect
+        messages.success(request, 'Comment updated successfully')
+        return redirect('portfolio:project_detail', pk=comment.project_id)
     except Exception as e:
-        return JsonResponse({'error': str(e)}, status=500)
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            return JsonResponse({'error': str(e)}, status=500)
+        messages.error(request, f'Error updating comment: {str(e)}')
+        return redirect('portfolio:project_detail', pk=comment.project_id)
 
 
 @login_required
 @require_POST
 def delete_comment(request, pk):
     """Delete a comment."""
-    if not request.headers.get('X-Requested-With') == 'XMLHttpRequest':
-        return JsonResponse({'error': 'Invalid request'}, status=400)
-
     comment = get_object_or_404(ProjectComment, pk=pk)
 
     if request.user != comment.user and request.user != comment.project.user:
-        return JsonResponse({'error': 'Permission denied'}, status=403)
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            return JsonResponse({'error': 'Permission denied'}, status=403)
+        messages.error(request, 'Permission denied')
+        return redirect('portfolio:project_detail', pk=comment.project_id)
 
     try:
+        project_id = comment.project_id
         comment.delete()
-        return JsonResponse({'status': 'success'})
+        # HTMX: return empty body; the client will swap out via outerHTML
+        if request.headers.get('HX-Request'):
+            return HttpResponse('')
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            return JsonResponse({'status': 'success'})
+        messages.success(request, 'Comment deleted successfully')
+        return redirect('portfolio:project_detail', pk=project_id)
     except Exception as e:
-        return JsonResponse({'error': str(e)}, status=500)
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            return JsonResponse({'error': str(e)}, status=500)
+        messages.error(request, f'Error deleting comment: {str(e)}')
+        return redirect('portfolio:project_detail', pk=comment.project_id)
 
 
 @login_required
 @require_POST
 def toggle_like(request, pk):
     """Toggle like status on a comment."""
-    if not request.headers.get('X-Requested-With') == 'XMLHttpRequest':
-        return JsonResponse({'error': 'Invalid request'}, status=400)
-
     comment = get_object_or_404(ProjectComment, pk=pk)
 
     try:
@@ -203,13 +238,23 @@ def toggle_like(request, pk):
             comment.likes.add(request.user)
             liked = True
 
-        return JsonResponse({
-            'status': 'success',
-            'liked': liked,
-            'likes_count': comment.get_like_count()
-        })
+        # HTMX behavior: return updated comment HTML
+        if request.headers.get('HX-Request'):
+            comment._request_user = request.user
+            html = render_to_string('portfolio/includes/comment.html',
+                                    {'comment': comment, 'project': comment.project},
+                                    request=request)
+            return HttpResponse(html)
+        # AJAX behavior
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            return JsonResponse({'status': 'success', 'liked': liked, 'likes_count': comment.get_like_count()})
+        # Non-AJAX redirect
+        return redirect('portfolio:project_detail', pk=comment.project_id)
     except Exception as e:
-        return JsonResponse({'error': str(e)}, status=500)
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            return JsonResponse({'error': str(e)}, status=500)
+        messages.error(request, f'Error toggling like: {str(e)}')
+        return redirect('portfolio:project_detail', pk=comment.project_id)
 
 
 def project_detail(request, pk):
@@ -232,10 +277,28 @@ def project_detail(request, pk):
     else:
         form = CommentForm()
 
+    # Compute a safe back URL based on referrer (home vs project list pages)
+    referrer = request.META.get('HTTP_REFERER', '')
+    back_url = reverse('portfolio:home')
+    try:
+        if referrer:
+            parsed = urlparse(referrer)
+            if parsed.netloc == request.get_host():
+                ref_path = parsed.path
+                # Any page under /projects should go back to that exact page (preserve filters/pagination)
+                if ref_path.startswith('/projects'):
+                    back_url = referrer
+                # Explicitly handle home
+                elif ref_path == reverse('portfolio:home') or ref_path == '/':
+                    back_url = reverse('portfolio:home')
+    except Exception:
+        back_url = reverse('portfolio:home')
+
     context = {
         'project': project,
         'comments': comments,
         'comment_form': form,
+        'back_url': back_url,
     }
     return render(request, 'portfolio/project_detail.html', context)
 
@@ -294,10 +357,14 @@ def experience_list(request):
 def experience_detail(request, pk):
     experience = get_object_or_404(Experience, pk=pk)
 
-    # Get related projects by matching the skills used in the experience
-    related_projects = Project.objects.filter(
-        skills__in=experience.technologies_used.all()
-    ).distinct().order_by('-created_at')
+    # Prefer manually selected related projects; fall back to skill-based matching
+    manual_related = experience.related_projects.all()
+    if manual_related.exists():
+        related_projects = manual_related.order_by('-created_at')
+    else:
+        related_projects = Project.objects.filter(
+            skills__in=experience.technologies_used.all()
+        ).distinct().order_by('-created_at')
 
     return render(request, 'portfolio/experience_detail.html', {
         'experience': experience,

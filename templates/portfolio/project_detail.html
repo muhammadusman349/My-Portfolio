@@ -33,11 +33,11 @@
         background: #3b82f6;
     }
     .project-thumbs {
-        height: 100px;
+        height: 80px;
         margin-top: 16px;
     }
     .project-thumbs .swiper-slide {
-        width: 120px;
+        width: 100px;
         opacity: 0.5;
         transition: all 0.3s ease;
         border-radius: 8px;
@@ -72,6 +72,55 @@
         from { opacity: 0; transform: translateY(20px); }
         to { opacity: 1; transform: translateY(0); }
     }
+    @media (max-width: 640px) {
+        .project-swiper { --swiper-navigation-size: 20px; }
+        .project-swiper .swiper-button-next,
+        .project-swiper .swiper-button-prev { padding: 12px; }
+        .project-swiper .swiper-pagination-bullet { width: 8px; height: 8px; margin: 0 4px; }
+        .project-thumbs { height: 72px; }
+        .project-thumbs .swiper-slide { width: 88px; }
+        h1 { font-size: 2.5rem; }
+        h2 { font-size: 1.75rem; }
+        h3 { font-size: 1.5rem; }
+        p { font-size: 0.875rem; }
+    }
+    /* Make comment textareas compact on desktop */
+    textarea.js-autosize { line-height: 1.5; }
+    @media (min-width: 1024px) { /* lg */
+        textarea.js-autosize { max-height: 56px; font-size: 0.875rem; }
+    }
+    /* Hide scrollbar utility (for horizontal action bar overflow) */
+    .no-scrollbar {
+        -ms-overflow-style: none; /* IE and Edge */
+        scrollbar-width: none; /* Firefox */
+    }
+    .no-scrollbar::-webkit-scrollbar { /* Chrome, Safari */
+        display: none;
+    }
+    /* Consistent sizing for comment action buttons */
+    .action-button {
+        height: 32px;
+        padding: 6px 10px;
+        font-size: 12px;
+        line-height: 1.2;
+        white-space: nowrap;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+    }
+    .action-button svg { width: 16px; height: 16px; flex: 0 0 auto; }
+    /* Mobile: icon-only equal squares */
+    @media (max-width: 639.5px) {
+        .action-button { width: 36px !important; height: 36px !important; padding: 6px !important; justify-content: center; }
+        .action-button .label { display: none !important; }
+    }
+    /* Desktop: match mobile icon-only equal squares */
+    @media (min-width: 640px) {
+        .action-button { width: 36px !important; height: 36px !important; padding: 6px !important; justify-content: center; font-size: 14px; }
+        .action-button .label { display: none !important; }
+    }
+    /* Exception: always show like count label even in icon-only mode */
+    .action-button.like-btn .label { display: inline !important; margin-left: 4px; }
 </style>
 {% endblock %}
 
@@ -79,9 +128,9 @@
 <div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
     <!-- Hero Section -->
     <div class="hero-gradient text-white">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
             <div class="flex items-center justify-between mb-6">
-                <a href="{% if request.GET.next %}{{ request.GET.next }}{% else %}{% url 'portfolio:home' %}{% endif %}" 
+                <a href="{{ back_url }}" 
                    class="inline-flex items-center text-white/80 hover:text-white transition-colors duration-300 group">
                     <svg class="w-5 h-5 mr-2 transform group-hover:-translate-x-1 transition-transform duration-300" 
                          fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -108,23 +157,24 @@
             </div>
             
             <div class="text-center fade-in">
-                <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-4">{{ project.title }}</h1>
-                <p class="text-xl md:text-2xl text-white/90 max-w-3xl mx-auto leading-relaxed">{{ project.description }}</p>
+                <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold mb-3">{{ project.title }}</h1>
+                <p class="text-base sm:text-lg text-white/90 max-w-3xl mx-auto leading-relaxed">{{ project.description }}</p>
             </div>
         </div>
     </div>
 
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-16 relative z-10">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 -mt-12 relative z-10">
         <!-- Image Gallery -->
-        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl overflow-hidden mb-8 fade-in">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl overflow-hidden mb-6 fade-in max-w-4xl mx-auto border border-gray-100 dark:border-gray-700">
             {% if project.images.exists %}
             <div class="swiper project-swiper">
                 <div class="swiper-wrapper">
                     {% for image in project.images.all %}
                     <div class="swiper-slide">
-                        <div class="relative h-64 sm:h-80 md:h-96 lg:h-[500px]">
+                        <div class="relative h-56 sm:h-72 md:h-72 lg:h-80">
                             <img src="{{ image.image.url }}" 
                                  alt="{{ image.caption|default:project.title }}"
+                                 loading="lazy"
                                  class="w-full h-full object-cover">
                             {% if image.caption %}
                             <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent text-white p-4">
@@ -151,6 +201,7 @@
                             <div class="swiper-slide">
                                 <img src="{{ image.image.url }}" 
                                      alt="Thumbnail"
+                                     loading="lazy"
                                      class="w-full h-full object-cover cursor-pointer">
                             </div>
                             {% endfor %}
@@ -159,28 +210,28 @@
                 </div>
             </div>
             {% elif project.image %}
-            <div class="h-64 sm:h-80 md:h-96 lg:h-[500px]">
-                <img src="{{ project.image.url }}" alt="{{ project.title }}" class="w-full h-full object-cover">
+            <div class="h-56 sm:h-72 md:h-72 lg:h-80 max-w-4xl mx-auto">
+                <img src="{{ project.image.url }}" alt="{{ project.title }}" loading="lazy" class="w-full h-full object-cover">
             </div>
             {% endif %}
         </div>
 
         <!-- Project Details Grid -->
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 mb-6">
             <!-- Main Content -->
             <div class="lg:col-span-2 space-y-8">
                 <!-- Project Overview -->
-                <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 md:p-8 fade-in">
-                    <h2 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-6">Project Overview</h2>
+                <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-4 sm:p-6 md:p-6 fade-in border border-gray-100 dark:border-gray-700">
+                    <h2 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-5">Project Overview</h2>
                     <div class="prose prose-lg dark:prose-invert max-w-none">
                         <p class="text-gray-600 dark:text-gray-300 leading-relaxed">{{ project.description }}</p>
                     </div>
                 </div>
 
                 <!-- Technologies Used -->
-                <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 md:p-8 fade-in">
-                    <h3 class="text-xl md:text-2xl font-bold text-gray-900 dark:text-white mb-6">Technologies Used</h3>
-                    <div class="flex flex-wrap gap-3">
+                <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-4 sm:p-6 md:p-6 fade-in border border-gray-100 dark:border-gray-700">
+                    <h3 class="text-xl md:text-2xl font-bold text-gray-900 dark:text-white mb-5">Technologies Used</h3>
+                    <div class="flex flex-wrap gap-2">
                         {% for skill in project.skills.all %}
                         <a href="{% url 'portfolio:projects_by_skill' skill.name|slugify %}"
                            class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-white text-gray-700 dark:bg-gray-800 dark:text-gray-200 border border-gray-200 dark:border-gray-700 hover:border-blue-300 dark:hover:border-blue-500 transition-colors">
@@ -195,9 +246,9 @@
             <!-- Sidebar -->
             <div class="space-y-6">
                 <!-- Project Info Card -->
-                <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 fade-in">
+                <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-4 sm:p-5 fade-in border border-gray-100 dark:border-gray-700">
                     <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-4">Project Info</h3>
-                    <div class="space-y-4">
+                    <div class="space-y-3">
                         <div>
                             <dt class="text-sm font-medium text-gray-500 dark:text-gray-400">Status</dt>
                             <dd class="mt-1">
@@ -236,79 +287,43 @@
                     </div>
                 </div>
 
-                <!-- Quick Links -->
-                <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 fade-in">
-                    <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-4">Quick Links</h3>
-                    <div class="space-y-3">
-                        {% if project.github_link %}
-                        <a href="{{ project.github_link }}" target="_blank" rel="noopener noreferrer" 
-                           class="project-link flex items-center p-3 rounded-lg bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 transition-all duration-300 group">
-                            <div class="flex-shrink-0">
-                                <i class="fab fa-github text-xl text-gray-600 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"></i>
-                            </div>
-                            <div class="ml-3">
-                                <p class="text-sm font-medium text-gray-900 dark:text-white">Source Code</p>
-                                <p class="text-xs text-gray-500 dark:text-gray-400">View on GitHub</p>
-                            </div>
-                            <div class="ml-auto">
-                                <i class="fas fa-external-link-alt text-xs text-gray-400 group-hover:text-gray-600 dark:group-hover:text-gray-300"></i>
-                            </div>
-                        </a>
-                        {% endif %}
-                        
-                        {% if project.live_link %}
-                        <a href="{{ project.live_link }}" target="_blank" rel="noopener noreferrer"
-                           class="project-link flex items-center p-3 rounded-lg bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 transition-all duration-300 group">
-                            <div class="flex-shrink-0">
-                                <i class="fas fa-globe text-xl text-gray-600 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"></i>
-                            </div>
-                            <div class="ml-3">
-                                <p class="text-sm font-medium text-gray-900 dark:text-white">Live Demo</p>
-                                <p class="text-xs text-gray-500 dark:text-gray-400">View live site</p>
-                            </div>
-                            <div class="ml-auto">
-                                <i class="fas fa-external-link-alt text-xs text-gray-400 group-hover:text-gray-600 dark:group-hover:text-gray-300"></i>
-                            </div>
-                        </a>
-                        {% endif %}
-                    </div>
-                </div>
+                
             </div>
         </div>
     </div>
 
     <!-- Comments Section -->
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12">
-        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden fade-in">
-            <div class="p-6 md:p-8">
-                <h2 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-8 flex items-center">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pb-8">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg overflow-hidden fade-in border border-gray-100 dark:border-gray-700">
+            <div class="p-3 sm:p-4 md:p-5">
+                <h2 class="text-lg sm:text-xl md:text-2xl font-bold text-gray-900 dark:text-white mb-5 sm:mb-6 flex items-center">
                     <i class="fas fa-comments mr-3 text-blue-500"></i>
                     Comments
                 </h2>
 
                 <!-- Comment Form -->
                 {% if user.is_authenticated %}
-                <div class="mb-8 p-6 bg-gray-50 dark:bg-gray-700 rounded-xl">
+                <div class="mb-4 sm:mb-5 p-3 sm:p-4 bg-gray-50 dark:bg-gray-700 rounded-xl">
                     <form id="comment-form" 
                           method="post" 
                           action="{% url 'portfolio:add_comment' project.id %}" 
                           data-project-id="{{ project.id }}"
-                          class="space-y-4">
+                          class="max-w-[600px] w-full">
                         {% csrf_token %}
                         <div>
-                            <label for="comment-text" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
+                            <label for="comment-text" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-0">
                                 Share your thoughts about this project
                             </label>
                             <textarea id="comment-text" 
                                     name="text" 
-                                    rows="4" 
-                                    class="w-full p-4 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:text-white transition-all duration-300 resize-none" 
+                                    rows="2" 
+                                    class="js-autosize w-full p-2 sm:p-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-gray-100 dark:bg-gray-700 dark:text-white placeholder-gray-400 shadow-inner transition-all duration-300 resize-none overflow-hidden" 
                                     placeholder="What do you think about this project? Any feedback or questions?" 
                                     required></textarea>
                         </div>
-                        <div class="flex justify-end">
+                        <div class="flex justify-end mt-0">
                             <button type="submit" 
-                                    class="inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white font-medium rounded-xl hover:from-blue-600 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5">
+                                    class="inline-flex items-center whitespace-nowrap px-3 py-2 sm:px-4 sm:py-2.5 bg-gradient-to-r from-blue-500 to-purple-600 text-white text-sm font-medium rounded-lg hover:from-blue-600 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-300 shadow-sm hover:shadow-md">
                                 <i class="fas fa-paper-plane mr-2"></i>
                                 Post Comment
                             </button>
@@ -316,7 +331,7 @@
                     </form>
                 </div>
                 {% else %}
-                <div class="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-gray-700 dark:to-gray-600 rounded-xl p-6 mb-8 border border-blue-200 dark:border-gray-600">
+                <div class="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-gray-700 dark:to-gray-600 rounded-xl p-4 sm:p-6 mb-6 sm:mb-8 border border-blue-200 dark:border-gray-600">
                     <div class="flex items-center">
                         <div class="flex-shrink-0">
                             <i class="fas fa-user-circle text-2xl text-blue-500"></i>
@@ -338,7 +353,7 @@
 
                 <!-- Comments List -->
                 {% if user.is_authenticated %}
-                <div id="comments-container" class="space-y-6">
+                <div id="comments-container" class="space-y-4 sm:space-y-6">
                     {% for comment in project.comments.all %}
                         {% if not comment.parent_comment %}  {# Only show top-level comments #}
                             {% include 'portfolio/includes/comment.html' with comment=comment project=project %}
@@ -348,7 +363,7 @@
 
                 <!-- No Comments Message -->
                 {% if not project.comments.exists %}
-                <div class="text-center py-12 no-comments-message">
+                <div class="text-center py-8 sm:py-12 no-comments-message">
                     <div class="max-w-sm mx-auto">
                         <i class="fas fa-comment-slash text-4xl text-gray-300 dark:text-gray-600 mb-4"></i>
                         <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-2">No comments yet</h3>
@@ -363,36 +378,11 @@
 </div>
 </div>
 
-<!-- Delete Comment Modal -->
-<div id="delete-comment-modal" class="fixed inset-0 z-50 hidden">
-    <div class="fixed inset-0 bg-black bg-opacity-50 transition-opacity"></div>
-    <div class="fixed inset-0 z-10 overflow-y-auto">
-        <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
-            <div class="relative transform overflow-hidden rounded-lg bg-white dark:bg-gray-800 px-4 pt-5 pb-4 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6">
-                <div class="sm:flex sm:items-start">
-                    <div class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-red-100 dark:bg-red-900/20 sm:mx-0 sm:h-10 sm:w-10">
-                        <svg class="h-6 w-6 text-red-600 dark:text-red-400" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
-                        </svg>
-                    </div>
-                    <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
-                        <h3 class="text-lg font-medium leading-6 text-gray-900 dark:text-white">Delete Comment</h3>
-                        <div class="mt-2">
-                            <p class="text-sm text-gray-500 dark:text-gray-400">Are you sure you want to delete this comment? This action cannot be undone.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
-                    <button id="confirm-delete-btn" type="button" class="inline-flex w-full justify-center rounded-md border border-transparent bg-red-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 sm:ml-3 sm:w-auto sm:text-sm">Delete</button>
-                    <button id="cancel-delete-btn" type="button" class="mt-3 inline-flex w-full justify-center rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 px-4 py-2 text-base font-medium text-gray-700 dark:text-gray-300 shadow-sm hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 sm:mt-0 sm:w-auto sm:text-sm">Cancel</button>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 {% endblock %}
 
 {% block extra_js %}
+<!-- HTMX for partial updates -->
+<script src="https://unpkg.com/htmx.org@1.9.12"></script>
 {% if project.images.exists %}
 <script>
 document.addEventListener('DOMContentLoaded', function() {
