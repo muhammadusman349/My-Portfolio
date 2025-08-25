@@ -509,6 +509,10 @@ def contact_list(request):
 @login_required
 def contact_detail(request, pk):
     contact = get_object_or_404(Contact, pk=pk)
+    # Mark contact as read when viewed
+    if not contact.is_read:
+        contact.is_read = True
+        contact.save()
     if request.method == 'POST':
         form = ContactResponseForm(request.POST)
         if form.is_valid():
