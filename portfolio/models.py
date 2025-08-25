@@ -182,6 +182,13 @@ class Experience(models.Model):
     description = models.TextField(help_text="Describe your responsibilities and achievements")
     technologies_used = models.ManyToManyField(Skill, blank=True, help_text="Select relevant skills")
     company_url = models.URLField(blank=True)
+    # Manually associate related projects for this experience
+    related_projects = models.ManyToManyField(
+        Project,
+        blank=True,
+        related_name='related_experiences',
+        help_text='Select projects that are directly related to this experience'
+    )
 
     def __str__(self):
         return f'{self.position} at {self.company}'

@@ -399,6 +399,8 @@ def experience_create(request):
             experience = form.save(commit=False)
             experience.user = request.user
             experience.save()
+            # Save ManyToMany fields like technologies_used and related_projects
+            form.save_m2m()
             messages.success(request, 'Experience created successfully!')
             return redirect('dashboard:dashboard_experience_list')
     else:
@@ -412,7 +414,9 @@ def experience_edit(request, pk):
     if request.method == 'POST':
         form = ExperienceForm(request.POST, instance=experience)
         if form.is_valid():
-            form.save()
+            experience = form.save()
+            # Ensure ManyToMany fields (technologies_used, related_projects) are saved
+            form.save_m2m()
             messages.success(request, 'Experience updated successfully!')
             return redirect('dashboard:dashboard_experience_list')
     else:

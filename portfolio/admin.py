@@ -69,6 +69,7 @@ class ExperienceAdmin(admin.ModelAdmin):
     list_filter = ('start_date', 'end_date', 'current')
     search_fields = ('company', 'position', 'user__username')
     date_hierarchy = 'start_date'
+    filter_horizontal = ('technologies_used', 'related_projects')
 
 
 @admin.register(Resume)

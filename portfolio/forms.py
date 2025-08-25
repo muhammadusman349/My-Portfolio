@@ -56,12 +56,17 @@ class ExperienceForm(forms.ModelForm):
     class Meta:
         model = Experience
         fields = ['company', 'position', 'employment_type', 'location', 'start_date', 'end_date',
-                 'current', 'description', 'technologies_used', 'company_url']
+                 'current', 'description', 'technologies_used', 'company_url', 'related_projects']
         widgets = {
             'start_date': forms.DateInput(attrs={'type': 'date'}),
             'end_date': forms.DateInput(attrs={'type': 'date'}),
             'description': forms.Textarea(attrs={'rows': 4}),
-            'technologies_used': forms.SelectMultiple(attrs={'class': 'form-select'}),
+            'technologies_used': forms.SelectMultiple(attrs={
+                'class': 'form-multiselect block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white'
+            }),
+            'related_projects': forms.SelectMultiple(attrs={
+                'class': 'form-multiselect block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white'
+            }),
         }
 
     def clean(self):
