@@ -2,26 +2,26 @@
 
 {% if comment.status == 'approved' %}
 <div id="comment-{{ comment.id }}" 
-     class="comment-container relative bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 mb-6 transform transition-all duration-300 hover:shadow-md {% if comment.parent %}ml-0 sm:ml-8{% endif %}"
+     class="comment-container group relative bg-white dark:bg-gray-800 rounded-lg shadow-sm p-3 sm:p-4 mb-4 sm:mb-5 transform transition-all duration-300 hover:shadow-md {% if comment.parent %}ml-0 sm:ml-8{% endif %}"
      data-nesting-level="{{ comment.get_nesting_level }}">
-    <div class="flex items-start space-x-6">
+    <div class="flex items-start space-x-3 sm:space-x-4">
         <!-- User Avatar -->
         <div class="flex-shrink-0">
             {% if comment.user.profile.avatar %}
-                <img class="h-12 w-12 rounded-full object-cover" src="{{ comment.user.profile.avatar.url }}" alt="{{ comment.user.username }}">
+                <img class="h-10 w-10 rounded-full object-cover" src="{{ comment.user.profile.avatar.url }}" alt="{{ comment.user.username }}">
             {% else %}
-                <div class="h-12 w-12 rounded-full bg-blue-500 flex items-center justify-center">
-                    <span class="text-white font-medium text-lg">{{ comment.user.username|make_list|first|upper }}</span>
+                <div class="h-10 w-10 rounded-full bg-blue-500 flex items-center justify-center">
+                    <span class="text-white font-medium text-base">{{ comment.user.username|make_list|first|upper }}</span>
                 </div>
             {% endif %}
         </div>
 
         <!-- Comment Content -->
-        <div class="flex-grow space-y-3">
+        <div class="flex-grow space-y-2 md:space-y-3">
             <!-- Comment Header -->
-            <div class="flex items-start justify-between w-full">
+            <div class="flex flex-col sm:flex-row items-start justify-between w-full">
                 <div class="flex-shrink-0">
-                    <h4 class="text-base font-medium text-gray-900 dark:text-white">
+                    <h4 class="text-sm md:text-base font-medium text-gray-900 dark:text-white">
                         {{ comment.user.username }}
                         {% if comment.is_owner_reply %}
                             <span class="ml-2 px-2 py-0.5 text-xs bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200 rounded-full">
@@ -29,7 +29,7 @@
                             </span>
                         {% endif %}
                     </h4>
-                    <p class="text-sm text-gray-500 dark:text-gray-400">
+                    <p class="text-xs sm:text-sm text-gray-500 dark:text-gray-400">
                         {{ comment.created_at|timesince }} ago
                         {% if comment.is_edited %}
                             · Edited
@@ -40,54 +40,101 @@
                     </p>
                 </div>
 
-                <!-- Comment Actions -->
-                <div class="comment-actions absolute right-6 top-6 flex items-center gap-1.5 invisible opacity-0 translate-y-[-8px] transition-all duration-200 ease-out">
+                <!-- Comment Actions: inline toolbar (visible on all screens) -->
+                <div class="mt-0 flex flex-nowrap items-center gap-1 overflow-x-auto no-scrollbar -mx-0.5 px-0.5 sm:flex">
                     {% if user.is_authenticated %}
                         <!-- Like Button -->
                         <button onclick="toggleLike({{ comment.id }})" 
-                                class="action-button inline-flex items-center px-2 py-1 text-sm font-medium rounded-md transition-colors duration-200 
+                                class="action-button like-btn inline-flex items-center px-2 py-1 text-xs font-medium rounded-md transition-colors duration-200 shrink-0 
                                        {% if user in comment.likes.all %}
                                            text-blue-600 bg-blue-50 hover:bg-blue-100 dark:text-blue-400 dark:bg-blue-900/50 dark:hover:bg-blue-900/70
                                        {% else %}
                                            text-gray-500 hover:text-blue-600 hover:bg-blue-50 dark:text-gray-400 dark:hover:text-blue-400 dark:hover:bg-blue-900/50
-                                       {% endif %}">
+                                       {% endif %}"
+                                role="button" aria-pressed="{% if user in comment.likes.all %}true{% else %}false{% endif %}">
                             <svg class="w-4 h-4 {% if user in comment.likes.all %}text-blue-600 dark:text-blue-400{% endif %} transition-transform duration-200" 
                                  fill="{% if user in comment.likes.all %}currentColor{% else %}none{% endif %}" 
                                  stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                                      d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"/>
                             </svg>
-                            <span id="like-count-{{ comment.id }}" class="ml-1.5">{{ comment.get_like_count }}</span>
+                            <span id="like-count-{{ comment.id }}" class="label ml-1.5">{{ comment.get_like_count }}</span>
                         </button>
 
                         {% if comment.status == 'approved' %}
                             <!-- Reply Button -->
                             <button onclick="showReplyForm({{ comment.id }})" 
-                                    class="action-button inline-flex items-center px-2 py-1 text-sm font-medium rounded-md text-gray-500 hover:text-blue-600 hover:bg-blue-50 dark:text-gray-400 dark:hover:text-blue-400 dark:hover:bg-blue-900/50 transition-colors duration-200">
+                                    class="action-button inline-flex items-center px-2 py-1 text-xs font-medium rounded-md text-gray-500 hover:text-blue-600 hover:bg-blue-50 dark:text-gray-400 dark:hover:text-blue-400 dark:hover:bg-blue-900/50 transition-colors duration-200 shrink-0">
                                 <svg class="w-4 h-4 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"/>
                                 </svg>
-                                <span class="ml-1.5">Reply</span>
+                                <span class="label ml-1.5">Reply</span>
                             </button>
                         {% endif %}
 
                         {% if user == comment.user %}
                             <!-- Edit Button -->
                             <button onclick="showEditForm({{ comment.id }})" 
-                                    class="action-button inline-flex items-center px-2 py-1 text-sm font-medium rounded-md text-gray-500 hover:text-green-600 hover:bg-green-50 dark:text-gray-400 dark:hover:text-green-400 dark:hover:bg-green-900/50 transition-colors duration-200">
+                                    class="action-button inline-flex items-center px-2 py-1 text-xs font-medium rounded-md text-gray-500 hover:text-green-600 hover:bg-green-50 dark:text-gray-400 dark:hover:text-green-400 dark:hover:bg-green-900/50 transition-colors duration-200 shrink-0">
                                 <svg class="w-4 h-4 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
                                 </svg>
-                                <span class="ml-1.5">Edit</span>
+                                <span class="label ml-1.5">Edit</span>
                             </button>
 
                             <!-- Delete Button -->
                             <button onclick="confirmDeleteComment({{ comment.id }})" 
-                                    class="action-button inline-flex items-center px-2 py-1 text-sm font-medium rounded-md text-gray-500 hover:text-red-600 hover:bg-red-50 dark:text-gray-400 dark:hover:text-red-400 dark:hover:bg-red-900/50 transition-colors duration-200">
+                                    class="action-button inline-flex items-center px-2 py-1 text-xs font-medium rounded-md text-gray-500 hover:text-red-600 hover:bg-red-50 dark:text-gray-400 dark:hover:text-red-400 dark:hover:bg-red-900/50 transition-colors duration-200 shrink-0">
                                 <svg class="w-4 h-4 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
                                 </svg>
-                                <span class="ml-1.5">Delete</span>
+                                <span class="label ml-1.5">Delete</span>
+                            </button>
+                        {% endif %}
+                    {% endif %}
+                </div>
+
+                <!-- Comment Actions: desktop hover toolbar (disabled; replaced by inline toolbar) -->
+                <div class="hidden sm:hidden comment-actions sm:absolute sm:right-6 sm:top-6 sm:items-center sm:gap-1.5 sm:invisible sm:opacity-0 sm:-translate-y-2 sm:group-hover:visible sm:group-hover:opacity-100 sm:group-hover:translate-y-0">
+                    {% if user.is_authenticated %}
+                        <button onclick="toggleLike({{ comment.id }})" 
+                                class="action-button like-btn inline-flex items-center px-2 py-1 text-sm font-medium rounded-md transition-colors duration-200 
+                                       {% if user in comment.likes.all %}
+                                           text-blue-600 bg-blue-50 hover:bg-blue-100 dark:text-blue-400 dark:bg-blue-900/50 dark:hover:bg-blue-900/70
+                                       {% else %}
+                                           text-gray-500 hover:text-blue-600 hover:bg-blue-50 dark:text-gray-400 dark:hover:text-blue-400 dark:hover:bg-blue-900/50
+                                       {% endif %}"
+                                role="button" aria-pressed="{% if user in comment.likes.all %}true{% else %}false{% endif %}">
+                            <svg class="w-4 h-4 {% if user in comment.likes.all %}text-blue-600 dark:text-blue-400{% endif %}" 
+                                 fill="{% if user in comment.likes.all %}currentColor{% else %}none{% endif %}" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"/>
+                            </svg>
+                            <span id="like-count-{{ comment.id }}" class="label ml-1.5">{{ comment.get_like_count }}</span>
+                        </button>
+
+                        {% if comment.status == 'approved' %}
+                            <button onclick="showReplyForm({{ comment.id }})" 
+                                    class="action-button inline-flex items-center px-2 py-1 text-sm font-medium rounded-md text-gray-500 hover:text-blue-600 hover:bg-blue-50 dark:text-gray-400 dark:hover:text-blue-400 dark:hover:bg-blue-900/50 transition-colors duration-200">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"/>
+                                </svg>
+                                <span class="label ml-1.5">Reply</span>
+                            </button>
+                        {% endif %}
+
+                        {% if user == comment.user %}
+                            <button onclick="showEditForm({{ comment.id }})" 
+                                    class="action-button inline-flex items-center px-2 py-1 text-sm font-medium rounded-md text-gray-500 hover:text-green-600 hover:bg-green-50 dark:text-gray-400 dark:hover:text-green-400 dark:hover:bg-green-900/50 transition-colors duration-200">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                                </svg>
+                                <span class="label ml-1.5">Edit</span>
+                            </button>
+                            <button onclick="confirmDeleteComment({{ comment.id }})" 
+                                    class="action-button inline-flex items-center px-2 py-1 text-sm font-medium rounded-md text-gray-500 hover:text-red-600 hover:bg-red-50 dark:text-gray-400 dark:hover:text-red-400 dark:hover:bg-red-900/50 transition-colors duration-200">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                                </svg>
+                                <span class="label ml-1.5">Delete</span>
                             </button>
                         {% endif %}
                     {% endif %}
@@ -101,12 +148,12 @@
 
             <!-- Reply Form -->
             {% if user.is_authenticated %}
-            <div id="reply-form-{{ comment.id }}" class="mt-6 hidden">
+            <div id="reply-form-{{ comment.id }}" class="mt-3 sm:mt-4 hidden">
                 <form onsubmit="submitReply(event, {{ comment.id }})" 
                       action="{% url 'portfolio:add_comment' project.id %}" 
                       method="post" 
                       data-project-id="{{ project.id }}"
-                      class="space-y-4">
+                      class="space-y-3 max-w-[600px] w-full">
                     {% csrf_token %}
                     <input type="hidden" name="parent_id" value="{{ comment.id }}">
                     <div>
@@ -114,18 +161,18 @@
                         <textarea id="reply-text-{{ comment.id }}" 
                                 name="text" 
                                 rows="3" 
-                                class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" 
+                                class="js-autosize w-full p-2 sm:p-2.5 text-sm border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 bg-gray-100 dark:bg-gray-700 dark:text-white placeholder-gray-400 shadow-inner resize-none overflow-hidden" 
                                 placeholder="Write your reply..." 
                                 required></textarea>
                     </div>
                     <div class="flex justify-end space-x-2">
                         <button type="button" 
                                 onclick="hideReplyForm({{ comment.id }})" 
-                                class="px-4 py-2 text-sm text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 dark:text-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 transition-colors">
+                                class="px-2.5 py-1.5 sm:px-3 text-xs sm:text-sm text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 dark:text-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 transition-colors">
                             Cancel
                         </button>
                         <button type="submit" 
-                                class="px-4 py-2 text-sm text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors">
+                                class="px-2.5 py-1.5 sm:px-3 text-xs sm:text-sm text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors">
                             Post Reply
                         </button>
                     </div>
@@ -135,28 +182,28 @@
 
             <!-- Edit Form -->
             {% if user == comment.user %}
-            <div id="edit-form-{{ comment.id }}" class="mt-6 hidden">
+            <div id="edit-form-{{ comment.id }}" class="mt-3 sm:mt-4 hidden">
                 <form onsubmit="submitEdit(event, {{ comment.id }})" 
                       action="{% url 'portfolio:edit_comment' comment.id %}" 
                       method="post" 
-                      class="space-y-4">
+                      class="space-y-3 max-w-[600px] w-full">
                     {% csrf_token %}
                     <div>
                         <label for="edit-text-{{ comment.id }}" class="sr-only">Edit comment</label>
                         <textarea id="edit-text-{{ comment.id }}" 
                                 name="text" 
                                 rows="3" 
-                                class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" 
+                                class="js-autosize w-full p-2 sm:p-2.5 text-sm border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-blue-500 bg-gray-100 dark:bg-gray-700 dark:text-white placeholder-gray-400 shadow-inner resize-none overflow-hidden" 
                                 required>{{ comment.text }}</textarea>
                     </div>
                     <div class="flex justify-end space-x-2">
                         <button type="button" 
                                 onclick="hideEditForm({{ comment.id }})" 
-                                class="px-4 py-2 text-sm text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 dark:text-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 transition-colors">
+                                class="px-2.5 py-1.5 sm:px-3 text-xs sm:text-sm text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 dark:text-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 transition-colors">
                             Cancel
                         </button>
                         <button type="submit" 
-                                class="px-4 py-2 text-sm text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors">
+                                class="px-2.5 py-1.5 sm:px-3 text-xs sm:text-sm text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors">
                             Save Changes
                         </button>
                     </div>
@@ -171,9 +218,9 @@
     {% if replies %}
     <div class="relative">
         <!-- Thread Line -->
-        <div class="absolute left-6 top-0 bottom-0 w-px bg-gray-200 dark:bg-gray-700"></div>
+        <div class="absolute left-5 sm:left-6 top-0 bottom-0 w-px bg-gray-200 dark:bg-gray-700"></div>
         
-        <div id="replies-{{ comment.id }}" class="mt-6 space-y-6 relative">
+        <div id="replies-{{ comment.id }}" class="mt-4 space-y-4 relative">
             {% with visible_replies=replies|slice:":3" remaining_replies=replies|slice:"3:" %}
                 {% for reply in visible_replies %}
                     {% if reply.status == 'approved' %}
@@ -182,7 +229,7 @@
                 {% endfor %}
 
                 {% if remaining_replies %}
-                <div id="remaining-replies-{{ comment.id }}" class="hidden space-y-6">
+                <div id="remaining-replies-{{ comment.id }}" class="hidden space-y-4">
                     {% for reply in remaining_replies %}
                         {% if reply.status == 'approved' %}
                             {% include "portfolio/includes/comment.html" with comment=reply %}

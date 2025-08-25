@@ -9,11 +9,6 @@
     
     <!-- Favicon Support -->
     <link rel="icon" type="image/svg+xml" href="{% static 'logo/portfolio-logo-mark.svg' %}">
-    <!-- /favicon.ico is redirected to the same SVG via urls.py -->
-    {# Optional: add PNG/apple-touch fallbacks later if needed #}
-    {# <link rel="icon" type="image/png" sizes="32x32" href="{% static 'logo/favicon-32x32.png' %}"> #}
-    {# <link rel="icon" type="image/png" sizes="16x16" href="{% static 'logo/favicon-16x16.png' %}"> #}
-    {# <link rel="apple-touch-icon" sizes="180x180" href="{% static 'logo/apple-touch-icon.png' %}"> #}
 
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -381,46 +376,46 @@
     <!-- Add padding to account for fixed header -->
     <div class="pt-16">
         <!-- Main Content -->
-        <main class="container mx-auto px-4 py-8 min-h-[calc(100vh-20rem)]">
+        <main class="container mx-auto px-4 py-6 min-h-[calc(100vh-14rem)]">
             {% block content %}{% endblock %}
         </main>
     </div>
 
     <!-- Footer -->
-    <footer class="relative bg-gradient-to-br from-gray-900 via-gray-800 to-black text-gray-300 overflow-hidden">
+    <footer class="relative bg-gradient-to-br from-gray-50 via-white to-gray-100 text-gray-700 dark:from-gray-900 dark:via-gray-800 dark:to-black dark:text-gray-300 overflow-hidden">
         <!-- Decorative Elements -->
-        <div class="absolute inset-0 opacity-10">
-            <div class="absolute -right-10 -top-10 w-40 h-40 bg-blue-500 rounded-full filter blur-3xl"></div>
-            <div class="absolute -left-10 -bottom-10 w-40 h-40 bg-purple-500 rounded-full filter blur-3xl"></div>
+        <div class="absolute inset-0 opacity-7">
+            <div class="absolute -right-10 -top-10 w-32 h-32 bg-blue-500 rounded-full filter blur-3xl"></div>
+            <div class="absolute -left-10 -bottom-10 w-32 h-32 bg-purple-500 rounded-full filter blur-3xl"></div>
         </div>
 
-        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
             <!-- Grid Container -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <!-- Brand Section -->
                 <div class="space-y-6">
                     <div>
                         <h3 class="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500 bg-clip-text text-transparent">
                             Usman Portfolio
                         </h3>
-                        <p class="mt-4 text-gray-400 leading-relaxed text-sm sm:text-base">
+                        <p class="mt-4 text-gray-600 dark:text-gray-400 leading-relaxed text-sm sm:text-base">
                             Transforming ideas into elegant digital solutions with passion and precision.
                         </p>
                     </div>
-                    <div class="flex space-x-4 social-icons">
+                    <div class="flex space-x-3 social-icons">
                         <a href="https://www.linkedin.com/in/muhammad-usman-profile/" class="group" aria-label="LinkedIn">
-                            <div class="w-8 sm:w-10 h-8 sm:h-10 rounded-lg bg-gray-800/50 flex items-center justify-center transform transition-all duration-300 group-hover:scale-110 group-hover:bg-blue-500/20">
-                                <i class="fab fa-linkedin-in text-base sm:text-xl text-gray-400 group-hover:text-blue-500 transition-colors duration-300"></i>
+                            <div class="w-7 sm:w-8 h-7 sm:h-8 rounded-lg bg-gray-100/60 dark:bg-gray-800/50 flex items-center justify-center transform transition-all duration-300 group-hover:scale-110 group-hover:bg-blue-500/20">
+                                <i class="fab fa-linkedin-in text-sm sm:text-lg text-gray-500 dark:text-gray-400 group-hover:text-blue-500 transition-colors duration-300"></i>
                             </div>
                         </a>
                         <a href="https://github.com/muhammadusman349/" class="group" aria-label="GitHub">
-                            <div class="w-8 sm:w-10 h-8 sm:h-10 rounded-lg bg-gray-800/50 flex items-center justify-center transform transition-all duration-300 group-hover:scale-110 group-hover:bg-gray-700/20">
-                                <i class="fab fa-github text-base sm:text-xl text-gray-400 group-hover:text-white transition-colors duration-300"></i>
+                            <div class="w-7 sm:w-8 h-7 sm:h-8 rounded-lg bg-gray-100/60 dark:bg-gray-800/50 flex items-center justify-center transform transition-all duration-300 group-hover:scale-110 group-hover:bg-gray-700/20">
+                                <i class="fab fa-github text-sm sm:text-lg text-gray-500 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white transition-colors duration-300"></i>
                             </div>
                         </a>
                         <a href="https://wa.me/923480867200" class="group" aria-label="WhatsApp">
-                            <div class="w-8 sm:w-10 h-8 sm:h-10 rounded-lg bg-gray-800/50 flex items-center justify-center transform transition-all duration-300 group-hover:scale-110 group-hover:bg-green-500/20">
-                                <i class="fab fa-whatsapp text-base sm:text-xl text-gray-400 group-hover:text-green-500 transition-colors duration-300"></i>
+                            <div class="w-7 sm:w-8 h-7 sm:h-8 rounded-lg bg-gray-100/60 dark:bg-gray-800/50 flex items-center justify-center transform transition-all duration-300 group-hover:scale-110 group-hover:bg-green-500/20">
+                                <i class="fab fa-whatsapp text-sm sm:text-lg text-gray-500 dark:text-gray-400 group-hover:text-green-500 transition-colors duration-300"></i>
                             </div>
                         </a>
                     </div>
@@ -428,16 +423,16 @@
 
                 <!-- Resources (non-duplicative) -->
                 <div class="space-y-6">
-                    <h3 class="text-lg sm:text-xl font-semibold text-white relative">
+                    <h3 class="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white relative">
                         Resources
                         <span class="absolute -bottom-2 left-0 w-12 h-1 bg-gradient-to-r from-blue-500 to-purple-500"></span>
                     </h3>
                     <nav class="grid grid-cols-1 gap-4">
-                        <a href="{% url 'portfolio:privacy_policy' %}" class="text-gray-400 hover:text-white transition-colors duration-300 flex items-center space-x-2 group w-fit">
+                        <a href="{% url 'portfolio:privacy_policy' %}" class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors duration-300 flex items-center space-x-2 group w-fit">
                             <span class="w-1.5 h-1.5 rounded-full bg-blue-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
                             <span>Privacy Policy</span>
                         </a>
-                        <a href="{% url 'portfolio:terms_of_service' %}" class="text-gray-400 hover:text-white transition-colors duration-300 flex items-center space-x-2 group w-fit">
+                        <a href="{% url 'portfolio:terms_of_service' %}" class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors duration-300 flex items-center space-x-2 group w-fit">
                             <span class="w-1.5 h-1.5 rounded-full bg-blue-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></span>
                             <span>Terms of Service</span>
                         </a>
@@ -446,19 +441,19 @@
 
                 <!-- Contact -->
                 <div class="space-y-6">
-                    <h3 class="text-lg sm:text-xl font-semibold text-white relative">
+                    <h3 class="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white relative">
                         Get in Touch
                         <span class="absolute -bottom-2 left-0 w-12 h-1 bg-gradient-to-r from-blue-500 to-purple-500"></span>
                     </h3>
                     <div class="space-y-4">
-                        <a href="mailto:muhammadusman67200@gmail.com" class="group flex items-center space-x-4 text-gray-400 hover:text-white transition-colors duration-300">
-                            <div class="w-8 sm:w-10 h-8 sm:h-10 rounded-lg bg-gray-800/50 flex items-center justify-center group-hover:bg-blue-500/20 transition-colors duration-300">
+                        <a href="mailto:muhammadusman67200@gmail.com" class="group flex items-center space-x-4 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors duration-300">
+                            <div class="w-8 sm:w-10 h-8 sm:h-10 rounded-lg bg-gray-100/60 dark:bg-gray-800/50 flex items-center justify-center group-hover:bg-blue-500/20 transition-colors duration-300">
                                 <i class="fas fa-envelope text-blue-500 text-base sm:text-lg"></i>
                             </div>
                             <span class="text-sm sm:text-base">muhammadusman67200@gmail.com</span>
                         </a>
-                        <div class="group flex items-center space-x-4 text-gray-400">
-                            <div class="w-8 sm:w-10 h-8 sm:h-10 rounded-lg bg-gray-800/50 flex items-center justify-center">
+                        <div class="group flex items-center space-x-4 text-gray-600 dark:text-gray-400">
+                            <div class="w-8 sm:w-10 h-8 sm:h-10 rounded-lg bg-gray-100/60 dark:bg-gray-800/50 flex items-center justify-center">
                                 <i class="fas fa-map-marker-alt text-blue-500 text-base sm:text-lg"></i>
                             </div>
                             <span class="text-sm sm:text-base">Sialkot, Pakistan</span>
@@ -468,15 +463,23 @@
             </div>
 
             <!-- Bottom Bar -->
-            <div class="mt-8 pt-6 border-t border-gray-800/50">
+            <div class="mt-6 pt-4 border-t border-gray-200/60 dark:border-gray-800/50">
                 <div class="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
-                    <p class="text-sm text-gray-400">
-                        &copy; {% now "Y" %} <span class="text-white">Usman Portfolio</span>. All rights reserved.
+                    <p class="text-xs sm:text-sm text-gray-600 dark:text-gray-400">
+                        &copy; {% now "Y" %} <span class="text-gray-900 dark:text-white">Usman Portfolio</span>. All rights reserved.
                     </p>
                 </div>
             </div>
         </div>
     </footer>
+    <!-- Scroll To Top Button -->
+    <button id="scroll-to-top"
+            aria-label="Scroll to top"
+            class="hidden fixed bottom-6 right-6 z-[60] rounded-full p-3 sm:p-3.5 shadow-lg bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:from-blue-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 dark:focus:ring-offset-gray-900 transition transform hover:scale-105">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 sm:h-6 sm:w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M5 15l7-7 7 7" />
+        </svg>
+    </button>
 
     <!-- Dark Mode Script -->
     <script>
@@ -587,14 +590,65 @@
                 hamburgerLines[1].style.opacity = '';
                 hamburgerLines[2].style.transform = '';
             }
-            document.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape' && isMobileMenuOpen) {
-                    isMobileMenuOpen = false;
-                    mobileMenu.classList.remove('open');
-                    mobileMenuToggle.classList.remove('open');
-                }
+        }
+
+        // Attach event listeners for opening/closing the mobile menu
+        if (mobileMenuToggle) {
+            mobileMenuToggle.addEventListener('click', toggleMobileMenu);
+        }
+        if (mobileMenuClose) {
+            mobileMenuClose.addEventListener('click', () => {
+                if (isMobileMenuOpen) toggleMobileMenu();
             });
         }
+
+        // Close menu when a link/button inside it is clicked
+        const mobileMenuInteractive = document.querySelectorAll('#mobile-menu a, #mobile-menu button');
+        mobileMenuInteractive.forEach((el) => {
+            el.addEventListener('click', () => {
+                if (isMobileMenuOpen) toggleMobileMenu();
+            });
+        });
+
+        // Close with Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && isMobileMenuOpen) {
+                isMobileMenuOpen = false;
+                mobileMenu.classList.add('translate-x-full');
+                mobileMenu.classList.remove('translate-x-0');
+                document.body.style.overflow = '';
+                const hamburgerLines = document.querySelectorAll('.hamburger-line');
+                hamburgerLines[0].style.transform = '';
+                hamburgerLines[1].style.opacity = '';
+                hamburgerLines[2].style.transform = '';
+            }
+        });
+    </script>
+
+    <!-- Scroll To Top Script -->
+    <script>
+        (function() {
+            const btn = document.getElementById('scroll-to-top');
+            if (!btn) return;
+
+            function updateVisibility() {
+                const scrolled = window.scrollY || document.documentElement.scrollTop;
+                const nearBottom = (window.innerHeight + scrolled) >= (document.documentElement.scrollHeight - 200);
+                if (scrolled > 300 || nearBottom) {
+                    btn.classList.remove('hidden');
+                } else {
+                    btn.classList.add('hidden');
+                }
+            }
+
+            window.addEventListener('scroll', updateVisibility, { passive: true });
+            window.addEventListener('resize', updateVisibility);
+            document.addEventListener('DOMContentLoaded', updateVisibility);
+
+            btn.addEventListener('click', () => {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        })();
     </script>
 
     {% block extra_js %}{% endblock %}
