@@ -15,13 +15,22 @@ def multiply(value, arg):
 @register.filter(name='skill_icon')
 def skill_icon(skill_name: str) -> str:
     """Return a FontAwesome class for a given skill name."""
-
     if not skill_name:
         return 'fas fa-question-circle'
 
     skill_name = str(skill_name).strip().lower()
+    
+    # First check for exact matches in the main icon dictionary
+    exact_matches = {
+        'tailwind css': 'devicon-tailwindcss-plain colored',
+        'tailwind': 'devicon-tailwindcss-plain colored',
+        'tailwindcss': 'devicon-tailwindcss-plain colored',
+    }
+    
+    if skill_name in exact_matches:
+        return exact_matches[skill_name]
 
-    # Testing and QA icons
+    # Testing and QA icons (only match exact phrases)
     testing_icons = {
         # General Testing
         'testing': 'fas fa-vial',
@@ -70,12 +79,12 @@ def skill_icon(skill_name: str) -> str:
         'l10n testing': 'fas fa-language',
 
         # Testing Tools
-        'selenium': 'fas fa-window-maximize',
+        'selenium': 'devicon-selenium-original colored',
         'junit': 'fas fa-flask',
         'testng': 'fas fa-flask',
-        'pytest': 'fas fa-flask',
+        'pytest': 'devicon-pytest-plain colored',
         'cypress': 'fas fa-ghost',
-        'postman': 'fas fa-paper-plane',
+        'postman': 'devicon-postman-plain colored',
         'jmeter': 'fas fa-tachometer-alt',
         'loadrunner': 'fas fa-tachometer-alt',
     }
@@ -91,7 +100,7 @@ def skill_icon(skill_name: str) -> str:
 
     # Development / Tools
     if 'jupyter' in skill_name.lower():
-        return 'fas fa-book'  # Represents Jupyter notebook
+        return 'devicon-jupyter-plain colored'  # Represents Jupyter notebook
     if 'test case' in skill_name.lower() or 'test execution' in skill_name.lower():
         return 'fas fa-tasks'  # For test case design/execution
     if 'test planning' in skill_name.lower() or 'test strategy' in skill_name.lower():
@@ -103,54 +112,55 @@ def skill_icon(skill_name: str) -> str:
     if 'html' in skill_name or 'html5' in skill_name or 'html 5' in skill_name.lower():
         return 'fab fa-html5'
     if 'npm' in skill_name:
-        return 'fab fa-npm'
+        return 'devicon-npm-original-wordmark colored'
     if 'ubuntu' in skill_name:
         return 'fab fa-ubuntu'
     if 'pytorch' in skill_name:
-        return 'fab fa-python'  # PyTorch is primarily Python-based
+        return 'devicon-pytorch-original colored'
     if 'tensorflow' in skill_name:
-        return 'fas fa-project-diagram'  # Represents the computational graph
+        return 'devicon-tensorflow-original colored'
     if 'machine learning' in skill_name or 'ml' in skill_name:
-        return 'fas fa-brain'
+        return 'devicon-unifiedmodelinglanguage-plain colored'
     if 'ai' in skill_name or 'artificial intelligence' in skill_name:
-        return 'fas fa-robot'
+        return 'devicon-illustrator-plain colored'
     if 'numpy' in skill_name:
-        return 'fas fa-calculator'
+        return 'devicon-numpy-plain colored'
     if 'bug' in skill_name or 'bug tracking' in skill_name:
         return 'fas fa-bug'
     if 'agile' in skill_name or 'scrum' in skill_name:
         return 'fas fa-tasks'
     if 'jenkins' in skill_name or 'ci/cd' in skill_name or 'continuous integration' in skill_name:
         return 'fab fa-jenkins'
-    if "pandas" in skill_name.lower():
-        return "devicon-pandas-plain colored"  # Official pandas icon from Devicon
+    if 'pandas' in skill_name.lower():
+        return 'devicon-pandas-plain colored'
 
     # Mapping for tech stack
     mapping = {
         'python': 'fab fa-python',
+        'scikit-learn': 'devicon-scikitlearn-plain colored',
+        'matplotlib': 'devicon-matplotlib-plain colored',
         'django': 'devicon-django-plain colored',
         'flask': 'fas fa-flask',
-        'fastapi': 'fas fa-bolt',
+        'fastapi': 'devicon-fastapi-plain colored',
         'javascript': 'fab fa-js',
         'typescript': 'fab fa-js',
         'html': 'fab fa-html5',
         'html5': 'fab fa-html5',
         'css': 'fab fa-css3-alt',
         'css3': 'fab fa-css3-alt',
-        'tailwind': 'fas fa-wind',
         'bootstrap': 'fab fa-bootstrap',
         'react': 'fab fa-react',
-        'next.js': 'fab fa-react',
+        'next.js': 'devicon-nextjs-plain colored',
         'vue': 'fab fa-vuejs',
         'node': 'fab fa-node',
         'express': 'fas fa-route',
-        'postgresql': 'fas fa-database',
-        'mysql': 'fas fa-database',
-        'sqlite': 'fas fa-database',
-        'mongodb': 'fas fa-database',
+        'postgresql': 'devicon-postgresql-plain colored',
+        'mysql': 'devicon-mysql-plain colored',
+        'sqlite': 'devicon-sqlite-plain colored',
+        'mongodb': 'devicon-mongodb-plain colored',
         'redis': 'devicon-redis-plain colored',
         'docker': 'fab fa-docker',
-        'kubernetes': 'fas fa-cloud',
+        'kubernetes': 'devicon-kubernetes-plain colored',
         'git': 'fab fa-git-alt',
         'github': 'fab fa-github',
         'gitlab': 'fab fa-gitlab',
@@ -158,16 +168,21 @@ def skill_icon(skill_name: str) -> str:
         'azure': 'fab fa-microsoft',
         'gcp': 'fab fa-google',
         'linux': 'fab fa-linux',
-        'nginx': 'fas fa-server',
+        'nginx': 'devicon-nginx-original colored',
+        'ngrok': 'devicon-ngrok-original colored',
         'gunicorn': 'fas fa-feather',
-        'celery': 'fas fa-seedling',
+        'celery': 'devicon-envoy-plain colored',
         'rabbitmq': 'fas fa-envelope-open-text',
         'graphql': 'fas fa-project-diagram',
-        'drf': 'fas fa-plug',
+        'drf': 'devicon-djangorest-plain-wordmark',
+        'django rest framework': 'devicon-djangorest-plain-wordmark',
         'rest api': 'fas fa-plug',
-        'jira': 'fab fa-jira',
+        'restful api': 'devicon-djangorest-plain colored',
+        'jira': 'devicon-jira-plain colored',
         'webpack': 'fas fa-cubes',
-        'vite': 'fas fa-bolt',
+        'vite': 'devicon-vite-original colored',
+        'streamlit': 'devicon-streamlit-plain colored',
+        'swagger': 'devicon-swagger-plain colored',
     }
 
     # Try exact
