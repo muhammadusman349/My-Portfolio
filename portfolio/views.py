@@ -5,14 +5,13 @@ from django.http import JsonResponse, HttpResponse
 from django.template.loader import render_to_string
 from django.utils import timezone
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.db.models import Q
+from django.db.models import Q, F, Window, Max
 from .models import Project, ProjectComment, Skill, Education, Experience, Contact, Resume
 from django.contrib import messages
 from .forms import CommentForm
 from urllib.parse import urlparse
 from django.urls import reverse
-from django.db.models import Max
-from django.db.models.functions import Lower
+from django.db.models.functions import Lower, RowNumber
 
 
 def project_list(request):
@@ -341,58 +340,49 @@ def projects_by_skill(request, skill_slug):
     return render(request, 'portfolio/project_list.html', context)
 
 
-def skill_list(request):    
-    # Get unique lowercase skill names with their max proficiency
-    unique_skills = Skill.objects.annotate(
-        lower_name=Lower('name')
-    ).values('lower_name').annotate(
-        max_proficiency=Max('proficiency')
-    ).order_by('-max_proficiency')
-
-    # Get the full skill objects for the unique names with max proficiency
-    skill_ids = []
-    seen_names = set()
-
-    for skill in unique_skills:
-        skill_obj = Skill.objects.filter(
-            name__iexact=skill['lower_name'],
-            proficiency=skill['max_proficiency']
-        ).first()
-
-        if skill_obj and skill_obj.name.lower() not in seen_names:
-            seen_names.add(skill_obj.name.lower())
-            skill_ids.append(skill_obj.id)
-
-    # Get the actual skill objects in the correct order
-    skill_qs = Skill.objects.filter(id__in=skill_ids).order_by('-proficiency')
-
-    # Search functionality
+def skill_list(request):
     search = request.GET.get('search', '').strip()
+
+    # Base queryset + optional search
+    base_qs = Skill.objects.all()
     if search:
-        skill_qs = skill_qs.filter(
+        base_qs = base_qs.filter(
             Q(name__icontains=search) | Q(description__icontains=search)
         )
 
+    # Deduplicate by lowercased name, keep the highest proficiency (tie-break by id)
+    deduped = (
+        base_qs
+        .annotate(lower_name=Lower('name'))
+        .annotate(
+            rn=Window(
+                expression=RowNumber(),
+                partition_by=[F('lower_name')],
+                order_by=[F('proficiency').desc(), F('id').asc()],
+            )
+        )
+        .filter(rn=1)
+        .order_by('-proficiency', 'name')  # High → low, then A→Z
+    )
+
     # Pagination
-    paginator = Paginator(skill_qs, 12)  # Show 12 skills per page
-    page = request.GET.get('page')
+    paginator = Paginator(deduped, 12)
+    page_number = request.GET.get('page')
     try:
-        skills = paginator.page(page)
+        skills = paginator.page(page_number)
     except PageNotAnInteger:
         skills = paginator.page(1)
     except EmptyPage:
         skills = paginator.page(paginator.num_pages)
 
-    # Preserve query params (without page) for pagination links
+    # Preserve other query params (without page)
     query_params = request.GET.copy()
-    if 'page' in query_params:
-        query_params.pop('page')
-    querystring = query_params.urlencode()
+    query_params.pop('page', None)
 
     return render(request, 'portfolio/skill_list.html', {
         'skills': skills,
         'search_query': search,
-        'querystring': querystring,
+        'querystring': query_params.urlencode(),
     })
 
 

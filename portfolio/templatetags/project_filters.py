@@ -128,7 +128,7 @@ def skill_icon(skill_name: str) -> str:
     # Mapping for tech stack
     mapping = {
         'python': 'fab fa-python',
-        'django': 'fas fa-leaf',
+        'django': 'devicon-django-plain colored',
         'flask': 'fas fa-flask',
         'fastapi': 'fas fa-bolt',
         'javascript': 'fab fa-js',
@@ -148,7 +148,7 @@ def skill_icon(skill_name: str) -> str:
         'mysql': 'fas fa-database',
         'sqlite': 'fas fa-database',
         'mongodb': 'fas fa-database',
-        'redis': 'fas fa-database',
+        'redis': 'devicon-redis-plain colored',
         'docker': 'fab fa-docker',
         'kubernetes': 'fas fa-cloud',
         'git': 'fab fa-git-alt',
