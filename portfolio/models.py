@@ -150,12 +150,14 @@ class Education(models.Model):
     institution = models.CharField(max_length=200)
     degree = models.CharField(max_length=200)
     field_of_study = models.CharField(max_length=200)
+    location = models.CharField(max_length=200, blank=True, help_text='City, Country')
     start_date = models.DateField()
     end_date = models.DateField(null=True, blank=True)
     description = models.TextField(blank=True)
 
     def __str__(self):
-        return f'{self.degree} at {self.institution}'
+        location = f' in {self.location}' if self.location else ''
+        return f'{self.degree} at {self.institution}{location}'
 
     class Meta:
         ordering = ['-start_date']

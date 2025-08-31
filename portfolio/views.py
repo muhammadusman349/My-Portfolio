@@ -11,6 +11,8 @@ from django.contrib import messages
 from .forms import CommentForm
 from urllib.parse import urlparse
 from django.urls import reverse
+from django.db.models import Max
+from django.db.models.functions import Lower
 
 
 def project_list(request):
@@ -339,9 +341,59 @@ def projects_by_skill(request, skill_slug):
     return render(request, 'portfolio/project_list.html', context)
 
 
-def skill_list(request):
-    skills = Skill.objects.all().order_by('-proficiency')
-    return render(request, 'portfolio/skill_list.html', {'skills': skills})
+def skill_list(request):    
+    # Get unique lowercase skill names with their max proficiency
+    unique_skills = Skill.objects.annotate(
+        lower_name=Lower('name')
+    ).values('lower_name').annotate(
+        max_proficiency=Max('proficiency')
+    ).order_by('-max_proficiency')
+
+    # Get the full skill objects for the unique names with max proficiency
+    skill_ids = []
+    seen_names = set()
+
+    for skill in unique_skills:
+        skill_obj = Skill.objects.filter(
+            name__iexact=skill['lower_name'],
+            proficiency=skill['max_proficiency']
+        ).first()
+
+        if skill_obj and skill_obj.name.lower() not in seen_names:
+            seen_names.add(skill_obj.name.lower())
+            skill_ids.append(skill_obj.id)
+
+    # Get the actual skill objects in the correct order
+    skill_qs = Skill.objects.filter(id__in=skill_ids).order_by('-proficiency')
+
+    # Search functionality
+    search = request.GET.get('search', '').strip()
+    if search:
+        skill_qs = skill_qs.filter(
+            Q(name__icontains=search) | Q(description__icontains=search)
+        )
+
+    # Pagination
+    paginator = Paginator(skill_qs, 12)  # Show 12 skills per page
+    page = request.GET.get('page')
+    try:
+        skills = paginator.page(page)
+    except PageNotAnInteger:
+        skills = paginator.page(1)
+    except EmptyPage:
+        skills = paginator.page(paginator.num_pages)
+
+    # Preserve query params (without page) for pagination links
+    query_params = request.GET.copy()
+    if 'page' in query_params:
+        query_params.pop('page')
+    querystring = query_params.urlencode()
+
+    return render(request, 'portfolio/skill_list.html', {
+        'skills': skills,
+        'search_query': search,
+        'querystring': querystring,
+    })
 
 
 def education_list(request):
@@ -454,10 +506,34 @@ def reply_to_response(request, comment_id):
 
 
 def home(request):
-    projects = Project.objects.all().order_by('-created_at')[:3]
+    projects = Project.objects.all().order_by('id')[:3]
     experiences = Experience.objects.all().order_by('-start_date')[:3]
     educations = Education.objects.all().order_by('-start_date')
-    skills = Skill.objects.all().order_by('-proficiency')[:8]  # Reduced from 10 to 8 skills
+    total_skills = Skill.objects.all()
+
+    # Get unique lowercase skill names with their max proficiency
+    unique_skills = Skill.objects.annotate(
+        lower_name=Lower('name')
+    ).values('lower_name').annotate(
+        max_proficiency=Max('proficiency')
+    ).order_by('-max_proficiency')
+
+    # Get the full skill objects for the unique names with max proficiency
+    skill_ids = []
+    seen_names = set()
+
+    for skill in unique_skills[:8]:  # Limit to top 8 skills for the home page
+        skill_obj = Skill.objects.filter(
+            name__iexact=skill['lower_name'],
+            proficiency=skill['max_proficiency']
+        ).first()
+
+        if skill_obj and skill_obj.name.lower() not in seen_names:
+            seen_names.add(skill_obj.name.lower())
+            skill_ids.append(skill_obj.id)
+
+    # Get the actual skill objects in the correct order
+    skills = Skill.objects.filter(id__in=skill_ids).order_by('-proficiency')
     latest_resume = Resume.objects.first()
 
     return render(request, 'portfolio/home.html', {
@@ -466,6 +542,7 @@ def home(request):
         'educations': educations,
         'skills': skills,
         'latest_resume': latest_resume,
+        'total_skills': total_skills,
     })
 
 

@@ -44,11 +44,33 @@ class SkillForm(forms.ModelForm):
 class EducationForm(forms.ModelForm):
     class Meta:
         model = Education
-        fields = ['institution', 'degree', 'field_of_study', 'start_date', 'end_date', 'description']
+        fields = ['institution', 'degree', 'field_of_study', 'location', 'start_date', 'end_date', 'description']
         widgets = {
-            'start_date': forms.DateInput(attrs={'type': 'date'}),
-            'end_date': forms.DateInput(attrs={'type': 'date'}),
-            'description': forms.Textarea(attrs={'rows': 3}),
+            'institution': forms.TextInput(attrs={
+                'class': 'form-input mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white'
+            }),
+            'degree': forms.TextInput(attrs={
+                'class': 'form-input mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white'
+            }),
+            'field_of_study': forms.TextInput(attrs={
+                'class': 'form-input mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white'
+            }),
+            'location': forms.TextInput(attrs={
+                'class': 'form-input mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white',
+                'placeholder': 'City, Country'
+            }),
+            'start_date': forms.DateInput(attrs={
+                'type': 'date',
+                'class': 'form-input mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white'
+            }),
+            'end_date': forms.DateInput(attrs={
+                'type': 'date',
+                'class': 'form-input mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white'
+            }),
+            'description': forms.Textarea(attrs={
+                'rows': 3,
+                'class': 'form-textarea mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white'
+            }),
         }
 
 
