@@ -219,6 +219,60 @@
     </div>
     {% endif %}
 
+    <!-- Pagination -->
+    {% if projects and projects.has_other_pages %}
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pb-6">
+        <nav class="flex items-center justify-between" role="navigation" aria-label="Pagination">
+            <!-- Prev -->
+            <div>
+                {% if projects.has_previous %}
+                <a href="?{% if querystring %}{{ querystring }}&{% endif %}page={{ projects.previous_page_number }}"
+                   class="btn-secondary inline-flex items-center">
+                    <i class="fas fa-chevron-left mr-2 text-xs"></i> Previous
+                </a>
+                {% else %}
+                <span class="btn-secondary inline-flex items-center opacity-50 cursor-not-allowed">
+                    <i class="fas fa-chevron-left mr-2 text-xs"></i> Previous
+                </span>
+                {% endif %}
+            </div>
+
+            <!-- Page numbers -->
+            <ul class="flex items-center gap-1" role="list">
+                {% for i in projects.paginator.page_range %}
+                    {% if i == projects.number %}
+                        <li><span class="px-3 py-1 rounded-md bg-blue-600 text-white text-sm" aria-current="page">{{ i }}</span></li>
+                    {% else %}
+                        <li>
+                            <a href="?{% if querystring %}{{ querystring }}&{% endif %}page={{ i }}"
+                               class="px-3 py-1 rounded-md text-sm bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50">
+                                {{ i }}
+                            </a>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+
+            <!-- Next -->
+            <div>
+                {% if projects.has_next %}
+                <a href="?{% if querystring %}{{ querystring }}&{% endif %}page={{ projects.next_page_number }}"
+                   class="btn-secondary inline-flex items-center">
+                    Next <i class="fas fa-chevron-right ml-2 text-xs"></i>
+                </a>
+                {% else %}
+                <span class="btn-secondary inline-flex items-center opacity-50 cursor-not-allowed">
+                    Next <i class="fas fa-chevron-right ml-2 text-xs"></i>
+                </span>
+                {% endif %}
+            </div>
+        </nav>
+        <p class="mt-3 text-center text-sm text-gray-600 dark:text-gray-300">
+            Page {{ projects.number }} of {{ projects.paginator.num_pages }} • {{ filtered_projects_count|default:projects.paginator.count }} total projects
+        </p>
+    </div>
+    {% endif %}
+
     <!-- Back to Home -->
     <div class="text-center pb-10">
         <a href="{% url 'portfolio:home' %}" class="btn-primary inline-flex items-center">
