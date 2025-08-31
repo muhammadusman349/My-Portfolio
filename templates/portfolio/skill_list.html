@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% load custom_filters %}
+{% load project_filters %}
 
 {% block title %}My Technical Skills{% endblock %}
 
@@ -108,7 +108,6 @@
                     </div>
                 </div>
 
-            {% regroup skills by category as category_list %}
             <!-- Legend -->
             <div class="mt-6 flex flex-wrap items-center gap-3 text-xs font-medium text-gray-600 dark:text-gray-400">
                 <span class="inline-flex items-center gap-2 px-2.5 py-1 rounded-md bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700"><span class="w-3 h-3 rounded-sm bg-red-500"></span> Beginner (&lt; 40%)</span>
@@ -118,108 +117,26 @@
 
             <!-- Skills by Category -->
             <div class="mt-12 space-y-12" id="skills-sections">
-                {% for category in category_list %}
-                {% with raw=category.grouper|default_if_none:'' %}
-                {% with section_slug=raw|slugify|default:'all' %}
-                <section data-section-cat="{{ section_slug }}" class="fade-in-up stagger-{{ forloop.counter|add:0|floatformat:0|slice:"0:1" }}">
+                <section class="fade-in-up">
                     <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-6 flex items-center justify-between">
-                        <span>{{ category.grouper|default:'All Skills' }}</span>
-                        <span class="text-sm font-normal text-gray-500 dark:text-gray-400">{{ category.list|length }} skill{{ category.list|length|pluralize }}</span>
+                        <span>All Skills</span>
+                        <span class="text-sm font-normal text-gray-500 dark:text-gray-400">{{ skills.paginator.count }} skill{{ skills.paginator.count|pluralize }}</span>
                     </h3>
                     <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                        {% for skill in category.list %}
-                        {% with cat_slug=section_slug %}
+                        {% for skill in skills %}
                         {% with percent=skill.proficiency|multiply:20 %}
                         <a href="{% url 'portfolio:projects_by_skill' skill_slug=skill.name|slugify %}"
                            class="skill-card bg-white dark:bg-gray-800 p-5 rounded-lg border border-gray-200 dark:border-gray-700 hover:border-blue-200 dark:hover:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 group flex flex-col"
-                           data-cat="{{ cat_slug }}" data-name="{{ skill.name|lower }}" data-desc="{{ skill.description|default:''|lower }}" data-prof="{{ percent }}"
+                           data-name="{{ skill.name|lower }}" data-desc="{{ skill.description|default:''|lower }}" data-prof="{{ percent }}"
                            aria-label="View projects using {{ skill.name }}">
                             <div class="flex items-start justify-between">
                                 <div class="flex items-center gap-3">
-                                    <div class="h-10 w-10 rounded-lg bg-gradient-to-br from-blue-100 to-purple-100 dark:from-blue-900/40 dark:to-purple-900/40 flex items-center justify-center text-blue-700 dark:text-blue-300 font-bold transition-transform duration-200 group-hover:scale-105">
-                                        {% with lname=skill.name|lower %}
-                                        {% if 'python' in lname %}
-                                            <i class="fab fa-python text-lg text-blue-600 dark:text-blue-400"></i>
-                                        {% elif 'javascript' in lname or 'js' in lname %}
-                                            <i class="fab fa-js text-lg text-yellow-400"></i>
-                                        {% elif 'react' in lname %}
-                                            <i class="fab fa-react text-lg text-sky-400"></i>
-                                        {% elif 'node' in lname %}
-                                            <i class="fab fa-node-js text-lg text-green-600"></i>
-                                        {% elif 'html' in lname %}
-                                            <i class="fab fa-html5 text-lg text-orange-500"></i>
-                                        {% elif 'css' in lname %}
-                                            <i class="fab fa-css3-alt text-lg text-blue-500"></i>
-                                        {% elif 'github' in lname or 'git' in lname %}
-                                            <i class="fab fa-github text-lg text-gray-800 dark:text-gray-200"></i>
-                                        {% elif 'django' in lname and 'rest' in lname or 'drf' in lname %}
-                                            <i class="fa-solid fa-gears text-lg text-green-600"></i>
-                                        {% elif 'django' in lname %}
-                                            <i class="fa-solid fa-cube text-lg text-green-500"></i>
-                                        {% elif 'docker' in lname %}
-                                            <i class="fab fa-docker text-lg text-blue-500"></i>
-                                        {% elif 'redis' in lname %}
-                                            <i class="fas fa-database text-lg text-red-500"></i>
-                                        {% elif 'mysql' in lname or 'postgres' in lname or 'sql' in lname %}
-                                            <i class="fas fa-database text-lg text-blue-600"></i>
-                                        {% elif 'bootstrap' in lname %}
-                                            <i class="fab fa-bootstrap text-lg text-purple-600"></i>
-                                        {% elif 'tailwind' in lname %}
-                                            <i class="fa-solid fa-wind text-lg text-cyan-500"></i>
-                                        {% elif 'vue' in lname %}
-                                            <i class="fab fa-vuejs text-lg text-green-500"></i>
-                                        {% elif 'angular' in lname %}
-                                            <i class="fab fa-angular text-lg text-red-600"></i>
-                                        {% elif 'aws' in lname %}
-                                            <i class="fab fa-aws text-lg text-orange-500"></i>
-                                        {% elif 'linux' in lname %}
-                                            <i class="fab fa-linux text-lg text-gray-800 dark:text-gray-200"></i>
-                                        {% elif 'ubuntu' in lname %}
-                                            <i class="fab fa-ubuntu text-lg text-orange-600"></i>
-                                        {% elif 'figma' in lname %}
-                                            <i class="fab fa-figma text-lg text-purple-500"></i>
-                                        {% elif 'photoshop' in lname %}
-                                            <i class="fa-solid fa-image text-lg text-blue-600"></i>
-                                        {% elif 'api' in lname or 'rest' in lname %}
-                                            <i class="fa-solid fa-plug text-lg text-indigo-600"></i>
-                                        {% elif 'mongodb' in lname or 'mongo' in lname %}
-                                            <i class="fa-solid fa-leaf text-lg text-green-600"></i>
-                                        {% elif 'firebase' in lname %}
-                                            <i class="fa-solid fa-fire text-lg text-orange-500"></i>
-                                        {% elif 'typescript' in lname or 'ts' in lname %}
-                                            <i class="fa-solid fa-code text-lg text-blue-600"></i>
-                                        {% elif 'sass' in lname or 'scss' in lname %}
-                                            <i class="fab fa-sass text-lg text-pink-500"></i>
-                                        {% elif 'webpack' in lname %}
-                                            <i class="fa-solid fa-cube text-lg text-blue-500"></i>
-                                        {% elif 'npm' in lname %}
-                                            <i class="fab fa-npm text-lg text-red-600"></i>
-                                        {% elif 'yarn' in lname %}
-                                            <i class="fab fa-yarn text-lg text-blue-500"></i>
-                                        {% elif 'postman' in lname %}
-                                            <i class="fa-solid fa-paper-plane text-lg text-orange-500"></i>
-                                        {% elif 'vscode' in lname or 'vs code' in lname %}
-                                            <i class="fa-solid fa-code text-lg text-blue-600"></i>
-                                        {% elif 'jupyter' in lname %}
-                                            <i class="fa-solid fa-book text-lg text-orange-500"></i>
-                                        {% elif 'pandas' in lname %}
-                                            <i class="fa-solid fa-table text-lg text-blue-600"></i>
-                                        {% elif 'numpy' in lname %}
-                                            <i class="fa-solid fa-calculator text-lg text-blue-500"></i>
-                                        {% elif 'tensorflow' in lname %}
-                                            <i class="fa-solid fa-brain text-lg text-orange-600"></i>
-                                        {% elif 'pytorch' in lname %}
-                                            <i class="fa-solid fa-fire text-lg text-red-600"></i>
-                                        {% elif 'machine learning' in lname or 'ml' in lname %}
-                                            <i class="fa-solid fa-robot text-lg text-purple-600"></i>
-                                        {% elif 'ai' in lname or 'artificial intelligence' in lname %}
-                                            <i class="fa-solid fa-brain text-lg text-indigo-600"></i>
-                                        {% elif 'celery' in lname %}
-                                            <i class="fa-solid fa-tasks text-lg text-green-500"></i>
+                                    <div class="h-10 w-10 rounded-lg flex items-center justify-center transition-transform duration-200 group-hover:scale-105">
+                                        {% if skill.name|skill_icon|slice:":7" == "devicon" %}
+                                            <i class="{{ skill.name|skill_icon }} text-2xl"></i>
                                         {% else %}
-                                            {{ skill.name|first|upper }}
+                                            <i class="{{ skill.name|skill_icon }} text-xl bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent"></i>
                                         {% endif %}
-                                        {% endwith %}
                                     </div>
                                     <h4 class="text-lg font-semibold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 truncate">{{ skill.name }}</h4>
                                 </div>
@@ -235,20 +152,73 @@
                             {% endif %}
                         </a>
                         {% endwith %}
-                        {% endwith %}
                         {% endfor %}
                     </div>
                 </section>
-                {% endwith %}
-                {% endwith %}
-                {% empty %}
-                <div class="text-center py-16">
-                    <div class="mx-auto w-16 h-16 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 text-white flex items-center justify-center shadow-lg">
-                        <i class="fas fa-layer-group text-2xl"></i>
+                {% if not skills %}
+                <div class="text-center py-16 col-span-full">
+                    <div class="mx-auto w-16 h-16 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center mb-4">
+                        <i class="fas fa-tools text-2xl text-gray-400"></i>
                     </div>
-                    <p class="mt-6 text-gray-600 dark:text-gray-400">No skills available yet.</p>
+                    <h3 class="text-lg font-medium text-gray-900 dark:text-white">No skills found</h3>
+                    <p class="mt-1 text-gray-500 dark:text-gray-400">Try adjusting your search or filter to find what you're looking for.</p>
                 </div>
-                {% endfor %}
+                {% endif %}
+
+                <!-- Pagination -->
+                {% if skills.has_other_pages %}
+                <div class="col-span-full mt-8">
+                    <nav class="flex items-center justify-between border-t border-gray-200 dark:border-gray-700 px-4 sm:px-0">
+                        <div class="-mt-px flex-1 flex">
+                            {% if skills.has_previous %}
+                            <a href="?{% if querystring %}{{ querystring }}&{% endif %}page={{ skills.previous_page_number }}" 
+                               class="border-t-2 border-transparent pt-4 pr-1 inline-flex items-center text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300">
+                                <i class="fas fa-arrow-left mr-3"></i>
+                                Previous
+                            </a>
+                            {% else %}
+                            <span class="border-t-2 border-transparent pt-4 pr-1 inline-flex items-center text-sm font-medium text-gray-300 dark:text-gray-600 cursor-not-allowed">
+                                <i class="fas fa-arrow-left mr-3"></i>
+                                Previous
+                            </span>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="hidden md:-mt-px md:flex">
+                            {% for i in skills.paginator.page_range %}
+                                {% if skills.number == i %}
+                                <span class="border-blue-500 text-blue-600 dark:border-blue-400 dark:text-blue-400 border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium">
+                                    {{ i }}
+                                </span>
+                                {% else %}
+                                <a href="?{% if querystring %}{{ querystring }}&{% endif %}page={{ i }}" 
+                                   class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300 border-t-2 pt-4 px-4 inline-flex items-center text-sm font-medium">
+                                    {{ i }}
+                                </a>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                        
+                        <div class="-mt-px flex-1 flex justify-end">
+                            {% if skills.has_next %}
+                            <a href="?{% if querystring %}{{ querystring }}&{% endif %}page={{ skills.next_page_number }}" 
+                               class="border-t-2 border-transparent pt-4 pl-1 inline-flex items-center text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300">
+                                Next
+                                <i class="fas fa-arrow-right ml-3"></i>
+                            </a>
+                            {% else %}
+                            <span class="border-t-2 border-transparent pt-4 pl-1 inline-flex items-center text-sm font-medium text-gray-300 dark:text-gray-600 cursor-not-allowed">
+                                Next
+                                <i class="fas fa-arrow-right ml-3"></i>
+                            </span>
+                            {% endif %}
+                        </div>
+                    </nav>
+                    <div class="text-center mt-2 text-sm text-gray-500 dark:text-gray-400">
+                        Showing {{ skills.start_index }} - {{ skills.end_index }} of {{ skills.paginator.count }} skills
+                    </div>
+                </div>
+                {% endif %}
             </div>
 
             <!-- No Results -->
@@ -274,15 +244,12 @@
 <script>
 (function() {
     const q = document.getElementById('skill-search');
-    const pills = Array.from(document.querySelectorAll('.cat-pill'));
-    const sections = Array.from(document.querySelectorAll('#skills-sections section'));
     const noResults = document.getElementById('no-skill-results');
 
     function profColor(p) {
-        const v = Number(p);
-        if (v >= 70) return { bar: ['bg-gradient-to-r', 'from-emerald-400', 'to-emerald-600'], badge: 'bg-emerald-500' };
-        if (v >= 40) return { bar: ['bg-gradient-to-r', 'from-amber-400', 'to-amber-600'], badge: 'bg-amber-500' };
-        return { bar: ['bg-gradient-to-r', 'from-rose-400', 'to-rose-600'], badge: 'bg-rose-500' };
+        if (p < 40) return 'bg-red-500';
+        if (p < 70) return 'bg-yellow-500';
+        return 'bg-green-500';
     }
 
     // Initialize progress bars and badges
@@ -292,54 +259,38 @@
         const badge = card.querySelector('.proficiency-badge');
         if (bar) {
             bar.style.width = `${level}%`;
-            const cfg = profColor(level);
-            cfg.bar.forEach(c => bar.classList.add(c));
+            bar.classList.add('bg-gradient-to-r', 'from-emerald-400', 'to-emerald-600');
         }
         if (badge) {
-            const cfg = profColor(level);
-            badge.classList.add(cfg.badge);
+            badge.classList.add(profColor(level));
         }
     });
 
-    let activeCat = 'all';
-
+    // Filter skills based on search
     function applyFilters() {
-        const term = (q?.value || '').trim().toLowerCase();
+        const searchTerm = q ? q.value.toLowerCase() : '';
         let anyVisible = false;
-
-        sections.forEach(section => {
-            const cat = section.getAttribute('data-section-cat');
+        
+        document.querySelectorAll('#skills-sections section').forEach(section => {
             let sectionVisible = false;
             section.querySelectorAll('.skill-card').forEach(card => {
-                const matchesCat = activeCat === 'all' ? true : (card.dataset.cat === activeCat);
-                const matchesText = !term || card.dataset.name.includes(term) || card.dataset.desc.includes(term);
-                const show = matchesCat && matchesText;
+                const name = card.dataset.name;
+                const desc = card.dataset.desc || '';
+                
+                const matchesText = name.includes(searchTerm) || desc.includes(searchTerm);
+                const show = matchesText;
+                
                 card.classList.toggle('hidden', !show);
                 if (show) sectionVisible = true, anyVisible = true;
             });
             section.classList.toggle('hidden', !sectionVisible);
         });
-
+        
         noResults.classList.toggle('hidden', anyVisible);
     }
 
-    // Category pill click
-    pills.forEach(btn => {
-        btn.addEventListener('click', () => {
-            pills.forEach(b => {
-                b.classList.remove('active', 'bg-indigo-600', 'text-white');
-                b.classList.add('btn-secondary');
-            });
-            btn.classList.add('active', 'bg-indigo-600', 'text-white');
-            btn.classList.remove('btn-secondary');
-            activeCat = btn.getAttribute('data-cat') || 'all';
-            applyFilters();
-        });
-    });
-
     // Search input
     q && q.addEventListener('input', applyFilters);
-
     // Initial
     applyFilters();
 })();
