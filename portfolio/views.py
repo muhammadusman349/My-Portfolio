@@ -343,16 +343,20 @@ def projects_by_skill(request, skill_slug):
 def skill_list(request):
     search = request.GET.get('search', '').strip()
 
-    # Base queryset + optional search
-    base_qs = Skill.objects.all()
+    # Get all skills first for search
+    all_skills = Skill.objects.all()
+    
+    # Apply search filter if provided
     if search:
-        base_qs = base_qs.filter(
-            Q(name__icontains=search) | Q(description__icontains=search)
-        )
+        search_terms = search.split()
+        query = Q()
+        for term in search_terms:
+            query &= (Q(name__icontains=term) | Q(description__icontains=term))
+        all_skills = all_skills.filter(query)
 
     # Deduplicate by lowercased name, keep the highest proficiency (tie-break by id)
     deduped = (
-        base_qs
+        all_skills
         .annotate(lower_name=Lower('name'))
         .annotate(
             rn=Window(

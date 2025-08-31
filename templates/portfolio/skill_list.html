@@ -12,6 +12,25 @@
         --dark-gray: #1f2937;
         --text-dark: #111827;
         --text-light: #f9fafb;
+        --touch-target-min: 44px;
+    }
+    
+    /* Better touch targets for mobile */
+    @media (pointer: coarse) {
+        button, 
+        a[role="button"],
+        .skill-card,
+        .pagination-link {
+            min-height: var(--touch-target-min);
+            min-width: var(--touch-target-min);
+        }
+        
+        /* Prevent zoom on input focus on mobile */
+        @media screen and (max-width: 768px) {
+            input, select, textarea {
+                font-size: 16px !important;
+            }
+        }
     }
 
     .skill-card {
@@ -97,41 +116,41 @@
             <!-- Hero Section -->
             <div class="text-center px-1 sm:px-2">
                 <h2 class="text-2xl xs:text-2.5xl sm:text-3xl md:text-4xl font-extrabold tracking-tight text-gray-900 dark:text-white px-2">Technical Skills & Expertise</h2>
-                <p class="mt-2.5 sm:mt-3.5 text-sm xs:text-base sm:text-lg leading-normal sm:leading-relaxed text-gray-600 dark:text-gray-300 max-w-3xl mx-auto px-3">
+                <p class="mt-2.5 sm:mt-3 text-sm xs:text-base sm:text-lg leading-normal sm:leading-relaxed text-gray-600 dark:text-gray-300 max-w-3xl mx-auto px-3">
                     Explore my proficiency across a wide range of technologies and tools.
                 </p>
                 {% if skills %}
-                <p class="mt-2 text-xs sm:text-sm text-gray-500 dark:text-gray-400">
-                    Total Skills: <span class="font-semibold text-gray-800 dark:text-gray-200">{{ skills.paginator.count }}</span>
-                </p>
+                <div class="mt-2 inline-block px-4 py-1.5 bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-full text-xs sm:text-sm font-medium">
+                    {{ skills.paginator.count }} Skills
+                </div>
                 {% endif %}
             </div>
 
             <!-- Search and Filters -->
             <div class="mt-6 sm:mt-8 px-1">
                 <div class="max-w-md mx-auto sm:mx-0">
-                    <label for="skill-search" class="block text-xs xs:text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Search Skills</label>
+                    <label for="skill-search" class="block text-xs xs:text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 sm:mb-1.5">Search Skills</label>
                     <div class="relative">
-                        <i class="fas fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-blue-500 text-xs xs:text-sm"></i>
+                        <i class="fas fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-blue-500 text-sm"></i>
                         <input id="skill-search" type="text" placeholder="e.g., Python, React" 
-                               class="w-full pl-8 pr-3 xs:pl-9 xs:pr-4 py-2 xs:py-2.5 text-xs xs:text-sm sm:text-base rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+                               class="w-full pl-10 pr-4 py-3 sm:py-2.5 text-sm sm:text-base rounded-lg border-2 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-400 transition-colors"
                                aria-label="Search by skill name or description" />
                     </div>
                 </div>
 
                 <!-- Legend -->
-                <div class="mt-4 sm:mt-5 flex flex-wrap justify-center sm:justify-start items-center gap-1.5 sm:gap-2.5 text-[10px] xs:text-xs font-medium text-gray-600 dark:text-gray-400">
-                    <span class="inline-flex items-center gap-1 px-1.5 py-1 xs:px-2 xs:py-1 rounded-md bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
-                        <span class="w-2 h-2 xs:w-2.5 xs:h-2.5 rounded-sm bg-red-500"></span>
-                        <span class="whitespace-nowrap">Beginner (&lt; 40%)</span>
+                <div class="mt-4 sm:mt-5 flex flex-wrap justify-start items-center gap-2 sm:gap-2.5 text-xs font-medium text-gray-600 dark:text-gray-400">
+                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1.5 sm:px-2 sm:py-1 rounded-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
+                        <span class="w-2.5 h-2.5 rounded-sm bg-red-500 flex-shrink-0"></span>
+                        <span class="whitespace-nowrap text-xs sm:text-sm">Beginner (&lt; 40%)</span>
                     </span>
-                    <span class="inline-flex items-center gap-1 px-1.5 py-1 xs:px-2 xs:py-1 rounded-md bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
-                        <span class="w-2 h-2 xs:w-2.5 xs:h-2.5 rounded-sm bg-yellow-500"></span>
-                        <span class="whitespace-nowrap">Intermediate (40–69%)</span>
+                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1.5 sm:px-2 sm:py-1 rounded-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
+                        <span class="w-2.5 h-2.5 rounded-sm bg-yellow-500 flex-shrink-0"></span>
+                        <span class="whitespace-nowrap text-xs sm:text-sm">Intermediate (40–69%)</span>
                     </span>
-                    <span class="inline-flex items-center gap-1 px-1.5 py-1 xs:px-2 xs:py-1 rounded-md bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
-                        <span class="w-2 h-2 xs:w-2.5 xs:h-2.5 rounded-sm bg-green-500"></span>
-                        <span class="whitespace-nowrap">Advanced (≥ 70%)</span>
+                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1.5 sm:px-2 sm:py-1 rounded-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
+                        <span class="w-2.5 h-2.5 rounded-sm bg-green-500 flex-shrink-0"></span>
+                        <span class="whitespace-nowrap text-xs sm:text-sm">Advanced (≥ 70%)</span>
                     </span>
                 </div>
             </div>
@@ -139,39 +158,36 @@
             <!-- Skills by Category -->
             <div class="mt-8 sm:mt-10 md:mt-12 space-y-8 sm:space-y-10 md:space-y-12" id="skills-sections">
                 <section class="fade-in-up">
-                    <div class="px-1 mb-3 sm:mb-4 md:mb-5 flex flex-col xs:flex-row xs:items-center xs:justify-between gap-1.5">
+                    <div class="px-1 mb-3 sm:mb-4 md:mb-5">
                         <h3 class="text-base sm:text-lg md:text-xl font-semibold text-gray-900 dark:text-white">All Skills</h3>
-                        <span class="text-[10px] xs:text-xs sm:text-sm font-normal text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-800 rounded-full px-2.5 py-0.5 xs:px-3 xs:py-1 sm:bg-transparent">
-                            {{ skills.paginator.count }} skill{{ skills.paginator.count|pluralize }}
-                        </span>
                     </div>
-                    <div class="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-5">
+                    <div class="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 lg:gap-5">
                         {% for skill in skills %}
                         {% with percent=skill.proficiency|multiply:20 %}
                         <a href="{% url 'portfolio:projects_by_skill' skill_slug=skill.name|slugify %}"
-                           class="skill-card bg-white dark:bg-gray-800 p-3 xs:p-3.5 sm:p-4 md:p-5 rounded-lg border border-gray-200 dark:border-gray-700 hover:border-blue-200 dark:hover:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 group flex flex-col transition-all duration-200 hover:shadow-md"
+                           class="skill-card bg-white dark:bg-gray-800 p-3.5 sm:p-4 md:p-5 rounded-xl border-2 border-gray-200 dark:border-gray-700 hover:border-blue-200 dark:hover:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 group flex flex-col transition-all duration-200 hover:shadow-md active:scale-[0.98]"
                            data-name="{{ skill.name|lower }}" data-desc="{{ skill.description|default:''|lower }}" data-prof="{{ percent }}"
                            aria-label="View projects using {{ skill.name }}">
                             <div class="flex items-start justify-between">
-                                <div class="flex items-center gap-2 xs:gap-2.5 sm:gap-3">
-                                    <div class="h-8 w-8 xs:h-9 xs:w-9 sm:h-10 sm:w-10 rounded-lg flex-shrink-0 flex items-center justify-center transition-transform duration-200 group-hover:scale-105">
+                                <div class="flex items-center gap-2.5 sm:gap-3">
+                                    <div class="h-10 w-10 sm:h-11 sm:w-11 md:h-12 md:w-12 rounded-xl flex-shrink-0 flex items-center justify-center transition-transform duration-200 group-hover:scale-110 bg-gray-50 dark:bg-gray-700/50">
                                         {% if skill.name|skill_icon|slice:":7" == "devicon" %}
-                                            <i class="{{ skill.name|skill_icon }} text-lg xs:text-xl sm:text-2xl"></i>
+                                            <i class="{{ skill.name|skill_icon }} text-xl sm:text-2xl"></i>
                                         {% else %}
-                                            <i class="{{ skill.name|skill_icon }} text-base xs:text-lg sm:text-xl bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent"></i>
+                                            <i class="{{ skill.name|skill_icon }} text-lg sm:text-xl bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent"></i>
                                         {% endif %}
                                     </div>
-                                    <h4 class="text-sm xs:text-base sm:text-lg font-semibold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 truncate">{{ skill.name }}</h4>
+                                    <h4 class="text-base sm:text-lg font-semibold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 truncate">{{ skill.name }}</h4>
                                 </div>
-                                <span class="proficiency-badge inline-flex items-center px-1.5 xs:px-2 py-0.5 rounded-full text-[9px] xs:text-[10px] sm:text-xs font-semibold text-white ml-1.5 xs:ml-2">{{ percent }}%</span>
+                                <span class="proficiency-badge inline-flex items-center justify-center h-6 px-2.5 rounded-xl text-xs sm:text-sm font-semibold text-white min-w-[2.5rem]">{{ percent }}%</span>
                             </div>
-                            <div class="mt-2.5 xs:mt-3 sm:mt-4">
-                                <div class="h-1.5 sm:h-2 rounded-full bg-gray-200 dark:bg-gray-700 overflow-hidden">
+                            <div class="mt-3 sm:mt-4">
+                                <div class="h-2 sm:h-2.5 rounded-full bg-gray-200 dark:bg-gray-700 overflow-hidden">
                                     <div class="progress-bar h-full rounded-full transition-all duration-300"></div>
                                 </div>
                             </div>
                             {% if skill.description %}
-                            <p class="mt-2 xs:mt-2.5 sm:mt-3 text-[11px] xs:text-xs sm:text-sm text-gray-600 dark:text-gray-400 line-clamp-2 leading-tight xs:leading-normal">{{ skill.description }}</p>
+                            <p class="mt-3 text-sm sm:text-base text-gray-600 dark:text-gray-400 line-clamp-2 leading-snug sm:leading-normal">{{ skill.description }}</p>
                             {% endif %}
                         </a>
                         {% endwith %}
@@ -191,49 +207,50 @@
                 <!-- Pagination -->
                 {% if skills.has_other_pages %}
                 <div class="col-span-full mt-8 sm:mt-10">
-                    <nav class="flex items-center justify-between border-t border-gray-200 dark:border-gray-700 px-2 sm:px-0">
+                    <nav class="flex items-center justify-between border-t border-gray-200 dark:border-gray-700 px-1 sm:px-0" aria-label="Pagination">
                         <div class="-mt-px w-0 flex-1 flex">
                             {% if skills.has_previous %}
                             <a href="?{% if querystring %}{{ querystring }}&{% endif %}page={{ skills.previous_page_number }}" 
-                               class="border-t-2 border-transparent pt-4 pr-1 inline-flex items-center text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300 transition-colors">
-                                <i class="fas fa-arrow-left mr-2 sm:mr-3 text-xs sm:text-sm"></i>
-                                <span class="text-xs sm:text-sm">Previous</span>
+                               class="py-4 pr-1 inline-flex items-center text-sm font-medium text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300 group"
+                               aria-label="Previous page">
+                                <i class="fas fa-arrow-left mr-1.5 text-base"></i>
+                                <span class="hidden xs:inline">Previous</span>
                             </a>
-                            {% else %}
-                            <span class="border-t-2 border-transparent pt-4 pr-1 inline-flex items-center text-sm font-medium text-gray-300 dark:text-gray-600 cursor-not-allowed">
-                                <i class="fas fa-arrow-left mr-2 sm:mr-3 text-xs sm:text-sm"></i>
-                                <span class="text-xs sm:text-sm">Previous</span>
-                            </span>
                             {% endif %}
                         </div>
                         
-                        <div class="hidden md:-mt-px md:flex md:space-x-1">
+                        <div class="hidden sm:flex -mt-px">
                             {% for i in skills.paginator.page_range %}
                                 {% if skills.number == i %}
-                                <span class="border-blue-500 text-blue-600 dark:border-blue-400 dark:text-blue-400 border-t-2 pt-4 px-2 sm:px-3 inline-flex items-center text-xs sm:text-sm font-medium">
-                                    {{ i }}
-                                </span>
+                                    <span class="border-blue-500 text-blue-600 dark:border-blue-400 dark:text-blue-300 border-t-2 pt-4 px-3 sm:px-4 inline-flex items-center text-sm font-medium" 
+                                          aria-current="page">
+                                        {{ i }}
+                                    </span>
                                 {% else %}
-                                <a href="?{% if querystring %}{{ querystring }}&{% endif %}page={{ i }}" 
-                                   class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300 border-t-2 pt-4 px-2 sm:px-3 inline-flex items-center text-xs sm:text-sm font-medium transition-colors">
-                                    {{ i }}
-                                </a>
+                                    <a href="?{% if querystring %}{{ querystring }}&{% endif %}page={{ i }}" 
+                                       class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300 border-t-2 pt-4 px-3 sm:px-4 inline-flex items-center text-sm font-medium"
+                                       aria-label="Go to page {{ i }}">
+                                        {{ i }}
+                                    </a>
                                 {% endif %}
                             {% endfor %}
+                        </div>
+                        
+                        <!-- Mobile pagination -->
+                        <div class="sm:hidden flex items-center">
+                            <span class="text-xs text-gray-500 dark:text-gray-400 px-3 py-1.5 bg-gray-100 dark:bg-gray-800 rounded-full">
+                                Page {{ skills.number }} of {{ skills.paginator.num_pages }}
+                            </span>
                         </div>
                         
                         <div class="-mt-px w-0 flex-1 flex justify-end">
                             {% if skills.has_next %}
                             <a href="?{% if querystring %}{{ querystring }}&{% endif %}page={{ skills.next_page_number }}" 
-                               class="border-t-2 border-transparent pt-4 pl-1 inline-flex items-center text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300 transition-colors">
-                                <span class="text-xs sm:text-sm">Next</span>
-                                <i class="fas fa-arrow-right ml-2 sm:ml-3 text-xs sm:text-sm"></i>
+                               class="py-4 pl-1 inline-flex items-center text-sm font-medium text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300 group"
+                               aria-label="Next page">
+                                <span class="hidden xs:inline">Next</span>
+                                <i class="fas fa-arrow-right ml-1.5 text-base"></i>
                             </a>
-                            {% else %}
-                            <span class="border-t-2 border-transparent pt-4 pl-1 inline-flex items-center text-sm font-medium text-gray-300 dark:text-gray-600 cursor-not-allowed">
-                                <span class="text-xs sm:text-sm">Next</span>
-                                <i class="fas fa-arrow-right ml-2 sm:ml-3 text-xs sm:text-sm"></i>
-                            </span>
                             {% endif %}
                         </div>
                     </nav>
