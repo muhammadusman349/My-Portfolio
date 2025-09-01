@@ -35,14 +35,13 @@ User = get_user_model()
 #     return user.is_authenticated and user.is_superuser
 #     @user_passes_test(is_owner, login_url='portfolio:home')
 
-
-
 @login_required
 def dashboard_home(request):
     projects_count = Project.objects.count()
     skills_count = Skill.objects.count()
     education_count = Education.objects.count()
     experience_count = Experience.objects.count()
+    messages_count = Contact.objects.count()
     unread_contacts = Contact.objects.filter(is_read=False).count()
     unresponded_comments = ProjectComment.objects.filter(parent_comment=None).exclude(replies__isnull=False).count()
     users_count = User.objects.count()
@@ -53,6 +52,7 @@ def dashboard_home(request):
         'skills_count': skills_count,
         'education_count': education_count,
         'experience_count': experience_count,
+        'messages_count': messages_count,
         'unread_contacts': unread_contacts,
         'unresponded_comments': unresponded_comments,
         'users_count': users_count,
@@ -120,7 +120,12 @@ def project_create(request):
 
 @login_required
 def project_edit(request, pk):
-    project = get_object_or_404(Project, pk=pk, user=request.user)
+    project = get_object_or_404(Project, pk=pk)
+    
+    # Check if user has permission to edit this project
+    if project.user != request.user and not request.user.is_superuser:
+        messages.error(request, "You don't have permission to edit this project.")
+        return redirect('dashboard:dashboard_project_list')
 
     if request.method == 'POST':
         form = ProjectForm(request.POST, instance=project)
@@ -161,6 +166,12 @@ def project_edit(request, pk):
 @login_required
 def project_delete(request, pk):
     project = get_object_or_404(Project, pk=pk)
+    
+    # Check if user has permission to delete this project
+    if project.user != request.user and not request.user.is_superuser:
+        messages.error(request, "You don't have permission to delete this project.")
+        return redirect('dashboard:dashboard_project_list')
+        
     if request.method == 'POST':
         project.delete()
         messages.success(request, 'Project deleted successfully!')

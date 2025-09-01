@@ -171,6 +171,7 @@ class Experience(models.Model):
         ('CT', 'Contract'),
         ('FE', 'Freelance'),
         ('IN', 'Internship'),
+        ('RE', 'Remote'),
     ]
 
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)

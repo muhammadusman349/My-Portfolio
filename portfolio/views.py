@@ -101,6 +101,9 @@ def add_comment(request, pk):
                 if parent_comment.project_id != project.id:
                     raise ValueError("Invalid parent comment")
                 comment.parent_comment = parent_comment
+                # Auto-approve replies to approved comments
+                if parent_comment.status == 'approved':
+                    comment.status = 'approved'
             except ProjectComment.DoesNotExist:
                 if is_ajax:
                     return JsonResponse({'error': 'Parent comment not found'}, status=400)
