@@ -80,6 +80,7 @@ def skill_icon(skill_name: str) -> str:
 
         # Testing Tools
         'selenium': 'devicon-selenium-original colored',
+        'streamlit': 'devicon-streamlit-plain colored',
         'junit': 'fas fa-flask',
         'testng': 'fas fa-flask',
         'pytest': 'devicon-pytest-plain colored',
@@ -133,6 +134,10 @@ def skill_icon(skill_name: str) -> str:
         return 'fab fa-jenkins'
     if 'pandas' in skill_name.lower():
         return 'devicon-pandas-plain colored'
+    if 'jwt' in skill_name.lower():
+        return 'fas fa-lock'
+    if 'excel' in skill_name.lower():
+        return 'fas fa-file-excel'
 
     # Mapping for tech stack
     mapping = {
@@ -155,7 +160,7 @@ def skill_icon(skill_name: str) -> str:
         'node': 'fab fa-node',
         'express': 'fas fa-route',
         'postgresql': 'devicon-postgresql-plain colored',
-        'mysql': 'devicon-mysql-plain colored',
+        'my sql': 'devicon-mysql-plain colored',
         'sqlite': 'devicon-sqlite-plain colored',
         'mongodb': 'devicon-mongodb-plain colored',
         'redis': 'devicon-redis-plain colored',
@@ -172,17 +177,21 @@ def skill_icon(skill_name: str) -> str:
         'ngrok': 'devicon-ngrok-original colored',
         'gunicorn': 'fas fa-feather',
         'celery': 'devicon-envoy-plain colored',
-        'rabbitmq': 'fas fa-envelope-open-text',
+        'rabbitmq': 'devicon-rabbitmq-original colored',
         'graphql': 'fas fa-project-diagram',
-        'drf': 'devicon-djangorest-plain-wordmark',
-        'django rest framework': 'devicon-djangorest-plain-wordmark',
+        'drf': 'devicon-djangorest-plain-wordmark colored',
+        'django rest framework': 'devicon-djangorest-plain-wordmark colored',
         'rest api': 'fas fa-plug',
         'restful api': 'devicon-djangorest-plain colored',
         'jira': 'devicon-jira-plain colored',
         'webpack': 'fas fa-cubes',
         'vite': 'devicon-vite-original colored',
-        'streamlit': 'devicon-streamlit-plain colored',
         'swagger': 'devicon-swagger-plain colored',
+        'pillow': 'fas fa-images',
+        'beautiful soup': 'fas fa-utensil-spoon',
+        'json': 'devicon-json-plain colored',
+        'authentication': 'fas fa-user-lock',
+        'oauth': 'devicon-oauth-plain colored',
     }
 
     # Try exact
@@ -212,6 +221,7 @@ def skill_icon(skill_name: str) -> str:
 
     # Default fallback
     return 'fas fa-question-circle'
+
 
 @register.filter(name='skill_color')
 def skill_color(skill_name: str) -> str:

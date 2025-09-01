@@ -507,6 +507,7 @@ def home(request):
     experiences = Experience.objects.all().order_by('-start_date')[:3]
     educations = Education.objects.all().order_by('-start_date')
     total_skills = Skill.objects.all()
+    projects_completed = Project.objects.filter(status='completed').count()
 
     # Get unique lowercase skill names with their max proficiency
     unique_skills = Skill.objects.annotate(
@@ -540,6 +541,7 @@ def home(request):
         'skills': skills,
         'latest_resume': latest_resume,
         'total_skills': total_skills,
+        'projects_completed': projects_completed,
     })
 
 
