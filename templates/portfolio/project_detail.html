@@ -383,6 +383,103 @@
 {% block extra_js %}
 <!-- HTMX for partial updates -->
 <script src="https://unpkg.com/htmx.org@1.9.12"></script>
+
+<script>
+// Function to close all open comment forms
+function closeAllCommentForms() {
+    // Close all reply panels
+    document.querySelectorAll('.reply-panel').forEach(panel => {
+        panel.classList.add('hidden');
+    });
+    // Close all edit panels
+    document.querySelectorAll('.edit-panel').forEach(panel => {
+        panel.classList.add('hidden');
+    });
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Close forms when clicking on the main comment form
+    const commentForm = document.getElementById('comment-form');
+    if (commentForm) {
+        // Close other forms when focusing on the main comment form
+        commentForm.querySelector('textarea').addEventListener('focus', function() {
+            closeAllCommentForms();
+        });
+        
+        commentForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(commentForm);
+            const submitButton = commentForm.querySelector('button[type="submit"]');
+            const originalButtonText = submitButton.innerHTML;
+            
+            // Show loading state
+            submitButton.disabled = true;
+            submitButton.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Posting...';
+            
+            fetch(commentForm.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'X-CSRFToken': formData.get('csrfmiddlewaretoken')
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    // Reset form
+                    commentForm.reset();
+                    
+                    // Show success message
+                    const messageDiv = document.createElement('div');
+                    messageDiv.className = 'mb-4 p-3 rounded-lg bg-blue-50 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200';
+                    messageDiv.innerHTML = `
+                        <div class="flex items-center">
+                            <i class="fas fa-info-circle mr-2"></i>
+                            <span>${data.message}</span>
+                        </div>
+                    `;
+                    
+                    // Insert message before the form
+                    commentForm.parentNode.insertBefore(messageDiv, commentForm);
+                    
+                    // Auto-remove message after 5 seconds
+                    setTimeout(() => {
+                        messageDiv.style.opacity = '0';
+                        setTimeout(() => messageDiv.remove(), 300);
+                    }, 5000);
+                    
+                    // If comment is approved, add it to the comments list
+                    if (data.html) {
+                        const commentsContainer = document.getElementById('comments-container');
+                        const noCommentsMessage = document.querySelector('.no-comments-message');
+                        
+                        if (noCommentsMessage) {
+                            noCommentsMessage.remove();
+                        }
+                        
+                        if (commentsContainer) {
+                            commentsContainer.insertAdjacentHTML('afterbegin', data.html);
+                        }
+                    }
+                } else {
+                    alert(data.error || 'Error posting comment');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred while posting your comment');
+            })
+            .finally(() => {
+                // Reset button state
+                submitButton.disabled = false;
+                submitButton.innerHTML = originalButtonText;
+            });
+        });
+    }
+});
+</script>
 {% if project.images.exists %}
 <script>
 document.addEventListener('DOMContentLoaded', function() {
