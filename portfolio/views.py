@@ -138,10 +138,10 @@ def add_comment(request, pk):
                     'comment_id': comment.id,
                 })
 
-        messages.success(
-            request,
-            'Comment posted successfully' if comment.status == 'approved' else 'Your comment is pending approval'
-        )
+        if comment.status == 'approved':
+            messages.success(request, 'Comment posted successfully')
+        else:
+            messages.info(request, 'Your comment has been submitted and is pending approval. It will be visible once approved by the administrator.')
         return redirect('portfolio:project_detail', pk=pk)
 
     except Exception as e:

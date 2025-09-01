@@ -736,25 +736,31 @@ def dashboard_comment_delete_multiple(request):
 
 
 @login_required
+@require_POST
 def approve_comment(request, pk):
-    if request.method == 'POST':
-        comment = get_object_or_404(ProjectComment, pk=pk)
-        comment.status = 'approved'
-        comment.save()
-        messages.success(request, 'Comment approved successfully!')
+    comment = get_object_or_404(ProjectComment, pk=pk)
+    comment.status = 'approved'
+    comment.save()
+    
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
         return JsonResponse({'status': 'success'})
-    return JsonResponse({'status': 'error', 'message': 'Invalid request method.'}, status=405)
+    
+    messages.success(request, 'Comment approved successfully!')
+    return redirect('dashboard:dashboard_comment_detail', pk=comment.pk)
 
 
 @login_required
+@require_POST
 def reject_comment(request, pk):
-    if request.method == 'POST':
-        comment = get_object_or_404(ProjectComment, pk=pk)
-        comment.status = 'rejected'
-        comment.save()
-        messages.success(request, 'Comment rejected successfully!')
+    comment = get_object_or_404(ProjectComment, pk=pk)
+    comment.status = 'rejected'
+    comment.save()
+    
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
         return JsonResponse({'status': 'success'})
-    return JsonResponse({'status': 'error', 'message': 'Invalid request method.'}, status=405)
+    
+    messages.success(request, 'Comment rejected successfully!')
+    return redirect('dashboard:dashboard_comment_detail', pk=comment.pk)
 
 
 @login_required
