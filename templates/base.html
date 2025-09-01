@@ -248,20 +248,9 @@
                             <!-- Dropdown Menu -->
                             <div id="profileDropdown" class="profile-dropdown hidden absolute right-0 mt-3 w-56 bg-white/95 dark:bg-gray-800/95 backdrop-blur-md rounded-xl shadow-xl border border-gray-200/20 dark:border-gray-700/20 z-50 overflow-hidden">
                                 <div class="p-4 border-b border-gray-100 dark:border-gray-700">
-                                    <div class="flex items-center space-x-3">
-                                        <div class="w-10 h-10 rounded-full overflow-hidden">
-                                            {% if user.profile_picture %}
-                                                <img src="{{ user.profile_picture.url }}" alt="{{ user.username }}" class="w-full h-full object-cover">
-                                            {% else %}
-                                                <div class="w-full h-full bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center">
-                                                    <span class="text-white font-medium">{{ user.username.0|upper }}</span>
-                                                </div>
-                                            {% endif %}
-                                        </div>
-                                        <div>
-                                            <div class="font-semibold text-gray-900 dark:text-white">{{ user.get_full_name|default:user.username }}</div>
-                                            <div class="text-sm text-gray-500 dark:text-gray-400">{{ user.email }}</div>
-                                        </div>
+                                    <div class="flex flex-col">
+                                        <div class="font-semibold text-gray-900 dark:text-white">{{ user.get_full_name|default:user.username }}</div>
+                                        <div class="text-sm text-gray-500 dark:text-gray-400 break-words whitespace-wrap" title="{{ user.email }}">{{ user.email }}</div>
                                     </div>
                                 </div>
                                 <div class="py-2">
