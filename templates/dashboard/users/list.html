@@ -66,14 +66,13 @@
                     </a>
                     {% if not user.is_superuser %}
                     <div class="flex gap-3">
-                        <button onclick="toggleUserStatus('{{ user.id }}', '{{ user.is_active|lower }}')" 
-                                class="flex-1 px-4 py-3 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 toggle-status-btn"
+                        <button class="flex-1 px-4 py-3 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 toggle-status-btn"
                                 data-user-id="{{ user.id }}"
                                 data-is-active="{{ user.is_active|lower }}">
                             {{ user.is_active|yesno:"Block,Unblock" }}
                         </button>
-                        <button onclick="deleteUser('{{ user.id }}')" 
-                                class="flex-1 px-4 py-3 bg-red-600 hover:bg-red-700 text-white text-sm font-medium rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
+                        <button class="flex-1 px-4 py-3 bg-red-600 hover:bg-red-700 text-white text-sm font-medium rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 delete-user-btn"
+                                data-user-id="{{ user.id }}">
                             Delete
                         </button>
                     </div>
@@ -149,14 +148,13 @@
                                     View Details
                                 </a>
                                 {% if not user.is_superuser %}
-                                <button onclick="toggleUserStatus('{{ user.id }}', '{{ user.is_active|lower }}')" 
-                                        class="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300 toggle-status-btn"
+                                <button class="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300 toggle-status-btn"
                                         data-user-id="{{ user.id }}"
                                         data-is-active="{{ user.is_active|lower }}">
                                     {{ user.is_active|yesno:"Block,Unblock" }}
                                 </button>
-                                <button onclick="deleteUser('{{ user.id }}')" 
-                                        class="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300">
+                                <button class="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300 delete-user-btn"
+                                        data-user-id="{{ user.id }}">
                                     Delete
                                 </button>
                                 {% else %}
@@ -273,9 +271,9 @@
     // const selectAllCheckbox = document.getElementById('selectAll');
     // const deleteSelectedButton = document.getElementById('deleteSelected');
     // const itemCheckboxes = document.querySelectorAll('.item-checkbox');
-    // let userToDelete = null;
-    // let userToToggle = null;
-    // let isBlocking = false;
+    let userToDelete = null;
+    let userToToggle = null;
+    let isBlocking = false;
 
     // selectAllCheckbox?.addEventListener('change', function() {
     //     itemCheckboxes.forEach(checkbox => {
@@ -372,7 +370,7 @@
     }
 
     // Show/hide bulk delete modal
-    function showBulkDeleteModal() {
+    {% comment %} function showBulkDeleteModal() {
         const modal = document.getElementById('bulkDeleteModal');
         modal.classList.remove('hidden');
         modal.classList.add('flex');
@@ -450,7 +448,7 @@
         };
         
         modal.addEventListener('click', handleClickOutside);
-    }
+    } {% endcomment %}
 
     // Toggle user status with confirmation
     function toggleUserStatus(userId, newStatus) {
@@ -486,7 +484,6 @@
         form.method = 'POST';
         form.action = `/dashboard/users/${userToDelete}/delete/`;
         
-        // Add CSRF token
         const csrfInput = document.createElement('input');
         csrfInput.type = 'hidden';
         csrfInput.name = 'csrfmiddlewaretoken';
@@ -495,6 +492,9 @@
         
         document.body.appendChild(form);
         form.submit();
+        
+        // Close modal
+        closeDeleteModal();
     });
 
     // Confirm block button handler
@@ -515,9 +515,7 @@
         form.submit();
         
         // Close modal
-        const modal = document.getElementById('blockModal');
-        modal.classList.add('hidden');
-        modal.classList.remove('flex');
+        closeBlockModal();
     });
 
     // Add event listeners after DOM is loaded
@@ -532,7 +530,7 @@
             });
         });
 
-        // Delete button event listeners
+        // Delete user button event listeners
         document.querySelectorAll('.delete-user-btn').forEach(button => {
             button.addEventListener('click', function(e) {
                 e.preventDefault();
@@ -540,38 +538,7 @@
                 showDeleteModal(userId);
             });
         });
-
-        // Initialize select all checkbox - REMOVED
-        // if (selectAllCheckbox) {
-        //     selectAllCheckbox.addEventListener('change', function() {
-        //         const checkboxes = document.querySelectorAll('.item-checkbox:not(:disabled)');
-        //         checkboxes.forEach(checkbox => {
-        //             checkbox.checked = this.checked;
-        //         });
-        //         updateDeleteButtonVisibility();
-        //     });
-        // }
-
-        // Update delete button visibility when checkboxes change - REMOVED
-        // document.querySelectorAll('.item-checkbox').forEach(checkbox => {
-        //     checkbox.addEventListener('change', updateDeleteButtonVisibility);
-        // });
-
-        // Initial update of delete button visibility - REMOVED
-        // updateDeleteButtonVisibility();
     });
-
-    // function updateDeleteButtonVisibility() { - REMOVED
-    //     const deleteButton = document.getElementById('deleteSelected');
-    //     const selectedCount = document.querySelectorAll('.item-checkbox:checked').length;
-    //     
-    //     if (deleteButton) {
-    //         deleteButton.classList.toggle('hidden', selectedCount === 0);
-    //         deleteButton.textContent = `Delete Selected (${selectedCount})`;
-    //     }
-    // }
-
-    // Delete multiple users with dedicated confirmation page - REMOVED
     // if (deleteSelectedButton) {
     //     deleteSelectedButton.addEventListener('click', function(e) {
     //         e.preventDefault();
