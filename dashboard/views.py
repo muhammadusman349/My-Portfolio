@@ -833,10 +833,12 @@ def user_detail(request, user_id):
     education_count = user.education_set.count()
     experience_count = user.experience_set.count()
     skills_count = user.skill_set.count()
+    contact_messages_count = Contact.objects.filter(email=user.email).count()  # Add total count
     
     # Get recent activity
     recent_projects = user.project_set.order_by('-created_at')[:5]
     recent_comments = user.projectcomment_set.order_by('-created_at')[:5]
+    contact_messages = Contact.objects.filter(email=user.email).order_by('-created_at')[:5]
     
     context = {
         'user_detail': user,
@@ -845,8 +847,10 @@ def user_detail(request, user_id):
         'education_count': education_count,
         'experience_count': experience_count,
         'skills_count': skills_count,
+        'contact_messages_count': contact_messages_count,  # Add to context
         'recent_projects': recent_projects,
         'recent_comments': recent_comments,
+        'contact_messages': contact_messages,
         'is_dashboard': True,
     }
     

@@ -74,12 +74,12 @@
     </div>
 
     <!-- Statistics Cards -->
-    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 sm:gap-6 mb-8">
+    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 sm:gap-6 mb-8">
         <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-4 sm:p-6 stat-card">
             <div class="flex flex-col items-center text-center">
                 <div class="w-8 h-8 sm:w-8 sm:h-8 bg-blue-500 rounded-md flex items-center justify-center mb-2">
                     <svg class="w-4 h-4 sm:w-5 sm:h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m8 0V8a2 2 0 01-2 2H8a2 2 0 01-2-2V6m8 0H8m0 0V4"/>
                     </svg>
                 </div>
                 <h3 class="text-xl sm:text-lg font-medium text-gray-900 dark:text-white mb-1">{{ projects_count }}</h3>
@@ -123,20 +123,29 @@
             </div>
         </div>
 
-        <!-- Experience card - only show on larger screens -->
-        <div class="hidden lg:block bg-white dark:bg-gray-800 shadow rounded-lg p-6 stat-card">
-            <div class="flex items-center">
-                <div class="flex-shrink-0">
-                    <div class="w-8 h-8 bg-purple-500 rounded-md flex items-center justify-center">
-                        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m8 0V8a2 2 0 01-2 2H8a2 2 0 01-2-2V6m8 0H8m0 0V4"/>
-                        </svg>
-                    </div>
+        <!-- Experience card -->
+        <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-4 sm:p-6 stat-card">
+            <div class="flex flex-col items-center text-center">
+                <div class="w-8 h-8 sm:w-8 sm:h-8 bg-purple-500 rounded-md flex items-center justify-center mb-2">
+                    <svg class="w-4 h-4 sm:w-5 sm:h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m8 0V8a2 2 0 01-2 2H8a2 2 0 01-2-2V6m8 0H8m0 0V4"/>
+                    </svg>
                 </div>
-                <div class="ml-4">
-                    <h3 class="text-lg font-medium text-gray-900 dark:text-white">{{ experience_count }}</h3>
-                    <p class="text-sm text-gray-500 dark:text-gray-400">Experience</p>
+                <h3 class="text-xl sm:text-lg font-medium text-gray-900 dark:text-white mb-1">{{ experience_count }}</h3>
+                <p class="text-xs sm:text-sm text-gray-500 dark:text-gray-400">Experience</p>
+            </div>
+        </div>
+
+        <!-- Contact Messages card -->
+        <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-4 sm:p-6 stat-card">
+            <div class="flex flex-col items-center text-center">
+                <div class="w-8 h-8 sm:w-8 sm:h-8 bg-orange-500 rounded-md flex items-center justify-center mb-2">
+                    <svg class="w-4 h-4 sm:w-5 sm:h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                    </svg>
                 </div>
+                <h3 class="text-xl sm:text-lg font-medium text-gray-900 dark:text-white mb-1">{{ contact_messages_count }}</h3>
+                <p class="text-xs sm:text-sm text-gray-500 dark:text-gray-400">Contact Messages</p>
             </div>
         </div>
     </div>
@@ -198,7 +207,7 @@
                 <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 border-l-4 border-blue-500">
                     <h4 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 flex items-center">
                         <svg class="w-4 h-4 mr-2 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m8 0V8a2 2 0 01-2 2H8a2 2 0 01-2-2V6m8 0H8m0 0V4"/>
                         </svg>
                         Bio
                     </h4>
@@ -334,6 +343,35 @@
             </div>
             {% else %}
             <p class="text-sm text-gray-500 dark:text-gray-400">No recent comments found.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Contact Messages -->
+    <div class="mt-8 bg-white dark:bg-gray-800 shadow rounded-lg">
+        <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+            <h3 class="text-lg font-medium text-gray-900 dark:text-white">Contact Messages ({{ contact_messages_count }})</h3>
+        </div>
+        <div class="px-6 py-4">
+            {% if contact_messages %}
+            <div class="space-y-4">
+                {% for message in contact_messages %}
+                <div class="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h4 class="font-medium text-gray-900 dark:text-white">{{ message.subject }}</h4>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">{{ message.created_at|date:"M d, Y H:i" }}</p>
+                        </div>
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {% if message.is_read %}bg-green-100 text-green-800 dark:bg-green-800 dark:text-green-100{% else %}bg-yellow-100 text-yellow-800 dark:bg-yellow-800 dark:text-yellow-100{% endif %}">
+                            {{ message.is_read|yesno:"Read,Unread" }}
+                        </span>
+                    </div>
+                    <p class="mt-2 text-sm text-gray-600 dark:text-gray-300">{{ message.message|truncatechars:120 }}</p>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <p class="text-sm text-gray-500 dark:text-gray-400">No contact messages found.</p>
             {% endif %}
         </div>
     </div>
