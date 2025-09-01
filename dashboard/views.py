@@ -125,7 +125,13 @@ def project_edit(request, pk):
     if request.method == 'POST':
         form = ProjectForm(request.POST, instance=project)
         if form.is_valid():
-            project = form.save()
+            # Save the form without many-to-many fields first
+            project = form.save(commit=False)
+            project.save()
+
+            # Handle many-to-many fields manually
+            project.skills.set(form.cleaned_data['skills'])
+
             # Handle multiple image uploads
             images = request.FILES.getlist('images[]')
             captions = request.POST.getlist('captions[]')
@@ -414,9 +420,14 @@ def experience_edit(request, pk):
     if request.method == 'POST':
         form = ExperienceForm(request.POST, instance=experience)
         if form.is_valid():
-            experience = form.save()
-            # Ensure ManyToMany fields (technologies_used, related_projects) are saved
-            form.save_m2m()
+            # Save the form without many-to-many fields first
+            experience = form.save(commit=False)
+            experience.save()
+
+            # Handle many-to-many fields manually
+            experience.technologies_used.set(form.cleaned_data['technologies_used'])
+            experience.related_projects.set(form.cleaned_data['related_projects'])
+
             messages.success(request, 'Experience updated successfully!')
             return redirect('dashboard:dashboard_experience_list')
     else:
@@ -809,6 +820,37 @@ def user_list(request):
     }
 
     return render(request, 'dashboard/users/list.html', context)
+
+
+@login_required
+def user_detail(request, user_id):
+    """View detailed information about a specific user."""
+    user = get_object_or_404(User, id=user_id)
+    
+    # Get additional user statistics
+    projects_count = user.project_set.count()
+    comments_count = user.projectcomment_set.count()
+    education_count = user.education_set.count()
+    experience_count = user.experience_set.count()
+    skills_count = user.skill_set.count()
+    
+    # Get recent activity
+    recent_projects = user.project_set.order_by('-created_at')[:5]
+    recent_comments = user.projectcomment_set.order_by('-created_at')[:5]
+    
+    context = {
+        'user_detail': user,
+        'projects_count': projects_count,
+        'comments_count': comments_count,
+        'education_count': education_count,
+        'experience_count': experience_count,
+        'skills_count': skills_count,
+        'recent_projects': recent_projects,
+        'recent_comments': recent_comments,
+        'is_dashboard': True,
+    }
+    
+    return render(request, 'dashboard/users/detail.html', context)
 
 
 @login_required
