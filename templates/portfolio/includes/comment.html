@@ -7,9 +7,15 @@
     <div class="flex items-start space-x-3 sm:space-x-4">
         <!-- User Avatar -->
         <div class="flex-shrink-0">
+            {% if comment.user.profile_picture %}
             <img class="h-10 w-10 rounded-full object-cover"
                  src="{{ comment.user.profile_picture.url }}"
-                 alt="{{ comment.user.first_name }} {{ comment.user.last_name }}">
+                 alt="{{ comment.user.get_full_name|default:comment.user.username }}">
+            {% else %}
+            <img class="h-10 w-10 rounded-full object-cover"
+                 src="{% static 'logo/portfolio-logo-mark.svg' %}"
+                 alt="{{ comment.user.get_full_name|default:comment.user.username }}">
+            {% endif %}
         </div>
 
         <!-- Comment Content -->

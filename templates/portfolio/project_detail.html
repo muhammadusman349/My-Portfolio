@@ -461,6 +461,15 @@ document.addEventListener('DOMContentLoaded', function() {
                         
                         if (commentsContainer) {
                             commentsContainer.insertAdjacentHTML('afterbegin', data.html);
+                            // Ensure HTMX initializes behaviors on the newly added comment (reply/edit/delete/like)
+                            try {
+                                const newEl = document.getElementById(`comment-${data.comment_id}`);
+                                if (window.htmx && newEl) {
+                                    htmx.process(newEl);
+                                }
+                            } catch (e) {
+                                console.warn('HTMX process failed for new comment:', e);
+                            }
                         }
                     }
                 } else {

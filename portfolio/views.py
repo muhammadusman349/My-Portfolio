@@ -90,7 +90,7 @@ def add_comment(request, pk):
             project=project,
             user=request.user,
             text=text,
-            status='approved' if request.user == project.user else 'pending',
+            status='approved' if (request.user == project.user or request.user.is_superuser) else 'pending',
             is_owner_reply=request.user == project.user
         )
 
