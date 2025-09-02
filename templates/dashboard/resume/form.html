@@ -11,11 +11,18 @@
 
     {% if latest_resume %}
     <div class="p-4 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
-        <p class="text-sm text-gray-600 dark:text-gray-300">Current Resume:</p>
-        <a href="{{ latest_resume.file.url }}" target="_blank" class="inline-flex items-center mt-2 px-4 py-2 bg-primary-500 text-white rounded-lg hover:bg-primary-600 transition">
-            <i class="fas fa-download mr-2"></i> Download Current
-        </a>
-        <p class="mt-2 text-xs text-gray-500">Uploaded at: {{ latest_resume.uploaded_at }}</p>
+        <p class="text-sm text-gray-600 dark:text-gray-300 mb-2">Current Resume:</p>
+        <div class="flex flex-wrap gap-3">
+            <a href="{{ latest_resume.file.url }}" target="_blank" class="inline-flex items-center px-3 py-1.5 text-sm bg-primary-500 text-white rounded-lg hover:bg-primary-600 transition">
+                <i class="fas fa-download mr-1.5"></i> Download
+            </a>
+            <a href="{{ latest_resume.file.url }}" target="_blank" class="inline-flex items-center px-3 py-1.5 text-sm bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition">
+                <i class="fas fa-eye mr-1.5"></i> View
+            </a>
+            <div class="w-full md:w-auto mt-2 md:mt-0 flex items-center">
+                <p class="text-xs text-gray-500 dark:text-gray-400">Uploaded: <span class="font-medium">{{ latest_resume.uploaded_at|date:"M d, Y h:i A" }}</span></p>
+            </div>
+        </div>
     </div>
     {% endif %}
 
@@ -24,7 +31,16 @@
             {% csrf_token %}
             <div>
                 <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Upload New Resume (PDF/DOC/DOCX)</label>
-                {{ form.file }}
+                <div class="mt-1">
+                    <input type="file" name="file" required id="id_file" 
+                           class="block w-full text-sm text-gray-500 dark:text-gray-400
+                                  file:mr-4 file:py-2 file:px-4
+                                  file:rounded-lg file:border-0
+                                  file:text-sm file:font-medium
+                                  file:bg-primary-50 dark:file:bg-gray-700
+                                  file:text-primary-700 dark:file:text-gray-200
+                                  hover:file:bg-primary-100 dark:hover:file:bg-gray-600">
+                </div>
                 {% if form.file.errors %}
                     <p class="text-sm text-red-600 mt-1">{{ form.file.errors.0 }}</p>
                 {% endif %}
